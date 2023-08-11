@@ -9,7 +9,7 @@ export type HomePageProps = PagePropsWithData<HomePageQuery>;
 const HomePage: PageComponent<HomePageProps> = () => (
   <Stack align="center" spacing={8}>
     <Text>Aaaand we&apos;re live!</Text>
-    <ContactMeLink>hey hey hey</ContactMeLink>
+    <ContactMeLink subject="hey guys!">hey hey hey</ContactMeLink>
   </Stack>
 );
 
