@@ -131,8 +131,8 @@ class User < ApplicationRecord
     end
     user.attributes = info.slice("first_name", "last_name", "email").to_h
     user.avatar_url = info["image"]
-    if (token = auth.dig("credentials", "refresh_token"))
-      user.google_refresh_token = token
+    if (refresh_token = auth.dig("credentials", "refresh_token"))
+      user.google_refresh_token = refresh_token
     end
     user.save!
     user
@@ -149,11 +149,40 @@ class User < ApplicationRecord
     super(params)
   end
 
+  # == Calendar
+  sig { params(id: String, refresh_token: String).returns(Google::Calendar) }
+  def self.google_calendar(id, refresh_token:)
+    @calendars = T.let(
+      @calendars,
+      T.nilable(T::Hash[[String, String], Google::Calendar]),
+    )
+    @calendars ||= Hash.new do |hash, key; calendar, refresh_token|
+      calendar, refresh_token = key
+      hash[key] = Google::Calendar.new(
+        client_id: Google.client_id!,
+        client_secret: Google.client_secret!,
+        redirect_url: "urn:ietf:wg:oauth:2.0:oob",
+        calendar:,
+        refresh_token:,
+      )
+    end
+    @calendars[[id, refresh_token]]
+  end
+
+  sig { returns(Google::Calendar) }
+  def google_calendar
+    self.class.google_calendar(email, refresh_token: google_refresh_token)
+  end
+
   # == Methods
   sig { returns(T::Boolean) }
   def admin?
     Admin.emails.include?(email) || Admin.email_domains.include?(email_domain)
   end
+
+  # def calendar
+  #   @calendar_hash = T.let(@calendar_hash, T::Hash[])
+  # end
 
   # # == Devise: Callback handlers
   # sig { void }
