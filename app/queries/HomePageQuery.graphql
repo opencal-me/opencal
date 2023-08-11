@@ -1,0 +1,7 @@
+query HomePageQuery {
+  announcement
+  viewer {
+    ...AppViewerFragment
+    id
+  }
+}

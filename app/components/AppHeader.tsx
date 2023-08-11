@@ -1,0 +1,46 @@
+import type { FC } from "react";
+import { Header } from "@mantine/core";
+
+import AppMenu from "./AppMenu";
+
+import type { AppViewerFragment } from "~/helpers/graphql";
+import type { Maybe } from "~/helpers/graphql";
+
+export type AppHeaderProps = {
+  readonly viewer: Maybe<AppViewerFragment>;
+};
+
+const AppHeader: FC<AppHeaderProps> = ({ viewer }) => (
+  <Header
+    height={38}
+    p={8}
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      columnGap: 6,
+    }}
+  >
+    <Button
+      component={Link}
+      href="/"
+      color="dark"
+      compact
+      variant="subtle"
+      p={4}
+      fz="md"
+      fw={700}
+      sx={({ colors }) => ({
+        flexShrink: 0,
+        "&:hover": {
+          backgroundColor: colors.gray[1],
+        },
+      })}
+    >
+      OpenCal
+    </Button>
+    <AppMenu sx={{ flexShrink: 0 }} {...{ viewer }} />
+  </Header>
+);
+
+export default AppHeader;

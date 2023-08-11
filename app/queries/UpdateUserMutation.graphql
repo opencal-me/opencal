@@ -1,0 +1,11 @@
+mutation UpdateUserMutation($input: UpdateUserInput!) {
+  payload: updateUser(input: $input) {
+    errors {
+      field
+      message
+    }
+    user {
+      id
+    }
+  }
+}

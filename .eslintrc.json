@@ -1,0 +1,74 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["react-refresh"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 12
+  },
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "extendDefaults": true,
+        "types": {
+          "{}": false
+        }
+      }
+    ],
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-no-undef": "off",
+    "react/prop-types": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "react-refresh/only-export-components": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["*.graphql"],
+      "extends": "plugin:@graphql-eslint/operations-recommended",
+      "rules": {
+        "prettier/prettier": "error",
+        "@graphql-eslint/alphabetize": [
+          "warn",
+          {
+            "selections": ["OperationDefinition", "FragmentDefinition"]
+          }
+        ],
+        "@graphql-eslint/naming-convention": [
+          "error",
+          {
+            "allowLeadingUnderscore": true,
+            "VariableDefinition": "camelCase",
+            "OperationDefinition": {
+              "style": "PascalCase",
+              "forbiddenPrefixes": ["Query", "Mutation", "Subscription"]
+            },
+            "FragmentDefinition": {
+              "style": "PascalCase",
+              "forbiddenPrefixes": ["Fragment"]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

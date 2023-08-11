@@ -1,0 +1,20 @@
+{
+  "all": {
+    "sourceCodeDir": "app",
+    "additionalEntrypoints": ["~/assets/**/*"],
+    "ssrBuildEnabled": true,
+    "ssrEntrypoint": "~/ssr/application.{js,jsx,ts,tsx}",
+    "ssrOutputDir": "app/ssr/dist"
+  },
+  "development": {
+    "publicOutputDir": "dist-dev",
+    "port": 3036
+  },
+  "test": {
+    "publicOutputDir": "dist-test",
+    "port": 3037
+  },
+  "production": {
+    "publicOutputDir": "dist"
+  }
+}

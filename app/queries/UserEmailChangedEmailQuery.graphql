@@ -1,0 +1,8 @@
+query UserEmailChangedEmailQuery($userId: ID!) {
+  user(id: $userId) {
+    email
+    firstName
+    id
+    name
+  }
+}

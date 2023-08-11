@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+bin/overmind connect rails

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%# == Favicon %>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <%# == Fonts %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@400..800&display=swap" rel="stylesheet">
+
+    <%# == Viewport %>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <%# == Content Security Policy & CSRF %>
+    <%= csp_meta_tag %>
+    <%= csrf_meta_tags %>
+
+    <%# == Action Cable %>
+    <%= action_cable_meta_tag %>
+
+    <%# == Active Storage %>
+    <meta name="active-storage-direct-uploads-url" content="<%= rails_direct_uploads_path %>">
+
+    <%# == Environment %>
+    <meta name="env" content="<%= Rails.env %>">
+
+    <%# == GraphQL %>
+    <meta name="graphql-url" content="<%= graphql_path %>">
+
+    <%# == Sentry %>
+    <% scoped do %>
+      <% config = Sentry.configuration %>
+      <% if (dsn = config.dsn.presence) %>
+        <meta name="sentry-dsn" content="<%= dsn %>">
+        <meta name="sentry-traces-sample-rate" content="<%= config.traces_sample_rate %>">
+        <% if (user = current_user) %>
+          <meta name="sentry-user" content="<%= user.sentry_info.to_json %>">
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%# == FullStory %>
+    <% if (org_id = ENV["FULLSTORY_ORG_ID"].presence) %>
+      <meta name="fullstory-org-id" content="<%= org_id %>">
+      <% if (user = current_user) %>
+        <meta name="fullstory-identity" content="<%= user.fullstory_identity.to_json %>">
+      <% end %>
+    <% end %>
+
+    <%# == Vite %>
+    <%= vite_client_tag %>
+    <%= vite_typescript_tag "sentry" %>
+    <%= vite_typescript_tag "fullstory" %>
+    <% if local_assigns.include?(:page) %>
+      <%= vite_react_refresh_tag %>
+      <%= vite_typescript_tag "application" %>
+    <% end %>
+
+    <%# == Google Analytics %>
+    <% if (measurement_id = ENV["GOOGLE_ANALYTICS_MEASUREMENT_ID"].presence) %>
+      <script src="https://www.googletagmanager.com/gtag/js?id=<%= measurement_id %>" async></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        gtag("js", new Date());
+        gtag("config", "<%= measurement_id %>");
+      </script>
+    <% end %>
+
+    <%# == Inertia %>
+    <%== inertia_headers %>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>

@@ -1,0 +1,2 @@
+schema: config/graphql/schema.generated.graphql
+documents: app/queries/*.graphql

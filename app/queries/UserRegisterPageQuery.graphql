@@ -1,0 +1,6 @@
+query UserRegisterPageQuery {
+  viewer {
+    ...AppViewerFragment
+    id
+  }
+}
