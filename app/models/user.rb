@@ -129,7 +129,7 @@ class User < ApplicationRecord
     user = find_or_initialize_by(google_uid:) do |user|
       user.password = Devise.friendly_token
     end
-    user.attributes = info.slice("first_name", "last_name", "email")
+    user.attributes = info.slice("first_name", "last_name", "email").to_h
     user.avatar_url = info["image"]
     if (token = auth.dig("credentials", "refresh_token"))
       user.google_refresh_token = token
