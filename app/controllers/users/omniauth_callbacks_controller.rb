@@ -21,6 +21,14 @@ module Users
       sign_in_and_redirect(user)
     end
 
+    protected
+
+    # == Helpers
+    sig { override.params(scope: T.untyped).returns(String) }
+    def after_omniauth_failure_path_for(scope)
+      root_path(scope)
+    end
+
     private
 
     # == Helpers

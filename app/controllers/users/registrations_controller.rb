@@ -98,7 +98,7 @@ module Users
       if sign_in_after_change_password?
         edit_registration_path(resource)
       else
-        new_session_path(resource_name)
+        edit_registration_path(resource_name)
       end
     end
 
