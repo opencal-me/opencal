@@ -283,7 +283,11 @@ Devise.setup do |config|
     client_id: Google.client_id,
     client_secret: Google.client_secret,
     name: :google,
-    scope: %w[profile email https://www.googleapis.com/auth/calendar].join(","),
+    scope: %w[
+      profile
+      email
+      https://www.googleapis.com/auth/calendar.events
+    ].join(","),
     # prompt: "consent",
   )
 
