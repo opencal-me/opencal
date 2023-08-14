@@ -6,6 +6,7 @@
 # Table name: activities
 #
 #  id              :uuid             not null, primary key
+#  capacity        :integer          not null
 #  coordinates     :geography        point, 4326
 #  description     :string
 #  during          :tstzrange        not null
@@ -41,6 +42,8 @@ class Activity < ApplicationRecord
   attribute :handle, :string, default: -> { generate_handle }
 
   # == Attributes
+  # TODO: Change this to reflect a default from the user's account settings.
+  attribute :capacity, :integer, default: 5
 
   sig { returns(Time) }
   def start = during.begin
@@ -52,7 +55,7 @@ class Activity < ApplicationRecord
   def google_event? = google_event_id?
 
   sig { returns(Google::Event) }
-  def google_event
+  def google_event!
     owner!.google_event(google_event_id)
   end
 
@@ -69,6 +72,7 @@ class Activity < ApplicationRecord
   # == Associations
   belongs_to :owner, class_name: "User"
   has_one :address, dependent: :destroy
+  has_many :reservations, dependent: :destroy
 
   sig { returns(User) }
   def owner!
@@ -120,7 +124,7 @@ class Activity < ApplicationRecord
   # == Callback Handlers
   sig { void }
   def set_attributes_from_google_event
-    event = google_event
+    event = google_event!
     self.title = event.title
     self.description = event.description
     self.during = (event.start_time.to_time..event.end_time.to_time)

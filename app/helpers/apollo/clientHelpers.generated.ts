@@ -1,5 +1,5 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
-export type ActivityKeySpecifier = ('address' | 'coordinates' | 'description' | 'end' | 'googleEventId' | 'id' | 'location' | 'owner' | 'start' | 'title' | 'url' | ActivityKeySpecifier)[];
+export type ActivityKeySpecifier = ('address' | 'coordinates' | 'description' | 'end' | 'googleEventId' | 'id' | 'location' | 'openings' | 'owner' | 'start' | 'title' | 'url' | ActivityKeySpecifier)[];
 export type ActivityFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,
 	coordinates?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -8,6 +8,7 @@ export type ActivityFieldPolicy = {
 	googleEventId?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	location?: FieldPolicy<any> | FieldReadFunction<any>,
+	openings?: FieldPolicy<any> | FieldReadFunction<any>,
 	owner?: FieldPolicy<any> | FieldReadFunction<any>,
 	start?: FieldPolicy<any> | FieldReadFunction<any>,
 	title?: FieldPolicy<any> | FieldReadFunction<any>,

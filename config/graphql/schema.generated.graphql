@@ -13,6 +13,7 @@ type Activity implements Node {
   """ID of the object."""
   id: ID!
   location: String
+  openings: Int!
   owner: User!
   start: DateTime!
   title: String!

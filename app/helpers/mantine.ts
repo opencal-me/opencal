@@ -35,6 +35,16 @@ export const APP_THEME: MantineThemeOverride = {
     }),
   },
   components: {
+    Button: {
+      defaultProps: {
+        radius: "md",
+      },
+    },
+    Card: {
+      defaultProps: {
+        radius: "md",
+      },
+    },
     LoadingOverlay: {
       defaultProps: {
         loaderProps: {
@@ -45,6 +55,11 @@ export const APP_THEME: MantineThemeOverride = {
     ThemeIcon: {
       defaultProps: {
         variant: "default",
+      },
+    },
+    Input: {
+      defaultProps: {
+        radius: "md",
       },
     },
     Modal: {

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_14_034708) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_14_142252) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -55,6 +55,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_14_034708) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "handle", null: false
+    t.integer "capacity", null: false
     t.index ["coordinates"], name: "index_activities_on_coordinates", using: :gist
     t.index ["google_event_id"], name: "index_activities_on_google_event_id", unique: true
     t.index ["handle"], name: "index_activities_on_handle", unique: true
@@ -151,6 +152,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_14_034708) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
+  create_table "reservations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "activity_id", null: false
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_reservations_on_activity_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "encrypted_password", null: false
@@ -177,4 +188,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_14_034708) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "activities", "users", column: "owner_id"
   add_foreign_key "addresses", "activities"
+  add_foreign_key "reservations", "activities"
 end

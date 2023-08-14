@@ -28,6 +28,7 @@ export type Activity = Node & {
   /** ID of the object. */
   id: Scalars['ID']['output'];
   location?: Maybe<Scalars['String']['output']>;
+  openings: Scalars['Int']['output'];
   owner: User;
   start: Scalars['DateTime']['output'];
   title: Scalars['String']['output'];

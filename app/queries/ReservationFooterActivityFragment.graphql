@@ -1,0 +1,4 @@
+fragment ReservationFooterActivityFragment on Activity {
+  id
+  openings
+}

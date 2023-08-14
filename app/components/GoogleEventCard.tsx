@@ -52,7 +52,7 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
   ...otherProps
 }) => {
   return (
-    <Card radius="md" withBorder {...otherProps}>
+    <Card withBorder {...otherProps}>
       <Group align="start">
         <Text weight={500} sx={{ flexGrow: 1 }}>
           {title}
@@ -127,7 +127,6 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
           component={Link}
           href={activity.url}
           leftIcon={<RightArrowIcon />}
-          radius="md"
         >
           Go To Activity
         </Button>
@@ -142,7 +141,6 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
               googleEventId={eventId}
               onCreate={onCreateActivity}
               disabled={!viewerIsOrganizer}
-              radius="md"
             />
           </Box>
         </Tooltip>

@@ -13,6 +13,7 @@ module Types
     field :end, DateTimeType, null: false, resolver_method: :resolve_end
     field :google_event_id, String, null: false
     field :location, String
+    field :openings, Integer, null: false # rubocop:disable GraphQL/FieldMethod
     field :owner, UserType, null: false
     field :start, DateTimeType, null: false
     field :title, String, null: false
@@ -34,6 +35,11 @@ module Types
         end
         texts.join("\n")
       end
+    end
+
+    sig { returns(Integer) }
+    def openings
+      object.capacity
     end
 
     sig { returns(Time) }

@@ -13,6 +13,7 @@ query ActivityPageQuery($activityId: ID!) {
       id
       name
     }
+    ...ReservationFooterActivityFragment
     start
     title
   }

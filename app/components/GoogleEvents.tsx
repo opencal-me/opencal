@@ -38,7 +38,6 @@ const GoogleEvents: FC<GoogleEventsProps> = ({
           size="md"
           placeholder="Search events..."
           value={search}
-          radius="md"
           onChange={({ target }) => setSearch(target.value)}
         />
         {events ? (
@@ -50,7 +49,7 @@ const GoogleEvents: FC<GoogleEventsProps> = ({
               />
             ))
           ) : (
-            <EmptyCard itemLabel="events" radius="md" />
+            <EmptyCard itemLabel="events" />
           )
         ) : (
           [...new Array(3)].map((value, index) => (

@@ -16,7 +16,7 @@ const UserSettingsPage: PageComponent<UserSettingsPageProps> = ({
   // == Markup
   return (
     <Stack>
-      <Card radius="md" withBorder>
+      <Card withBorder>
         <Stack spacing="xs">
           <Stack align="center" spacing={8}>
             {!!avatarUrl && (
