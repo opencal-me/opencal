@@ -1,0 +1,9 @@
+query GoogleEventsQuery($query: String) {
+  viewer {
+    googleEvents(query: $query) {
+      ...GoogleEventCardEventFragment
+      id
+    }
+    id
+  }
+}

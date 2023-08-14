@@ -1,0 +1,12 @@
+mutation CreateActivityMutation($input: CreateActivityInput!) {
+  payload: createActivity(input: $input) {
+    activity {
+      ...ActivityCreateButtonActivityFragment
+      id
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

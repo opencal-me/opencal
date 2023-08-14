@@ -17,6 +17,7 @@ module Types
     field :image_by_signed_id, resolver: Queries::ImageBySignedId
     field :password_strength, resolver: Queries::PasswordStrength
 
+    field :activity, resolver: Queries::Activity
     field :user, resolver: Queries::User
     field :viewer, resolver: Queries::Viewer
   end

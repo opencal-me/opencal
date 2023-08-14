@@ -80,12 +80,12 @@ const ActivityStatusBadge: FC<ActivityStatusBadgeProps> = ({
                     <Anchor
                       href="https://twitter.com/scottific"
                       target="_blank"
-                      weight={700}
+                      weight={600}
                     >
                       scott
                     </Anchor>{" "}
                     &{" "}
-                    <Anchor href="https://twitter.com/hulloitskai" weight={700}>
+                    <Anchor href="https://twitter.com/hulloitskai" weight={600}>
                       kai
                     </Anchor>{" "}
                     with
@@ -98,7 +98,7 @@ const ActivityStatusBadge: FC<ActivityStatusBadgeProps> = ({
               >
                 <Stack spacing={6} align="center">
                   <Text size="sm" lh={1.4}>
-                    Did you know this website is{" "}
+                    Did you know OpenCal is{" "}
                     <Text span inherit weight={600}>
                       open source
                     </Text>
@@ -114,7 +114,7 @@ const ActivityStatusBadge: FC<ActivityStatusBadgeProps> = ({
                     h="unset"
                     py={4}
                   >
-                    Take me to the code!
+                    take me to the code!
                   </Button>
                 </Stack>
               </HoverCard.Dropdown>

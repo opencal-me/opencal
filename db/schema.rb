@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_11_152125) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_14_034708) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -42,6 +42,36 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_11_152125) do
     t.uuid "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "activities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "title", null: false
+    t.string "description"
+    t.string "google_event_id", null: false
+    t.uuid "owner_id", null: false
+    t.tstzrange "during", null: false
+    t.string "location"
+    t.geography "coordinates", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "handle", null: false
+    t.index ["coordinates"], name: "index_activities_on_coordinates", using: :gist
+    t.index ["google_event_id"], name: "index_activities_on_google_event_id", unique: true
+    t.index ["handle"], name: "index_activities_on_handle", unique: true
+    t.index ["owner_id"], name: "index_activities_on_owner_id"
+  end
+
+  create_table "addresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "activity_id", null: false
+    t.string "city"
+    t.string "country", null: false
+    t.string "province", null: false
+    t.string "postal_code"
+    t.string "neighbourhood"
+    t.string "full_address", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.string "street_address"
+    t.index ["activity_id"], name: "index_addresses_on_activity_id"
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -145,4 +175,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_11_152125) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "activities", "users", column: "owner_id"
+  add_foreign_key "addresses", "activities"
 end

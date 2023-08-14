@@ -1,0 +1,23 @@
+query ActivityPageQuery($activityId: ID!) {
+  activity(id: $activityId) {
+    address
+    coordinates {
+      latitude
+      longitude
+    }
+    description
+    end
+    id
+    owner {
+      avatarUrl
+      id
+      name
+    }
+    start
+    title
+  }
+  viewer {
+    ...AppViewerFragment
+    id
+  }
+}

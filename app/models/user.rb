@@ -68,6 +68,12 @@ class User < ApplicationRecord
     T.must(domain)
   end
 
+  # == Associations
+  has_many :activities,
+           inverse_of: :owner,
+           foreign_key: :owner_id,
+           dependent: :destroy
+
   # == Normalizations
   # before_validation :remove_unconfirmed_email_if_matches_email,
   #                   if: %i[unconfirmed_email? email_changed?]
@@ -152,10 +158,8 @@ class User < ApplicationRecord
   # == Calendar
   sig { params(id: String, refresh_token: String).returns(Google::Calendar) }
   def self.google_calendar(id, refresh_token:)
-    @calendars = T.let(
-      @calendars,
-      T.nilable(T::Hash[[String, String], Google::Calendar]),
-    )
+    @calendars = T.let(@calendars,
+                       T.nilable(T::Hash[T.untyped, Google::Calendar]))
     @calendars ||= Hash.new do |hash, key; calendar, refresh_token|
       calendar, refresh_token = key
       hash[key] = Google::Calendar.new(
@@ -174,15 +178,24 @@ class User < ApplicationRecord
     self.class.google_calendar(email, refresh_token: google_refresh_token)
   end
 
+  sig { params(query: T.nilable(String)).returns(T::Array[Google::Event]) }
+  def google_events(query:)
+    options = { query: query.presence }
+    options.compact!
+    options[:max_results] = 10
+    google_calendar.find_future_events(options)
+  end
+
+  sig { params(id: String).returns(Google::Event) }
+  def google_event(id)
+    google_calendar.find_event_by_id(id).first
+  end
+
   # == Methods
   sig { returns(T::Boolean) }
   def admin?
     Admin.emails.include?(email) || Admin.email_domains.include?(email_domain)
   end
-
-  # def calendar
-  #   @calendar_hash = T.let(@calendar_hash, T::Hash[])
-  # end
 
   # # == Devise: Callback handlers
   # sig { void }

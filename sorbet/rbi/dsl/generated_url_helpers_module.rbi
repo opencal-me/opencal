@@ -9,7 +9,7 @@ module GeneratedUrlHelpersModule
   include ::ActionDispatch::Routing::PolymorphicRoutes
 
   sig { params(args: T.untyped).returns(String) }
-  def calendly_url(*args); end
+  def activity_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def destroy_user_session_url(*args); end
@@ -21,12 +21,6 @@ module GeneratedUrlHelpersModule
   def edit_user_registrations_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def events_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def gh_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
   def good_job_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -36,7 +30,7 @@ module GeneratedUrlHelpersModule
   def graphql_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def hangout_url(*args); end
+  def home_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def mailcatcher_url(*args); end
@@ -46,9 +40,6 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def new_rails_conductor_inbound_email_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def poorly_drawn_lines_comic_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def rails_blob_representation_proxy_url(*args); end
@@ -126,28 +117,13 @@ module GeneratedUrlHelpersModule
   def rails_storage_redirect_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def resume_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
   def root_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def scottcall_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def scottkit_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def shortcuts_action_items_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def status_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def test_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def toronto_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def update_rails_disk_service_url(*args); end

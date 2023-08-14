@@ -92,7 +92,7 @@ WORKDIR /app
 ENV BUNDLE_WITHOUT="development test" RAILS_ENV=production RAILS_LOG_TO_STDOUT=true NODE_ENV=$RAILS_ENV
 
 # Copy dependency lists
-COPY Gemfile Gemfile.lock package.json yarn.lock requirements.txt ./
+COPY Gemfile Gemfile.lock package.json yarn.lock ./
 
 # Install dependencies
 RUN bundle install && yarn install

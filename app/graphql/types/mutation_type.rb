@@ -12,5 +12,7 @@ module Types
     #       mutation: Mutations::RequestUserPasswordReset
     # field :update_user_email, mutation: Mutations::UpdateUserEmail
     field :update_user, mutation: Mutations::UpdateUser
+
+    field :create_activity, mutation: Mutations::CreateActivity
   end
 end

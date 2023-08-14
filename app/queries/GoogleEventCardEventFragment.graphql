@@ -1,0 +1,12 @@
+fragment GoogleEventCardEventFragment on GoogleEvent {
+  activity {
+    id
+    url
+  }
+  description
+  durationSeconds
+  id
+  start
+  title
+  viewerIsOrganizer
+}

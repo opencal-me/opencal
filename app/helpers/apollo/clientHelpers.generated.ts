@@ -1,4 +1,42 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
+export type ActivityKeySpecifier = ('address' | 'coordinates' | 'description' | 'end' | 'googleEventId' | 'id' | 'location' | 'owner' | 'start' | 'title' | 'url' | ActivityKeySpecifier)[];
+export type ActivityFieldPolicy = {
+	address?: FieldPolicy<any> | FieldReadFunction<any>,
+	coordinates?: FieldPolicy<any> | FieldReadFunction<any>,
+	description?: FieldPolicy<any> | FieldReadFunction<any>,
+	end?: FieldPolicy<any> | FieldReadFunction<any>,
+	googleEventId?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	location?: FieldPolicy<any> | FieldReadFunction<any>,
+	owner?: FieldPolicy<any> | FieldReadFunction<any>,
+	start?: FieldPolicy<any> | FieldReadFunction<any>,
+	title?: FieldPolicy<any> | FieldReadFunction<any>,
+	url?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type CoordinatesKeySpecifier = ('latitude' | 'longitude' | CoordinatesKeySpecifier)[];
+export type CoordinatesFieldPolicy = {
+	latitude?: FieldPolicy<any> | FieldReadFunction<any>,
+	longitude?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type CreateActivityPayloadKeySpecifier = ('activity' | 'clientMutationId' | 'errors' | 'success' | CreateActivityPayloadKeySpecifier)[];
+export type CreateActivityPayloadFieldPolicy = {
+	activity?: FieldPolicy<any> | FieldReadFunction<any>,
+	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
+	errors?: FieldPolicy<any> | FieldReadFunction<any>,
+	success?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type GoogleEventKeySpecifier = ('activity' | 'description' | 'durationSeconds' | 'end' | 'id' | 'location' | 'start' | 'title' | 'viewerIsOrganizer' | GoogleEventKeySpecifier)[];
+export type GoogleEventFieldPolicy = {
+	activity?: FieldPolicy<any> | FieldReadFunction<any>,
+	description?: FieldPolicy<any> | FieldReadFunction<any>,
+	durationSeconds?: FieldPolicy<any> | FieldReadFunction<any>,
+	end?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	location?: FieldPolicy<any> | FieldReadFunction<any>,
+	start?: FieldPolicy<any> | FieldReadFunction<any>,
+	title?: FieldPolicy<any> | FieldReadFunction<any>,
+	viewerIsOrganizer?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type ImageKeySpecifier = ('id' | 'signedId' | 'url' | ImageKeySpecifier)[];
 export type ImageFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -10,8 +48,9 @@ export type InputFieldErrorFieldPolicy = {
 	field?: FieldPolicy<any> | FieldReadFunction<any>,
 	message?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('testMutation' | 'updateUser' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('createActivity' | 'testMutation' | 'updateUser' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
+	createActivity?: FieldPolicy<any> | FieldReadFunction<any>,
 	testMutation?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateUser?: FieldPolicy<any> | FieldReadFunction<any>
 };
@@ -19,8 +58,9 @@ export type NodeKeySpecifier = ('id' | NodeKeySpecifier)[];
 export type NodeFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('activityStatus' | 'announcement' | 'bootedAt' | 'contactEmail' | 'imageBySignedId' | 'passwordStrength' | 'testEcho' | 'user' | 'viewer' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('activity' | 'activityStatus' | 'announcement' | 'bootedAt' | 'contactEmail' | 'imageBySignedId' | 'passwordStrength' | 'testEcho' | 'user' | 'viewer' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
+	activity?: FieldPolicy<any> | FieldReadFunction<any>,
 	activityStatus?: FieldPolicy<any> | FieldReadFunction<any>,
 	announcement?: FieldPolicy<any> | FieldReadFunction<any>,
 	bootedAt?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -56,17 +96,35 @@ export type UpdateUserPayloadFieldPolicy = {
 	success?: FieldPolicy<any> | FieldReadFunction<any>,
 	user?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type UserKeySpecifier = ('avatarUrl' | 'email' | 'firstName' | 'id' | 'isAdmin' | 'lastName' | 'name' | UserKeySpecifier)[];
+export type UserKeySpecifier = ('activities' | 'avatarUrl' | 'email' | 'firstName' | 'googleEvents' | 'id' | 'isAdmin' | 'lastName' | 'name' | UserKeySpecifier)[];
 export type UserFieldPolicy = {
+	activities?: FieldPolicy<any> | FieldReadFunction<any>,
 	avatarUrl?: FieldPolicy<any> | FieldReadFunction<any>,
 	email?: FieldPolicy<any> | FieldReadFunction<any>,
 	firstName?: FieldPolicy<any> | FieldReadFunction<any>,
+	googleEvents?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	isAdmin?: FieldPolicy<any> | FieldReadFunction<any>,
 	lastName?: FieldPolicy<any> | FieldReadFunction<any>,
 	name?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type StrictTypedTypePolicies = {
+	Activity?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | ActivityKeySpecifier | (() => undefined | ActivityKeySpecifier),
+		fields?: ActivityFieldPolicy,
+	},
+	Coordinates?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | CoordinatesKeySpecifier | (() => undefined | CoordinatesKeySpecifier),
+		fields?: CoordinatesFieldPolicy,
+	},
+	CreateActivityPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | CreateActivityPayloadKeySpecifier | (() => undefined | CreateActivityPayloadKeySpecifier),
+		fields?: CreateActivityPayloadFieldPolicy,
+	},
+	GoogleEvent?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | GoogleEventKeySpecifier | (() => undefined | GoogleEventKeySpecifier),
+		fields?: GoogleEventFieldPolicy,
+	},
 	Image?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | ImageKeySpecifier | (() => undefined | ImageKeySpecifier),
 		fields?: ImageFieldPolicy,

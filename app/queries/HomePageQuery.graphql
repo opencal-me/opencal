@@ -1,6 +1,11 @@
 query HomePageQuery {
   announcement
   viewer {
+    activities {
+      id
+      title
+      url
+    }
     ...AppViewerFragment
     id
   }

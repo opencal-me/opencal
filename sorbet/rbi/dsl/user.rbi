@@ -5,6 +5,7 @@
 # Please instead update this file by running `bin/tapioca dsl User`.
 
 class User
+  include GeneratedAssociationMethods
   include GeneratedAttributeMethods
   extend CommonRelationMethods
   extend GeneratedRelationMethods
@@ -215,6 +216,22 @@ class User
 
     sig { returns(::User) }
     def third_to_last!; end
+  end
+
+  module GeneratedAssociationMethods
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :activities`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::Activity::PrivateCollectionProxy) }
+    def activities; end
+
+    sig { params(value: T::Enumerable[::Activity]).void }
+    def activities=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def activity_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def activity_ids=(ids); end
   end
 
   module GeneratedAssociationRelationMethods

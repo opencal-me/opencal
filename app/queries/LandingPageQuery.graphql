@@ -1,0 +1,7 @@
+query LandingPageQuery {
+  announcement
+  viewer {
+    ...AppViewerFragment
+    id
+  }
+}

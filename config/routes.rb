@@ -11,6 +11,14 @@ Rails.application.routes.draw do
   # == Healthcheck
   Healthcheck.routes(self)
 
+  # == Errors
+  scope controller: :errors do
+    match "/401", action: :unauthorized, via: :all
+    match "/404", action: :not_found, via: :all
+    match "/422", action: :unprocessable_entity, via: :all
+    match "/500", action: :internal_server_error, via: :all
+  end
+
   # == Devise
   devise_for :users,
              skip: %i[sessions registrations confirmations passwords],
@@ -50,44 +58,14 @@ Rails.application.routes.draw do
     post "/", action: :execute, as: :graphql
   end
 
-  # == Shorcuts
-  namespace :shortcuts do
-    resource :action_items, only: :create
-  end
+  # == Home
+  resource :home, only: :show
 
-  # == Poorly Drawn Lines
-  namespace :poorly_drawn_lines do
-    resources :comics, only: :show
-  end
+  # == Activities
+  resources :activities, path: "/join", only: :show
 
-  # == Calendly
-  get "/calendly" => "calendly#show"
-  get "/hangout" => "calendly#show"
-
-  # == Events
-  resources :events, only: :index
-
-  # == Errors
-  scope controller: :errors do
-    match "/401", action: :unauthorized, via: :all
-    match "/404", action: :not_found, via: :all
-    match "/422", action: :unprocessable_entity, via: :all
-    match "/500", action: :internal_server_error, via: :all
-  end
-
-  # == Resume
-  resource :resume, only: :show
-
-  # == Scottkit
-  resource :scottkit, only: :show
-
-  # == Scottcall
-  post "/scottcall" => "scottcalls#handle"
-
-  # == Pages
-  root "homepages#show"
-  get "/toronto" => "places#toronto"
-  get "/gh" => redirect("https://github.com/opencal-me/opencal", status: 302)
+  # == Landing
+  root "landings#show"
 
   # == Development
   if Rails.env.development?

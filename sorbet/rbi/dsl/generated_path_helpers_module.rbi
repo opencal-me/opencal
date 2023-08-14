@@ -9,7 +9,7 @@ module GeneratedPathHelpersModule
   include ::ActionDispatch::Routing::PolymorphicRoutes
 
   sig { params(args: T.untyped).returns(String) }
-  def calendly_path(*args); end
+  def activity_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def destroy_user_session_path(*args); end
@@ -21,12 +21,6 @@ module GeneratedPathHelpersModule
   def edit_user_registrations_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def events_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def gh_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
   def good_job_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -36,7 +30,7 @@ module GeneratedPathHelpersModule
   def graphql_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def hangout_path(*args); end
+  def home_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def mailcatcher_path(*args); end
@@ -46,9 +40,6 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def new_rails_conductor_inbound_email_source_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def poorly_drawn_lines_comic_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def rails_blob_path(*args); end
@@ -126,28 +117,13 @@ module GeneratedPathHelpersModule
   def rails_storage_redirect_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def resume_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
   def root_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def scottcall_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def scottkit_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def shortcuts_action_items_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def status_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def test_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def toronto_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def update_rails_disk_service_path(*args); end

@@ -1,0 +1,4 @@
+fragment ActivityCreateButtonActivityFragment on Activity {
+  id
+  url
+}

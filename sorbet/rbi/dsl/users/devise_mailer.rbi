@@ -6,13 +6,7 @@
 
 class Users::DeviseMailer
   class << self
-    sig do
-      params(
-        record: ::User,
-        token: ::String,
-        opts: T::Hash[::Symbol, T.untyped]
-      ).returns(::ActionMailer::MessageDelivery)
-    end
+    sig { params(record: T.untyped, token: T.untyped, opts: T.untyped).returns(::ActionMailer::MessageDelivery) }
     def confirmation_instructions(record, token, opts = T.unsafe(nil)); end
 
     sig { returns(::ActionMailer::MessageDelivery) }
@@ -24,13 +18,7 @@ class Users::DeviseMailer
     sig { params(record: ::User, opts: T::Hash[::Symbol, T.untyped]).returns(::ActionMailer::MessageDelivery) }
     def password_change(record, opts = T.unsafe(nil)); end
 
-    sig do
-      params(
-        record: ::User,
-        token: ::String,
-        opts: T::Hash[::Symbol, T.untyped]
-      ).returns(::ActionMailer::MessageDelivery)
-    end
+    sig { params(record: T.untyped, token: T.untyped, opts: T.untyped).returns(::ActionMailer::MessageDelivery) }
     def reset_password_instructions(record, token, opts = T.unsafe(nil)); end
 
     sig { params(record: T.untyped, token: T.untyped, opts: T.untyped).returns(::ActionMailer::MessageDelivery) }

@@ -159,6 +159,9 @@ gem "rack-cors", "~> 2.0"
 # Load events from Google Calendar
 gem "google_calendar", "~> 0.6.4"
 
+# Parse HTML with Nokogiri
+gem "nokogiri", "~> 1.15"
+
 group :development, :test do
   # Auto-detect and warn about N+1 queries
   gem "bullet"

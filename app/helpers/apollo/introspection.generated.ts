@@ -7,6 +7,7 @@
       const result: PossibleTypesResultData = {
   "possibleTypes": {
     "Node": [
+      "Activity",
       "Image",
       "User"
     ]

@@ -585,6 +585,7 @@ DEPENDENCIES
   listen (~> 3.8)
   mailjet (~> 1.7)
   nanoid (~> 2.0)
+  nokogiri (~> 1.15)
   omniauth (~> 2.1)
   omniauth-google-oauth2 (~> 1.1)
   omniauth-rails_csrf_protection (~> 1.0)
