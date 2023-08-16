@@ -11,7 +11,7 @@ import AppMeta from "./AppMeta";
 import type { AppMetaProps } from "./AppMeta";
 
 import AppHeader from "./AppHeader";
-import AppFooter from "./AppFooter";
+// import AppFooter from "./AppFooter";
 import AppFlash from "./AppFlash";
 import PageLayout from "./PageLayout";
 import PageContainer from "./PageContainer";
@@ -123,7 +123,7 @@ const AppLayout: FC<AppLayoutProps> = ({
           {content}
         </Box>
       </AppShell>
-      <AppFooter />
+      {/* <AppFooter /> */}
       <AppFlash />
     </PageLayout>
   );

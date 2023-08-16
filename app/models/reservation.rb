@@ -24,6 +24,9 @@
 class Reservation < ApplicationRecord
   include Identifiable
 
+  # == Attributes
+  enumerize :status, in: %i[pending confirmed cancelled]
+
   # == Associations
   belongs_to :activity
 
