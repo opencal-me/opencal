@@ -32,6 +32,11 @@ module Users
     private
 
     # == Helpers
+    sig { params(resource_or_scope: T.untyped).returns(String) }
+    def after_sign_in_path_for(resource_or_scope)
+      home_path
+    end
+
     sig { returns(OmniAuth::AuthHash) }
     def auth
       request.env.fetch("omniauth.auth")

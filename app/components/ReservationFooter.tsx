@@ -1,17 +1,16 @@
 import type { FC } from "react";
-import { Text, type BoxProps } from "@mantine/core";
+import { Text } from "@mantine/core";
+import type { BoxProps } from "@mantine/core";
 
 import type { ReservationFooterActivityFragment } from "~/helpers/graphql";
+import { ReservationCreateForm } from "./ReservationCreateForm";
 
 export type ReservationFooterProps = Omit<BoxProps, "children"> & {
   readonly activity: ReservationFooterActivityFragment;
 };
 
 const ReservationFooter: FC<ReservationFooterProps> = ({
-  activity: {
-    id: activityId /* eslint-disable-line @typescript-eslint/no-unused-vars */,
-    openings,
-  },
+  activity: { id: activityId, openings },
   sx,
   ...otherProps
 }) => {
@@ -37,9 +36,16 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
             color="dark"
             px="xl"
             onClick={() => {
-              showAlert({
-                title: "TODO",
-                message: "This needs to be implemented.",
+              openModal({
+                title: "Reserve your spot!",
+                children: (
+                  <ReservationCreateForm
+                    onReserve={() => {
+                      closeAllModals();
+                    }}
+                    {...{ activityId }}
+                  />
+                ),
               });
             }}
           >

@@ -16,6 +16,7 @@
 # Indexes
 #
 #  index_reservations_on_activity_id  (activity_id)
+#  index_reservations_uniqueness      (activity_id,email) UNIQUE
 #
 # Foreign Keys
 #
@@ -25,7 +26,7 @@ class Reservation < ApplicationRecord
   include Identifiable
 
   # == Attributes
-  enumerize :status, in: %i[pending confirmed cancelled]
+  enumerize :status, in: %i[pending confirmed rejected], default: :confirmed
 
   # == Associations
   belongs_to :activity
@@ -42,5 +43,35 @@ class Reservation < ApplicationRecord
 
   # == Validations
   validates :name, presence: true, length: { maximum: 129 }
-  validates :email, presence: true, length: { maximum: 100 }, email: true
+  validates :email,
+            presence: true,
+            length: { maximum: 100 },
+            email: true,
+            uniqueness: {
+              scope: :activity,
+              message: "already added",
+            }
+
+  # == Callbacks
+  after_create_commit :update_google_event
+
+  # == Methods
+  sig { returns(T::Hash[String, T.untyped]) }
+  def as_attendee_json
+    { "email" => email, "responseStatus" => "needsAction" }
+  end
+
+  private
+
+  # == Callback Handlers
+  sig { void }
+  def update_google_event
+    event = google_event!
+    event.attendees ||= []
+    unless event.attendees.any? { |attendee| attendee["email"] == email }
+      event.attendees << as_attendee_json
+      event.send_notifications = true
+      event.save
+    end
+  end
 end

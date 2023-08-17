@@ -45,7 +45,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
 
   return (
     <>
-      <PageContainer size="xs" withGutter>
+      <PageContainer size="xs" withGutter sx={{ flexGrow: 1 }}>
         <Stack>
           <Group spacing="xs">
             {resolve(() => {
@@ -150,7 +150,9 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
       <Affix position={{ left: 0, bottom: 0, right: 0 }}>
         <Transition
           transition="slide-up"
-          mounted={!footerIntersection?.isIntersecting}
+          mounted={
+            footerIntersection ? !footerIntersection.isIntersecting : false
+          }
         >
           {style => <ReservationFooter {...{ activity, style }} />}
         </Transition>

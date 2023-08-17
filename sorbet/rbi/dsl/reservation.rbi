@@ -10,10 +10,18 @@ class Reservation
   extend CommonRelationMethods
   extend GeneratedRelationMethods
 
+  sig { returns(Enumerize::Value) }
+  def status; end
+
   private
 
   sig { returns(NilClass) }
   def to_ary; end
+
+  class << self
+    sig { returns(Enumerize::Attribute) }
+    def status; end
+  end
 
   module CommonRelationMethods
     sig { params(block: T.nilable(T.proc.params(record: ::Reservation).returns(T.untyped))).returns(T::Boolean) }
@@ -746,7 +754,7 @@ class Reservation
     sig { returns(T::Boolean) }
     def saved_change_to_name?; end
 
-    sig { returns(T.nilable([::String, ::String])) }
+    sig { returns(T.nilable([T.untyped, T.untyped])) }
     def saved_change_to_status; end
 
     sig { returns(T::Boolean) }
@@ -758,16 +766,16 @@ class Reservation
     sig { returns(T::Boolean) }
     def saved_change_to_updated_at?; end
 
-    sig { returns(::String) }
+    sig { returns(T.untyped) }
     def status; end
 
-    sig { params(value: ::String).returns(::String) }
+    sig { params(value: T.untyped).returns(T.untyped) }
     def status=(value); end
 
     sig { returns(T::Boolean) }
     def status?; end
 
-    sig { returns(T.nilable(::String)) }
+    sig { returns(T.untyped) }
     def status_before_last_save; end
 
     sig { returns(T.untyped) }
@@ -776,28 +784,28 @@ class Reservation
     sig { returns(T::Boolean) }
     def status_came_from_user?; end
 
-    sig { returns(T.nilable([::String, ::String])) }
+    sig { returns(T.nilable([T.untyped, T.untyped])) }
     def status_change; end
 
-    sig { returns(T.nilable([::String, ::String])) }
+    sig { returns(T.nilable([T.untyped, T.untyped])) }
     def status_change_to_be_saved; end
 
     sig { returns(T::Boolean) }
     def status_changed?; end
 
-    sig { returns(T.nilable(::String)) }
+    sig { returns(T.untyped) }
     def status_in_database; end
 
-    sig { returns(T.nilable([::String, ::String])) }
+    sig { returns(T.nilable([T.untyped, T.untyped])) }
     def status_previous_change; end
 
     sig { returns(T::Boolean) }
     def status_previously_changed?; end
 
-    sig { returns(T.nilable(::String)) }
+    sig { returns(T.untyped) }
     def status_previously_was; end
 
-    sig { returns(T.nilable(::String)) }
+    sig { returns(T.untyped) }
     def status_was; end
 
     sig { void }

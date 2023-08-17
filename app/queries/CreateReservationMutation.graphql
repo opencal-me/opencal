@@ -1,0 +1,11 @@
+mutation CreateReservationMutation($input: CreateReservationInput!) {
+  payload: createReservation(input: $input) {
+    errors {
+      field
+      message
+    }
+    reservation {
+      id
+    }
+  }
+}

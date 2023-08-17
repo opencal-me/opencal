@@ -19,6 +19,11 @@ module Types
     field :name, String, null: false
 
     # == Resolvers
+    sig { returns(Activity::PrivateAssociationRelation) }
+    def activities
+      object.activities.where("LOWER(during) >= NOW()")
+    end
+
     sig { params(query: T.nilable(String)).returns(T::Array[Google::Event]) }
     def google_events(query: nil)
       object.google_events(query:)

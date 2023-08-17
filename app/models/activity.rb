@@ -119,6 +119,11 @@ class Activity < ApplicationRecord
     url_regexp.match?(location)
   end
 
+  sig { returns(Integer) }
+  def openings
+    capacity - reservations.count
+  end
+
   private
 
   # == Callback Handlers
