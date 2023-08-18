@@ -1,34 +1,39 @@
 # typed: true
 # frozen_string_literal: true
 
+# rubocop:disable Layout/LineLength
+#
 # == Schema Information
 #
 # Table name: users
 #
-#  id                     :uuid             not null, primary key
-#  avatar_url             :string
-#  current_sign_in_at     :datetime
-#  current_sign_in_ip     :string
-#  email                  :string           not null
-#  encrypted_password     :string           not null
-#  first_name             :string           not null
-#  google_refresh_token   :string           not null
-#  google_uid             :string           not null
-#  last_name              :string
-#  last_sign_in_at        :datetime
-#  last_sign_in_ip        :string
-#  remember_created_at    :datetime
-#  reset_password_sent_at :datetime
-#  reset_password_token   :string
-#  sign_in_count          :integer          default(0), not null
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
+#  id                               :uuid             not null, primary key
+#  avatar_url                       :string
+#  current_sign_in_at               :datetime
+#  current_sign_in_ip               :string
+#  email                            :string           not null
+#  encrypted_password               :string           not null
+#  first_name                       :string           not null
+#  google_calendar_last_imported_at :datetime
+#  google_refresh_token             :string           not null
+#  google_uid                       :string           not null
+#  last_name                        :string
+#  last_sign_in_at                  :datetime
+#  last_sign_in_ip                  :string
+#  remember_created_at              :datetime
+#  reset_password_sent_at           :datetime
+#  reset_password_token             :string
+#  sign_in_count                    :integer          default(0), not null
+#  created_at                       :datetime         not null
+#  updated_at                       :datetime         not null
 #
 # Indexes
 #
-#  index_users_on_email                 (email) UNIQUE
-#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  index_users_on_email                             (email) UNIQUE
+#  index_users_on_google_calendar_last_imported_at  (google_calendar_last_imported_at)
+#  index_users_on_reset_password_token              (reset_password_token) UNIQUE
 #
+# rubocop:enable Layout/LineLength
 class User < ApplicationRecord
   include Identifiable
 
@@ -155,7 +160,7 @@ class User < ApplicationRecord
     super(params)
   end
 
-  # == Calendar
+  # == Google Calendar
   sig { params(id: String, refresh_token: String).returns(Google::Calendar) }
   def self.google_calendar(id, refresh_token:)
     @calendars = T.let(@calendars,
@@ -179,7 +184,7 @@ class User < ApplicationRecord
   end
 
   sig { params(query: T.nilable(String)).returns(T::Array[Google::Event]) }
-  def google_events(query:)
+  def google_events(query: nil)
     options = { query: query.presence }
     options.compact!
     options[:max_results] = 10
@@ -189,6 +194,24 @@ class User < ApplicationRecord
   sig { params(id: String).returns(Google::Event) }
   def google_event(id)
     google_calendar.find_event_by_id(id).first
+  end
+
+  sig { returns(T::Array[Google::Event]) }
+  def changed_google_events
+    updated_min = google_calendar_last_imported_at || created_at or
+      raise "User not yet created"
+    params = {
+      "updatedMin" => google_calendar.send(:encode_time, updated_min),
+      "maxResults" => 2500,
+      "orderBy" => "updated",
+      "singleEvents" => true,
+    }
+    google_calendar.send(:event_lookup, "?" + params.to_query)
+  end
+
+  sig { void }
+  def update_google_calendar_last_imported_at!
+    update!(google_calendar_last_imported_at: Time.current)
   end
 
   # == Methods

@@ -14,6 +14,11 @@ Rails.application.configure do
         description: "Schedule purging of unattached ActiveStorage blobs.",
         cron: "0 */6 * * *",
       },
+      "import_activities": {
+        class: "ImportActivitiesJob",
+        description: "Import activities from Google Calendar.",
+        cron: "* * * * *",
+      },
     }
 
     # == Errors

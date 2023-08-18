@@ -132,7 +132,7 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
         </Button>
       ) : (
         <Tooltip
-          label="right now, you must be the event organizer to create an activity :("
+          label="You must be the event organizer to create an activity."
           withArrow
           disabled={viewerIsOrganizer}
         >

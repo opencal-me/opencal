@@ -37,6 +37,7 @@ module OpenCal
       require "email_validator_ext"
       require "devise_ext"
       require "friendly_id_ext"
+      require "google_calendar_ext"
       # require "discordrb_ext"
     end
 
@@ -114,6 +115,9 @@ module OpenCal
 
     # == Assets
     config.assets.prefix = "dist-sprockets/assets"
+
+    # == GlobalID
+    config.global_id.app = "opencal"
 
     # == Booted At
     sig { returns(Time) }

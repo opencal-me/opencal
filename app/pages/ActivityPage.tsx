@@ -67,10 +67,9 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
           </Group>
           <Text color="red" size="sm">
             {startDateLabel} at{" "}
-            {startDateTime.toLocaleString({
-              hour: "numeric",
-              minute: "numeric",
-            })}
+            <Time format={{ hour: "numeric", minute: "numeric" }}>
+              {startDateTime}
+            </Time>
           </Text>
           <Title size="h3" lh={1.3}>
             {title}

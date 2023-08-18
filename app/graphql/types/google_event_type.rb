@@ -39,7 +39,11 @@ module Types
     sig { returns(T::Boolean) }
     def viewer_is_organizer
       if (attendees = object.attendees)
-        attendees.any? { |attendee| attendee["organizer"] }
+        viewer = current_user!
+        viewer_attendee = attendees.find do |attendee|
+          attendee["email"] == viewer.email
+        end
+        !!(viewer_attendee && viewer_attendee["organizer"])
       else
         true
       end
