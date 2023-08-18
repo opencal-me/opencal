@@ -113,7 +113,7 @@ class Activity < ApplicationRecord
       user.changed_google_events.each do |event|
         if (attendees = event.attendees)
           owner_attendee = attendees.find do |attendee|
-            attendee.email == user.email
+            attendee["email"] == user.email
           end
           next unless owner_attendee && owner_attendee["organizer"]
         end
