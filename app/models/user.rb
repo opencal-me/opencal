@@ -165,17 +165,18 @@ class User < ApplicationRecord
   def self.google_calendar(id, refresh_token:)
     @calendars = T.let(@calendars,
                        T.nilable(T::Hash[T.untyped, Google::Calendar]))
-    @calendars ||= Hash.new do |hash, key; calendar, refresh_token|
-      calendar, refresh_token = key
-      hash[key] = Google::Calendar.new(
+    @calendars ||= Hash.new do |hash, id|
+      hash[id] = Google::Calendar.new(
         client_id: Google.client_id!,
         client_secret: Google.client_secret!,
         redirect_url: "urn:ietf:wg:oauth:2.0:oob",
-        calendar:,
-        refresh_token:,
+        calendar: id,
       )
     end
-    @calendars[[id, refresh_token]]
+    @calendars[id].tap do |calendar|
+      calendar = T.let(calendar, Google::Calendar)
+      calendar.login_with_refresh_token(refresh_token)
+    end
   end
 
   sig { returns(Google::Calendar) }
@@ -188,12 +189,16 @@ class User < ApplicationRecord
     options = { query: query.presence }
     options.compact!
     options[:max_results] = 10
-    google_calendar.find_future_events(options)
+    google_calendar_operation do |calendar|
+      calendar.find_future_events(options)
+    end
   end
 
   sig { params(id: String).returns(Google::Event) }
   def google_event(id)
-    google_calendar.find_event_by_id(id).first
+    google_calendar_operation do |calendar|
+      calendar.find_event_by_id(id).first
+    end
   end
 
   sig { returns(T::Array[Google::Event]) }
@@ -206,7 +211,9 @@ class User < ApplicationRecord
       "orderBy" => "updated",
       "singleEvents" => true,
     }
-    google_calendar.send(:event_lookup, "?" + params.to_query)
+    google_calendar_operation do |calendar|
+      calendar.send(:event_lookup, "?" + params.to_query)
+    end
   end
 
   sig { void }
@@ -227,11 +234,19 @@ class User < ApplicationRecord
   #   send_welcome_email if confirmed_at_previously_was.nil?
   # end
 
-  # private
+  private
 
-  # # == Normalization handlers
-  # sig { void }
-  # def remove_unconfirmed_email_if_matches_email
-  #   self.unconfirmed_email = nil if email == unconfirmed_email
-  # end
+  # == Helpers
+  sig do
+    type_parameters(:U).params(
+      block: T.proc.params(
+        calendar: Google::Calendar,
+      ).returns(T.type_parameter(:U)),
+    ).returns(T.type_parameter(:U))
+  end
+  def google_calendar_operation(&block)
+    yield google_calendar
+  rescue => _
+    raise "Google Calendar error"
+  end
 end
