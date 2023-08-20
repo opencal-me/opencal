@@ -16,10 +16,9 @@ const UserWelcomeEmail: PageComponent<UserWelcomeEmailProps> = ({
     <>
       <Text>Hi, {firstName}!</Text>
       <Text>
-        Thanks for registering for an account on my website.
+        Thanks for making an account on OpenCal!
         <br />
-        I&apos;ll keep you posted when there&apos;s more stuff you can do on
-        here :)
+        We&apos;ll keep you posted when we have updates to share :)
       </Text>
     </>
   );

@@ -1,0 +1,11 @@
+query ActivityCreatedEmailQuery($activityId: ID!) {
+  activity(id: $activityId) {
+    id
+    owner {
+      firstName
+      id
+    }
+    title
+    url
+  }
+}

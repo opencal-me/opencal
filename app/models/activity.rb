@@ -106,6 +106,12 @@ class Activity < ApplicationRecord
   # == Callbacks
   after_commit :update_google_event, on: %i[create destroy]
 
+  # == Emails
+  sig { void }
+  def send_created_email
+    ActivityMailer.created_email(self).deliver_later
+  end
+
   # == Importing
   sig { params(user: User).void }
   def self.import_for_user!(user)
@@ -120,6 +126,7 @@ class Activity < ApplicationRecord
         if event.status != "cancelled" && event.title&.end_with?(" [open]")
           activity = from_google_event(event, owner: user)
           activity.save!
+          activity.send_created_email if activity.previously_new_record?
         elsif (activity = find_by(google_event_id: event.id, owner: user))
           activity.destroy!
         end
@@ -135,10 +142,13 @@ class Activity < ApplicationRecord
 
   sig { params(max_users: Integer).void }
   def self.import(max_users: 10)
-    User.where(google_calendar_last_imported_at: nil)
-      .or(User.where("google_calendar_last_imported_at < ?", 5.minutes.ago))
-      .limit(max_users)
-      .each { |user| import_for_user_later(user) }
+    users = if Rails.env.production?
+      User.where(google_calendar_last_imported_at: nil)
+        .or(User.where("google_calendar_last_imported_at < ?", 5.minutes.ago))
+    else
+      User.all
+    end
+    users.limit(max_users).each { |user| import_for_user_later(user) }
   end
 
   sig { params(max_users: T.nilable(Integer)).void }
