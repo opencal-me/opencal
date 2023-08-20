@@ -117,7 +117,7 @@ class Activity < ApplicationRecord
           end
           next unless owner_attendee && owner_attendee["organizer"]
         end
-        if event.status != "cancelled" && event.title.end_with?(" [open]")
+        if event.status != "cancelled" && event.title&.end_with?(" [open]")
           activity = from_google_event(event, owner: user)
           activity.save!
         elsif (activity = find_by(google_event_id: event.id, owner: user))
