@@ -232,6 +232,20 @@ class User
 
     sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
     def activity_ids=(ids); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def google_calendar_channel_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def google_calendar_channel_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :google_calendar_channels`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::GoogleCalendarChannel::PrivateCollectionProxy) }
+    def google_calendar_channels; end
+
+    sig { params(value: T::Enumerable[::GoogleCalendarChannel]).void }
+    def google_calendar_channels=(value); end
   end
 
   module GeneratedAssociationRelationMethods

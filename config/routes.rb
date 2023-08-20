@@ -64,6 +64,13 @@ Rails.application.routes.draw do
   # == Activities
   resources :activities, path: "/join", only: :show
 
+  # == Google Calendar Channels
+  resources :google_calendar_channels, only: [] do
+    member do
+      post :notify
+    end
+  end
+
   # == Landing
   root "landings#show"
 

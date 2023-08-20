@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_17_201354) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_20_020147) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -152,6 +152,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_17_201354) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
+  create_table "google_calendar_channels", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "owner_id", null: false
+    t.string "calendar_id", null: false
+    t.string "resource_id", null: false
+    t.string "token", null: false
+    t.datetime "expires_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["calendar_id"], name: "index_google_calendar_channels_on_calendar_id", unique: true
+    t.index ["owner_id"], name: "index_google_calendar_channels_on_owner_id"
+    t.index ["resource_id"], name: "index_google_calendar_channels_on_resource_id", unique: true
+    t.index ["token"], name: "index_google_calendar_channels_on_token", unique: true
+  end
+
   create_table "reservations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "activity_id", null: false
     t.string "name", null: false
@@ -191,5 +205,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_17_201354) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "activities", "users", column: "owner_id"
   add_foreign_key "addresses", "activities"
+  add_foreign_key "google_calendar_channels", "users", column: "owner_id"
   add_foreign_key "reservations", "activities"
 end

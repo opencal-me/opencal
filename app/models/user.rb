@@ -78,6 +78,10 @@ class User < ApplicationRecord
            inverse_of: :owner,
            foreign_key: :owner_id,
            dependent: :destroy
+  has_many :google_calendar_channels,
+           inverse_of: :owner,
+           foreign_key: :owner_id,
+           dependent: :destroy
 
   # == Normalizations
   # before_validation :remove_unconfirmed_email_if_matches_email,

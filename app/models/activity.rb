@@ -70,9 +70,6 @@ class Activity < ApplicationRecord
   # == Normalizations
   before_validation :normalize_title
 
-  # == Callbacks
-  after_create_commit :update_google_event
-
   # == Geocoding
   sig { returns(RGeo::Geographic::Factory) }
   def self.coordinates_factory
@@ -106,6 +103,9 @@ class Activity < ApplicationRecord
   # == Callbacks
   before_validation :geocode, if: :location_changed?, unless: :location_is_url?
 
+  # == Callbacks
+  after_commit :update_google_event, on: %i[create destroy]
+
   # == Importing
   sig { params(user: User).void }
   def self.import_for_user!(user)
@@ -117,7 +117,7 @@ class Activity < ApplicationRecord
           end
           next unless owner_attendee && owner_attendee["organizer"]
         end
-        if event.status != "cancelled" && event.title.ends_with?(" [open]")
+        if event.status != "cancelled" && event.title.end_with?(" [open]")
           activity = from_google_event(event, owner: user)
           activity.save!
         elsif (activity = find_by(google_event_id: event.id, owner: user))
@@ -186,7 +186,7 @@ class Activity < ApplicationRecord
 
   # == Normalization handlers
   def normalize_title
-    unless title.end_with?(" [open]")
+    unless self[:title]&.end_with?(" [open]")
       self.title += " [open]"
     end
   end
@@ -195,8 +195,16 @@ class Activity < ApplicationRecord
   sig { void }
   def update_google_event
     event = google_event!
-    event.title = title
-    event.attachments = [{ "fileUrl" => activity_url(self) }]
-    event.save
+    if previously_new_record?
+      event.title = title
+      event.attachments = [{ "fileUrl" => activity_url(self) }]
+      event.save
+    elsif destroyed?
+      if event.status != "cancelled"
+        event.title.delete_suffix!(" [open]")
+        event.attachments = []
+        event.save
+      end
+    end
   end
 end
