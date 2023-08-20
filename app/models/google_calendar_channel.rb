@@ -42,29 +42,14 @@ class GoogleCalendarChannel < ApplicationRecord
   # == Callbacks
   before_destroy :stop
 
-  # == Methods: Registration
-  sig { returns(T::Boolean) }
-  def self.registerable?
-    Rails.application.routes.default_url_options[:host] != "localhost"
-  end
-
+  # == Methods: Sync
   sig { void }
   def self.sync!
     if registerable?
       User
         .where.not(email: GoogleCalendarChannel.select(:calendar_id))
         .find_each do |user|
-          channel = GoogleCalendarChannel.new(
-            owner: user,
-            calendar_id: user.email,
-          )
-          channel.register
-          begin
-            channel.save!
-          rescue => error
-            channel.stop
-            raise error
-          end
+          GoogleCalendarChannel.register_for_user!(user)
         end
     else
       GoogleCalendarChannel.destroy_all
@@ -76,7 +61,30 @@ class GoogleCalendarChannel < ApplicationRecord
     SyncGoogleCalendarChannelsJob.perform_later
   end
 
-  sig { returns(TrueClass) }
+  # == Methods: Registration
+  sig { returns(T::Boolean) }
+  def self.registerable?
+    Rails.application.routes.default_url_options[:host] != "localhost"
+  end
+
+  sig { params(user: User).returns(GoogleCalendarChannel) }
+  def self.register_for_user!(user)
+    channel = GoogleCalendarChannel.new(owner: user, calendar_id: user.email)
+    channel.register
+    begin
+      channel.tap(&:save!)
+    rescue => error
+      channel.stop
+      raise error
+    end
+  end
+
+  sig { params(user: User).void }
+  def self.register_for_user_later(user)
+    RegisterGoogleCalendarChannelForUserJob.perform_later(user)
+  end
+
+  sig { void }
   def register
     if default_url_options[:host] == "localhost"
       raise "Cannot register channel in localhost"
@@ -90,7 +98,6 @@ class GoogleCalendarChannel < ApplicationRecord
     self.id = id
     self.resource_id = channel["resourceId"]
     self.expires_at = Time.zone.at(channel["expiration"].to_i / 1000)
-    true
   end
 
   sig { void }

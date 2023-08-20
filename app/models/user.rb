@@ -109,6 +109,7 @@ class User < ApplicationRecord
 
   # == Callbacks
   after_create_commit :send_welcome_email
+  after_create_commit :register_google_calendar_channel
 
   # == Finders
   sig { returns(PrivateRelation) }
@@ -252,5 +253,11 @@ class User < ApplicationRecord
     yield google_calendar
   rescue => _
     raise "Google Calendar error"
+  end
+
+  # == Callback Handlers
+  sig { void }
+  def register_google_calendar_channel
+    GoogleCalendarChannel.register_for_user_later(self)
   end
 end
