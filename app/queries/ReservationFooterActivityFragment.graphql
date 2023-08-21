@@ -3,4 +3,5 @@ fragment ReservationFooterActivityFragment on Activity {
   id
   openings
   storyImageUrl
+  url
 }

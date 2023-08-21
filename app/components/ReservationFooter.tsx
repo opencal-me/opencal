@@ -2,6 +2,7 @@ import type { FC } from "react";
 import ShareIcon from "~icons/lucide/share";
 
 import { ActionIcon, Text } from "@mantine/core";
+import { useClipboard } from "@mantine/hooks";
 import type { BoxProps } from "@mantine/core";
 
 import type { ReservationFooterActivityFragment } from "~/helpers/graphql";
@@ -12,11 +13,22 @@ export type ReservationFooterProps = Omit<BoxProps, "children"> & {
 };
 
 const ReservationFooter: FC<ReservationFooterProps> = ({
-  activity: { id: activityId, handle, openings, storyImageUrl },
+  activity: { id: activityId, handle, openings, url, storyImageUrl },
   sx,
   ...otherProps
 }) => {
   const [storyImageLoading, setStoryImageLoading] = useState(false);
+
+  const { copy, copied } = useClipboard();
+  useEffect(() => {
+    if (copied) {
+      showNotice({
+        title: "Activity URL copied",
+        message: "Please paste this URL to your story before you post it!",
+      });
+    }
+  }, [copied]);
+
   return (
     <Box
       bg="white"
@@ -48,6 +60,7 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
                   sx={({ black }) => ({ color: black })}
                   loading={storyImageLoading}
                   onClick={() => {
+                    copy(url);
                     setStoryImageLoading(true);
                     fetch(storyImageUrl)
                       .then(response => response.blob())
