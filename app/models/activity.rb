@@ -81,16 +81,17 @@ class Activity < ApplicationRecord
 
   geocoded_by :location do |activity, results|
     if (result = results.first)
-      result = T.cast(result, Geocoder::Result::Nominatim)
-      quarter = T.let(result.data.dig("address", "quarter"), T.nilable(String))
+      result = T.cast(result, Geocoder::Result::Here)
+      district = T.let(result.data.dig("address", "district"),
+                       T.nilable(String))
       activity.coordinates = coordinates_factory.point(
         result.longitude,
         result.latitude,
       )
       activity.build_address(
         full_address: result.address,
-        street_address: [result.house_number, result.street].compact.join(" "),
-        neighbourhood: result.neighbourhood || quarter,
+        street_address: [result.street_number, result.route].compact.join(" "),
+        neighbourhood: district,
         city: result.city,
         country: result.country,
         province: result.province,
@@ -101,7 +102,7 @@ class Activity < ApplicationRecord
   end
 
   # == Callbacks
-  before_validation :geocode, if: :location_changed?, unless: :location_is_url?
+  after_validation :geocode, if: :location_changed?, unless: :location_is_url?
 
   # == Callbacks
   after_commit :update_google_event, on: %i[create destroy]
