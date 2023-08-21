@@ -77,7 +77,7 @@ module Google
     end
 
     def attachments_attributes
-      return [] unless @attachments
+      return {} unless @attachments
       attachments = @attachments.map do |attachment|
         attachment.slice("fileUrl")
       end
