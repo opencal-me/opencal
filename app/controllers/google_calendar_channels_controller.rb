@@ -7,7 +7,7 @@ class GoogleCalendarChannelsController < ApplicationController
   before_action :set_channel
 
   # == Actions
-  def notify
+  def callback
     channel = T.must(@channel)
     if request.headers["X-Goog-Channel-Token"] != channel.token
       raise "Invalid token"

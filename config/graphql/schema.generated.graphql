@@ -6,7 +6,7 @@ directive @oneOf on INPUT_OBJECT
 type Activity implements Node {
   address: String
   coordinates: Coordinates
-  description: String
+  descriptionHtml: String
   end: DateTime!
   googleEventId: String!
 
@@ -70,7 +70,7 @@ scalar DateTime
 
 type GoogleEvent {
   activity: Activity
-  description: String
+  descriptionHtml: String
   durationSeconds: Int!
   end: DateTime!
   id: String!

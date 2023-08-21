@@ -12,6 +12,9 @@ module GeneratedPathHelpersModule
   def activity_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def callback_google_calendar_channel_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def destroy_user_session_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -40,9 +43,6 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def new_rails_conductor_inbound_email_source_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def notify_google_calendar_channel_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def rails_blob_path(*args); end

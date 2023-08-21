@@ -12,6 +12,9 @@ module GeneratedUrlHelpersModule
   def activity_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def callback_google_calendar_channel_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def destroy_user_session_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -40,9 +43,6 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def new_rails_conductor_inbound_email_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def notify_google_calendar_channel_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def rails_blob_representation_proxy_url(*args); end

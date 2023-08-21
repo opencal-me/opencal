@@ -5,14 +5,15 @@
 #
 # Table name: google_calendar_channels
 #
-#  id          :uuid             not null, primary key
-#  expires_at  :datetime         not null
-#  token       :string           not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  calendar_id :string           not null
-#  owner_id    :uuid             not null
-#  resource_id :string           not null
+#  id           :uuid             not null, primary key
+#  callback_url :string           not null
+#  expires_at   :datetime         not null
+#  token        :string           not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  calendar_id  :string           not null
+#  owner_id     :uuid             not null
+#  resource_id  :string           not null
 #
 # Indexes
 #
@@ -42,18 +43,21 @@ class GoogleCalendarChannel < ApplicationRecord
   # == Callbacks
   before_destroy :stop
 
-  # == Methods: Sync
+  # == Scopes
+  scope :to_deregister, -> {
+    T.bind(self, PrivateRelation)
+    prefix = Rails.application.routes.url_helpers.root_url
+    sanitized_prefix = ActiveRecord::Base.sanitize_sql_like(prefix)
+    where("callback_url NOT LIKE ?", sanitized_prefix + "%")
+  }
+
+  # == Sync
   sig { void }
   def self.sync!
-    if registerable?
-      User
-        .where.not(email: GoogleCalendarChannel.select(:calendar_id))
-        .find_each do |user|
-          GoogleCalendarChannel.register_for_user!(user)
-        end
-    else
-      GoogleCalendarChannel.destroy_all
-    end
+    to_deregister.find_each(&:destroy!)
+    users_to_register.find_each do |user|
+      GoogleCalendarChannel.register_for_user!(user)
+    end if registerable?
   end
 
   sig { void }
@@ -61,10 +65,15 @@ class GoogleCalendarChannel < ApplicationRecord
     SyncGoogleCalendarChannelsJob.perform_later
   end
 
-  # == Methods: Registration
+  # == Registration
   sig { returns(T::Boolean) }
   def self.registerable?
     Rails.application.routes.default_url_options[:host] != "localhost"
+  end
+
+  sig { returns(User::PrivateRelation) }
+  def self.users_to_register
+    User.where.not(email: GoogleCalendarChannel.select(:calendar_id))
   end
 
   sig { params(user: User).returns(GoogleCalendarChannel) }
@@ -90,16 +99,19 @@ class GoogleCalendarChannel < ApplicationRecord
       raise "Cannot register channel in localhost"
     end
     id = SecureRandom.uuid
+    address = callback_google_calendar_channel_url(id)
     channel = owner!.google_calendar.watch_events(
       id:,
       token:,
-      address: notify_google_calendar_channel_url(id),
+      address:,
     )
     self.id = id
+    self.callback_url = address
     self.resource_id = channel["resourceId"]
     self.expires_at = Time.zone.at(channel["expiration"].to_i / 1000)
   end
 
+  # == Methods
   sig { void }
   def stop
     owner!.google_calendar.stop_channel(id: T.must(id), resource_id:)

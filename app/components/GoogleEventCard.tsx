@@ -1,10 +1,9 @@
-import type { FC, JSXElementConstructor } from "react";
-import Linkify from "linkify-react";
+import type { FC } from "react";
 import humanizeDuration from "humanize-duration";
 import RightArrowIcon from "~icons/heroicons/arrow-right-20-solid";
 
 import { Text, MantineProvider } from "@mantine/core";
-import type { BoxProps, TextProps } from "@mantine/core";
+import type { BoxProps } from "@mantine/core";
 
 import type {
   ActivityCreateButtonActivityFragment,
@@ -12,6 +11,7 @@ import type {
 } from "~/helpers/graphql";
 
 import ActivityCreateButton from "./ActivityCreateButton";
+import HTMLDescription from "./HTMLDescription";
 
 export type GoogleEventCardProps = Omit<BoxProps, "children"> & {
   readonly event: GoogleEventCardEventFragment;
@@ -42,17 +42,31 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
   event: {
     id: eventId,
     title,
-    description,
+    descriptionHtml,
     start,
     durationSeconds,
     activity,
     viewerIsOrganizer,
   },
   onCreateActivity,
+  sx,
   ...otherProps
 }) => {
   return (
-    <Card withBorder {...otherProps}>
+    <Card
+      withBorder
+      sx={[
+        ...packSx(sx),
+        ({ fn }) => ({
+          ...(activity && {
+            "&[data-with-border]": {
+              borderColor: fn.primaryColor(),
+            },
+          }),
+        }),
+      ]}
+      {...otherProps}
+    >
       <Group align="start">
         <Text weight={500} sx={{ flexGrow: 1 }}>
           {title ?? "(no title)"}
@@ -99,27 +113,8 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
           </Group>
         </MantineProvider>
       </Group>
-      {!!description && (
-        <Linkify<TextProps, JSXElementConstructor<TextProps>>
-          as={Text}
-          options={{
-            render: ({ content, attributes }) => (
-              <Anchor
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                {...attributes}
-              >
-                {content}
-              </Anchor>
-            ),
-          }}
-          size="sm"
-          color="dimmed"
-          lineClamp={4}
-          sx={{ whiteSpace: "pre-wrap" }}
-        >
-          {description}
-        </Linkify>
+      {!!descriptionHtml && (
+        <HTMLDescription>{descriptionHtml}</HTMLDescription>
       )}
       <Space h={6} />
       {activity ? (

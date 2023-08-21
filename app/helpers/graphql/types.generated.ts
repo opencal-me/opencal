@@ -22,7 +22,7 @@ export type Activity = Node & {
   __typename?: 'Activity';
   address?: Maybe<Scalars['String']['output']>;
   coordinates?: Maybe<Coordinates>;
-  description?: Maybe<Scalars['String']['output']>;
+  descriptionHtml?: Maybe<Scalars['String']['output']>;
   end: Scalars['DateTime']['output'];
   googleEventId: Scalars['String']['output'];
   /** ID of the object. */
@@ -81,7 +81,7 @@ export type CreateReservationPayload = {
 export type GoogleEvent = {
   __typename?: 'GoogleEvent';
   activity?: Maybe<Activity>;
-  description?: Maybe<Scalars['String']['output']>;
+  descriptionHtml?: Maybe<Scalars['String']['output']>;
   durationSeconds: Scalars['Int']['output'];
   end: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];

@@ -9,7 +9,7 @@ module Types
     # == Fields
     field :address, String
     field :coordinates, CoordinatesType
-    field :description, String
+    field :description_html, String
     field :end, DateTimeType, null: false, resolver_method: :resolve_end
     field :google_event_id, String, null: false
     field :location, String
@@ -29,12 +29,9 @@ module Types
     end
 
     sig { returns(T.nilable(String)) }
-    def description
+    def description_html
       if (doc = description_doc)
-        texts = doc.search("//text()").map do |node|
-          node.text.split("\n").map(&:strip).join("\n").gsub(/(\n{2,})/, "\n\n")
-        end
-        texts.join("\n")
+        doc.search("//body").inner_html
       end
     end
 
@@ -56,7 +53,7 @@ module Types
     sig { returns(T.nilable(Nokogiri::HTML::Document)) }
     def description_doc
       if (description = object.description)
-        Nokogiri::HTML(description)
+        Nokogiri::HTML.parse(description)
       end
     end
   end

@@ -1,6 +1,4 @@
-import type { JSXElementConstructor } from "react";
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
-import Linkify from "linkify-react";
 import { Marker } from "react-map-gl";
 
 import LocationIcon from "~icons/heroicons/map-pin-20-solid";
@@ -9,13 +7,13 @@ import HideIcon from "~icons/heroicons/chevron-double-up-20-solid";
 
 import { Affix, Avatar, Spoiler, Text } from "@mantine/core";
 import { useIntersection } from "@mantine/hooks";
-import type { TextProps } from "@mantine/core";
 
 import type { ActivityPageQuery } from "~/helpers/graphql";
 
 import ReservationFooter from "~/components/ReservationFooter";
 import Map from "~/components/Map";
 import PageContainer from "~/components/PageContainer";
+import HTMLDescription from "~/components/HTMLDescription";
 
 export type ActivityPageProps = PagePropsWithData<ActivityPageQuery>;
 
@@ -23,7 +21,8 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
   data: { activity },
 }) => {
   invariant(activity, "Missing activity");
-  const { owner, start, title, description, coordinates, address } = activity;
+  const { owner, start, title, descriptionHtml, coordinates, address } =
+    activity;
 
   // == Start
   const startDateTime = useMemo(() => DateTime.fromISO(start), [start]);
@@ -74,7 +73,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
           <Title size="h3" lh={1.3}>
             {title}
           </Title>
-          {description && (
+          {!!descriptionHtml && (
             <Spoiler
               maxHeight={200}
               showLabel={
@@ -95,25 +94,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
                 },
               })}
             >
-              <Linkify<TextProps, JSXElementConstructor<TextProps>>
-                as={Text}
-                options={{
-                  render: ({ content, attributes }) => (
-                    <Anchor
-                      target="_blank"
-                      rel="noopener noreferrer nofollow"
-                      {...attributes}
-                    >
-                      {content}
-                    </Anchor>
-                  ),
-                }}
-                size="sm"
-                color="gray.7"
-                sx={{ whiteSpace: "pre-wrap" }}
-              >
-                {description}
-              </Linkify>
+              <HTMLDescription>{descriptionHtml}</HTMLDescription>
             </Spoiler>
           )}
           {coordinates && (
@@ -161,11 +142,23 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
 };
 
 ActivityPage.layout = buildLayout<ActivityPageProps>(
-  (page, { data: { viewer } }) => (
-    <AppLayout padding={0} {...{ viewer }}>
-      {page}
-    </AppLayout>
-  ),
+  (page, { data: { viewer, activity } }) => {
+    invariant(activity, "Missing activity");
+    return (
+      <AppLayout
+        padding={0}
+        {...(viewer && {
+          breadcrumbs: [
+            { title: "Home", href: "/home" },
+            { title: activity.title, href: activity.url },
+          ],
+        })}
+        {...{ viewer }}
+      >
+        {page}
+      </AppLayout>
+    );
+  },
 );
 
 export default ActivityPage;

@@ -3,7 +3,7 @@ fragment GoogleEventCardEventFragment on GoogleEvent {
     id
     url
   }
-  description
+  descriptionHtml
   durationSeconds
   id
   start

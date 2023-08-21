@@ -4,9 +4,8 @@
 module Types
   class GoogleEventType < BaseObject
     # == Fields
-    field :description, String
-    # field :description_html, String
     field :activity, ActivityType
+    field :description_html, String
     field :duration_seconds, Integer, null: false
     field :end, DateTimeType, null: false, method: :end_time
     field :id, String, null: false
@@ -22,12 +21,9 @@ module Types
     end
 
     sig { returns(T.nilable(String)) }
-    def description
+    def description_html
       if (doc = description_doc)
-        texts = doc.search("//text()").map do |node|
-          node.text.split("\n").map(&:strip).join("\n").gsub("\n\n", "\n")
-        end
-        texts.join("\n")
+        doc.search("//body").inner_html
       end
     end
 

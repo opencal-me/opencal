@@ -1,9 +1,9 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
-export type ActivityKeySpecifier = ('address' | 'coordinates' | 'description' | 'end' | 'googleEventId' | 'id' | 'location' | 'openings' | 'owner' | 'reservations' | 'start' | 'title' | 'url' | ActivityKeySpecifier)[];
+export type ActivityKeySpecifier = ('address' | 'coordinates' | 'descriptionHtml' | 'end' | 'googleEventId' | 'id' | 'location' | 'openings' | 'owner' | 'reservations' | 'start' | 'title' | 'url' | ActivityKeySpecifier)[];
 export type ActivityFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,
 	coordinates?: FieldPolicy<any> | FieldReadFunction<any>,
-	description?: FieldPolicy<any> | FieldReadFunction<any>,
+	descriptionHtml?: FieldPolicy<any> | FieldReadFunction<any>,
 	end?: FieldPolicy<any> | FieldReadFunction<any>,
 	googleEventId?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -34,10 +34,10 @@ export type CreateReservationPayloadFieldPolicy = {
 	reservation?: FieldPolicy<any> | FieldReadFunction<any>,
 	success?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type GoogleEventKeySpecifier = ('activity' | 'description' | 'durationSeconds' | 'end' | 'id' | 'location' | 'start' | 'title' | 'viewerIsOrganizer' | GoogleEventKeySpecifier)[];
+export type GoogleEventKeySpecifier = ('activity' | 'descriptionHtml' | 'durationSeconds' | 'end' | 'id' | 'location' | 'start' | 'title' | 'viewerIsOrganizer' | GoogleEventKeySpecifier)[];
 export type GoogleEventFieldPolicy = {
 	activity?: FieldPolicy<any> | FieldReadFunction<any>,
-	description?: FieldPolicy<any> | FieldReadFunction<any>,
+	descriptionHtml?: FieldPolicy<any> | FieldReadFunction<any>,
 	durationSeconds?: FieldPolicy<any> | FieldReadFunction<any>,
 	end?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,

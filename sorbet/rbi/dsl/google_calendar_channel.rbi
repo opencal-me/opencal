@@ -455,6 +455,9 @@ class GoogleCalendarChannel
     def structurally_compatible?(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def to_deregister(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def uniq!(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
@@ -530,6 +533,51 @@ class GoogleCalendarChannel
 
     sig { void }
     def calendar_id_will_change!; end
+
+    sig { returns(::String) }
+    def callback_url; end
+
+    sig { params(value: ::String).returns(::String) }
+    def callback_url=(value); end
+
+    sig { returns(T::Boolean) }
+    def callback_url?; end
+
+    sig { returns(T.nilable(::String)) }
+    def callback_url_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def callback_url_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def callback_url_came_from_user?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def callback_url_change; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def callback_url_change_to_be_saved; end
+
+    sig { returns(T::Boolean) }
+    def callback_url_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def callback_url_in_database; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def callback_url_previous_change; end
+
+    sig { returns(T::Boolean) }
+    def callback_url_previously_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def callback_url_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def callback_url_was; end
+
+    sig { void }
+    def callback_url_will_change!; end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def created_at; end
@@ -760,6 +808,9 @@ class GoogleCalendarChannel
     def restore_calendar_id!; end
 
     sig { void }
+    def restore_callback_url!; end
+
+    sig { void }
     def restore_created_at!; end
 
     sig { void }
@@ -785,6 +836,12 @@ class GoogleCalendarChannel
 
     sig { returns(T::Boolean) }
     def saved_change_to_calendar_id?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def saved_change_to_callback_url; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_callback_url?; end
 
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def saved_change_to_created_at; end
@@ -920,6 +977,9 @@ class GoogleCalendarChannel
 
     sig { returns(T::Boolean) }
     def will_save_change_to_calendar_id?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_callback_url?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_created_at?; end
@@ -1063,6 +1123,9 @@ class GoogleCalendarChannel
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def structurally_compatible?(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def to_deregister(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def uniq!(*args, &blk); end

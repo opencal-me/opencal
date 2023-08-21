@@ -67,7 +67,7 @@ Rails.application.routes.draw do
   # == Google Calendar Channels
   resources :google_calendar_channels, only: [] do
     member do
-      post :notify
+      post :callback, path: "/notify"
     end
   end
 

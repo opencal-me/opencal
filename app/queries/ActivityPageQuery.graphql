@@ -5,7 +5,7 @@ query ActivityPageQuery($activityId: ID!) {
       latitude
       longitude
     }
-    description
+    descriptionHtml
     end
     id
     owner {
@@ -16,6 +16,7 @@ query ActivityPageQuery($activityId: ID!) {
     ...ReservationFooterActivityFragment
     start
     title
+    url
   }
   viewer {
     ...AppViewerFragment
