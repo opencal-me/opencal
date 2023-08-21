@@ -440,6 +440,8 @@ GEM
     ruby2_keywords (0.0.5)
     ruby_http_client (3.5.5)
     rubyzip (2.3.2)
+    selenium-devtools (0.115.0)
+      selenium-webdriver (~> 4.2)
     selenium-webdriver (4.11.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
@@ -618,6 +620,7 @@ DEPENDENCIES
   rubocop-sorbet
   ruby-lsp
   ruby-vips (~> 2.1)
+  selenium-devtools (~> 0.115.0)
   selenium-webdriver (~> 4.10)
   sendgrid-ruby (~> 6.6)
   sentry-rails (~> 5.9)

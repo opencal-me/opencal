@@ -86,7 +86,7 @@ export const ReservationCreateForm: FC<ReservationCreateFormProps> = ({
           />
           <TextInput
             label="Email"
-            description="A calendar invititation will be sent to this email address."
+            description="A calendar invitation will be sent to this email address."
             placeholder="scott@example.com"
             required
             {...getInputProps("email")}

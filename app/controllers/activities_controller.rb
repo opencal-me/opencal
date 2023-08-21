@@ -37,7 +37,9 @@ class ActivitiesController < ApplicationController
         render(inertia: "ActivityStoryPage", props: { data: })
       end
       format.png do
-        data = activity_story_image(activity)
+        timezone = params.fetch(:timezone) or raise "Missing timezone param"
+        timezone = ActiveSupport::TimeZone.new(timezone)
+        data = activity_story_image(activity, timezone:)
         send_data(
           data,
           filename: "#{activity.to_param}.png",
@@ -51,10 +53,16 @@ class ActivitiesController < ApplicationController
   private
 
   # == Helpers
-  sig { returns(Selenium::WebDriver::Chrome::Driver) }
+  sig do
+    returns(T.all(Selenium::WebDriver::Chrome::Driver,
+                  Selenium::WebDriver::DriverExtensions::HasCDP))
+  end
   def webdriver
-    @webdriver = T.let(@webdriver,
-                       T.nilable(Selenium::WebDriver::Chrome::Driver))
+    @webdriver = T.let(
+      @webdriver,
+      T.nilable(T.all(Selenium::WebDriver::Chrome::Driver,
+                      Selenium::WebDriver::DriverExtensions::HasCDP)),
+    )
     @webdriver ||= Selenium::WebDriver.for(
       :chrome,
       options: Selenium::WebDriver::Chrome::Options.new.tap do |options|
@@ -71,11 +79,20 @@ class ActivitiesController < ApplicationController
     )
   end
 
-  sig { params(activity: Activity).returns(T.untyped) }
-  def activity_story_image(activity)
+  sig do
+    params(
+      activity: Activity,
+      timezone: ActiveSupport::TimeZone,
+    ).returns(T.untyped)
+  end
+  def activity_story_image(activity, timezone:)
     self.class.activity_story_image_semaphore.synchronize do
       require "selenium-webdriver"
       driver = webdriver
+      driver.execute_cdp(
+        "Emulation.setTimezoneOverride",
+        "timezoneId" => timezone.name,
+      )
       driver.get(story_activity_url(activity))
       Selenium::WebDriver::Wait.new.until do
         driver.execute_script(

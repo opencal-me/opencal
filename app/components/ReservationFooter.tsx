@@ -21,7 +21,10 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
   const { copy, copied } = useClipboard();
   useEffect(() => {
     if (copied) {
-      open(storyImageUrl, "_blank");
+      const localDateTime = DateTime.local();
+      const url = new URL(storyImageUrl);
+      url.searchParams.set("timezone", localDateTime.zoneName);
+      open(url.toString(), "_blank");
     }
   }, [copied]);
 
