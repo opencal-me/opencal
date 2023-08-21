@@ -7,6 +7,11 @@ class ApplicationController < ActionController::Base
   include ActiveStorage::SetCurrent
   include GraphQL::Querying
 
+  class << self
+    extend T::Sig
+    extend T::Helpers
+  end
+
   # == Devise: Filters
   before_action :store_user_location!, if: :storable_location?
 

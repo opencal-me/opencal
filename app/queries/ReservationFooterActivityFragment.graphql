@@ -1,5 +1,4 @@
 fragment ReservationFooterActivityFragment on Activity {
-  handle
   id
   openings
   storyImageUrl

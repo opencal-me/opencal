@@ -12,7 +12,7 @@ module Types
     field :description_html, String
     field :end, DateTimeType, null: false, resolver_method: :resolve_end
     field :google_event_id, String, null: false
-    field :handle, String, null: false, method: :to_param
+    # field :handle, String, null: false, method: :to_param
     field :location, String
     field :openings, Integer, null: false
     field :owner, UserType, null: false

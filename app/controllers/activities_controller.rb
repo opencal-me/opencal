@@ -2,6 +2,15 @@
 # frozen_string_literal: true
 
 class ActivitiesController < ApplicationController
+  class << self
+    sig { returns(Mutex) }
+    def activity_story_image_semaphore
+      @activity_story_image_semaphore = T.let(@activity_story_image_semaphore,
+                                              T.nilable(Mutex))
+      @activity_story_image_semaphore ||= Mutex.new
+    end
+  end
+
   # == Filters
   before_action :set_activity
 
@@ -64,17 +73,19 @@ class ActivitiesController < ApplicationController
 
   sig { params(activity: Activity).returns(T.untyped) }
   def activity_story_image(activity)
-    require "selenium-webdriver"
-    driver = webdriver
-    driver.get(story_activity_url(activity))
-    Selenium::WebDriver::Wait.new.until do
-      driver.execute_script(
-        "return window.performance.timing.loadEventEnd > 0",
-      ) && driver.execute_script(
-        'return window.performance.getEntriesByType("paint").length > 0',
-      )
+    self.class.activity_story_image_semaphore.synchronize do
+      require "selenium-webdriver"
+      driver = webdriver
+      driver.get(story_activity_url(activity))
+      Selenium::WebDriver::Wait.new.until do
+        driver.execute_script(
+          "return window.performance.timing.loadEventEnd > 0",
+        ) && driver.execute_script(
+          'return window.performance.getEntriesByType("paint").length > 0',
+        )
+      end
+      driver.screenshot_as(:png)
     end
-    driver.screenshot_as(:png)
   end
 
   # == Filter Handlers
