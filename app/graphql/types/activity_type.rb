@@ -46,6 +46,11 @@ module Types
     end
 
     sig { returns(String) }
+    def title
+      object.title.delete_suffix(" [open]")
+    end
+
+    sig { returns(String) }
     def url
       activity_url(object)
     end
