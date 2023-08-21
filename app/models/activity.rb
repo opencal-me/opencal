@@ -208,7 +208,11 @@ class Activity < ApplicationRecord
     event = google_event!
     if previously_new_record?
       event.title = title
-      event.attachments = [{ "fileUrl" => activity_url(self) }]
+      event.attachments = [{
+        "title" => "OpenCal",
+        "fileUrl" => activity_url(self),
+        "iconLink" => root_url + "logo.png",
+      }]
       event.save
     elsif destroyed?
       if event.status != "cancelled"
