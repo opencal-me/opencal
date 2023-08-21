@@ -48,6 +48,28 @@ module Google
   class Event
     attr_accessor :attachments
 
+    def self.new_from_feed(e, calendar)
+      params = {}
+      %w(id status description location creator transparency updated reminders
+         attendees visibility attachments).each do |p|
+           params[p.to_sym] = e[p]
+         end
+
+      params[:raw] = e
+      params[:calendar] = calendar
+      params[:title] = e["summary"]
+      params[:color_id] = e["colorId"]
+      params[:extended_properties] = e["extendedProperties"]
+      params[:guests_can_invite_others] = e["guestsCanInviteOthers"]
+      params[:guests_can_see_other_guests] = e["guestsCanSeeOtherGuests"]
+      params[:html_link] = e["htmlLink"]
+      params[:start_time] = Event.parse_json_time(e["start"])
+      params[:end_time] = Event.parse_json_time(e["end"])
+      params[:recurrence] = Event.parse_recurrence_rule(e["recurrence"])
+
+      Event.new(params)
+    end
+
     def to_json
       attributes = {
         "summary" => title,
