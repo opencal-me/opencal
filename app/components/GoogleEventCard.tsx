@@ -55,7 +55,7 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
     <Card withBorder {...otherProps}>
       <Group align="start">
         <Text weight={500} sx={{ flexGrow: 1 }}>
-          {title}
+          {title ?? "(no title)"}
         </Text>
         <MantineProvider
           inherit

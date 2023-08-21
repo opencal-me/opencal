@@ -87,7 +87,7 @@ export type GoogleEvent = {
   id: Scalars['String']['output'];
   location?: Maybe<Scalars['String']['output']>;
   start: Scalars['DateTime']['output'];
-  title: Scalars['String']['output'];
+  title?: Maybe<Scalars['String']['output']>;
   viewerIsOrganizer: Scalars['Boolean']['output'];
 };
 

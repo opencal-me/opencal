@@ -12,7 +12,7 @@ module Types
     field :id, String, null: false
     field :location, String
     field :start, DateTimeType, null: false, method: :start_time
-    field :title, String, null: false
+    field :title, String
     field :viewer_is_organizer, Boolean, null: false
 
     # == Resolvers

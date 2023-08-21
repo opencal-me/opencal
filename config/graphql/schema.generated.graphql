@@ -76,7 +76,7 @@ type GoogleEvent {
   id: String!
   location: String
   start: DateTime!
-  title: String!
+  title: String
   viewerIsOrganizer: Boolean!
 }
 
