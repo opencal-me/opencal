@@ -1,5 +1,7 @@
 import type { FC } from "react";
-import { Text } from "@mantine/core";
+import ShareIcon from "~icons/lucide/share";
+
+import { ActionIcon, Text } from "@mantine/core";
 import type { BoxProps } from "@mantine/core";
 
 import type { ReservationFooterActivityFragment } from "~/helpers/graphql";
@@ -10,10 +12,11 @@ export type ReservationFooterProps = Omit<BoxProps, "children"> & {
 };
 
 const ReservationFooter: FC<ReservationFooterProps> = ({
-  activity: { id: activityId, openings },
+  activity: { id: activityId, handle, openings, storyImageUrl },
   sx,
   ...otherProps
 }) => {
+  const [storyImageLoading, setStoryImageLoading] = useState(false);
   return (
     <Box
       bg="white"
@@ -32,25 +35,53 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
           <Text size="sm" color="gray.7">
             {openings} {openings === 1 ? "spot" : "spots"} remaining
           </Text>
-          <Button
-            color="dark"
-            px="xl"
-            onClick={() => {
-              openModal({
-                title: "Reserve your spot!",
-                children: (
-                  <ReservationCreateForm
-                    onReserve={() => {
-                      closeAllModals();
-                    }}
-                    {...{ activityId }}
-                  />
-                ),
-              });
-            }}
-          >
-            I&apos;ll be there!
-          </Button>
+          <Group spacing={8}>
+            {navigator.share !== undefined && (
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                radius="md"
+                sx={({ black }) => ({ color: black })}
+                loading={storyImageLoading}
+                onClick={() => {
+                  setStoryImageLoading(true);
+                  fetch(storyImageUrl)
+                    .then(response => response.blob())
+                    .then(blob => {
+                      const file = new File([blob], `${handle}.png`);
+                      navigator.share({
+                        title: "Share this activity on your story!",
+                        files: [file],
+                      });
+                    })
+                    .finally(() => {
+                      setStoryImageLoading(false);
+                    });
+                }}
+              >
+                <Text component={ShareIcon} />
+              </ActionIcon>
+            )}
+            <Button
+              color="dark"
+              px="xl"
+              onClick={() => {
+                openModal({
+                  title: "Reserve your spot!",
+                  children: (
+                    <ReservationCreateForm
+                      onReserve={() => {
+                        closeAllModals();
+                      }}
+                      {...{ activityId }}
+                    />
+                  ),
+                });
+              }}
+            >
+              I&apos;ll be there!
+            </Button>
+          </Group>
         </Group>
       </Container>
     </Box>

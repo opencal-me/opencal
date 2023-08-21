@@ -1,0 +1,6 @@
+query ActivityStoryPageQuery($activityId: ID!) {
+  activity(id: $activityId) {
+    id
+    title
+  }
+}

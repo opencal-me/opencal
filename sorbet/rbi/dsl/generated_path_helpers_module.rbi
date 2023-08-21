@@ -126,6 +126,9 @@ module GeneratedPathHelpersModule
   def status_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def story_activity_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def test_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }

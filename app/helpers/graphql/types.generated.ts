@@ -25,6 +25,7 @@ export type Activity = Node & {
   descriptionHtml?: Maybe<Scalars['String']['output']>;
   end: Scalars['DateTime']['output'];
   googleEventId: Scalars['String']['output'];
+  handle: Scalars['String']['output'];
   /** ID of the object. */
   id: Scalars['ID']['output'];
   location?: Maybe<Scalars['String']['output']>;
@@ -32,6 +33,7 @@ export type Activity = Node & {
   owner: User;
   reservations: Array<Reservation>;
   start: Scalars['DateTime']['output'];
+  storyImageUrl: Scalars['String']['output'];
   title: Scalars['String']['output'];
   url: Scalars['String']['output'];
 };

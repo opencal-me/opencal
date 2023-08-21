@@ -62,7 +62,11 @@ Rails.application.routes.draw do
   resource :home, only: :show
 
   # == Activities
-  resources :activities, path: "/join", only: :show
+  resources :activities, path: "/join", only: :show do
+    member do
+      get :story
+    end
+  end
 
   # == Google Calendar Channels
   resources :google_calendar_channels, only: [] do

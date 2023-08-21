@@ -162,6 +162,12 @@ gem "google_calendar", "~> 0.6.4"
 # Parse HTML with Nokogiri
 gem "nokogiri", "~> 1.15"
 
+# Save screenshots of our webpages with Selenium
+gem "selenium-webdriver", "~> 4.10", require: false
+
+# Detect what OS we are running on
+gem "os", "~> 1.1"
+
 group :development, :test do
   # Auto-detect and warn about N+1 queries
   gem "bullet"
@@ -218,3 +224,5 @@ group :test do
   gem "capybara"
   gem "webdrivers"
 end
+
+

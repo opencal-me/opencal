@@ -126,6 +126,9 @@ module GeneratedUrlHelpersModule
   def status_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def story_activity_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def test_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
