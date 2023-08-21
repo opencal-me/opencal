@@ -1,11 +1,12 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
-import { Image, Text } from "@mantine/core";
+import { Global, Image, Text } from "@mantine/core";
 
 import type { ActivityStoryPageQuery } from "~/helpers/graphql";
 
 export type ActivityStoryPageProps = PagePropsWithData<ActivityStoryPageQuery>;
 
 import logoSrc from "~/assets/images/logo-with-text.png";
+import PageLayout from "~/components/PageLayout";
 
 const SCALE_FACTOR = 2.5;
 
@@ -61,5 +62,18 @@ const ActivityStoryPage: PageComponent<ActivityStoryPageProps> = ({
     </Stack>
   );
 };
+
+ActivityStoryPage.layout = page => (
+  <PageLayout>
+    <Global
+      styles={{
+        body: {
+          zoom: `${SCALE_FACTOR * 100}%`,
+        },
+      }}
+    />
+    {page}
+  </PageLayout>
+);
 
 export default ActivityStoryPage;

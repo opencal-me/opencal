@@ -37,30 +37,35 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
           </Text>
           <Group spacing={8}>
             {navigator.share !== undefined && (
-              <ActionIcon
-                variant="subtle"
-                color="gray"
-                radius="md"
-                sx={({ black }) => ({ color: black })}
-                loading={storyImageLoading}
-                onClick={() => {
-                  setStoryImageLoading(true);
-                  fetch(storyImageUrl)
-                    .then(response => response.blob())
-                    .then(blob => {
-                      const file = new File([blob], `${handle}.png`);
-                      navigator.share({
-                        title: "Share this activity on your story!",
-                        files: [file],
-                      });
-                    })
-                    .finally(() => {
-                      setStoryImageLoading(false);
-                    });
-                }}
+              <Tooltip
+                label="Share to your story. Remember to paste the URL!"
+                withArrow
               >
-                <Text component={ShareIcon} />
-              </ActionIcon>
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  radius="md"
+                  sx={({ black }) => ({ color: black })}
+                  loading={storyImageLoading}
+                  onClick={() => {
+                    setStoryImageLoading(true);
+                    fetch(storyImageUrl)
+                      .then(response => response.blob())
+                      .then(blob => {
+                        const file = new File([blob], `${handle}.png`);
+                        navigator.share({
+                          title: "Share this activity on your story!",
+                          files: [file],
+                        });
+                      })
+                      .finally(() => {
+                        setStoryImageLoading(false);
+                      });
+                  }}
+                >
+                  <Text component={ShareIcon} />
+                </ActionIcon>
+              </Tooltip>
             )}
             <Button
               color="dark"

@@ -68,7 +68,6 @@ class ActivitiesController < ApplicationController
     driver = webdriver
     driver.get(story_activity_url(activity))
     Selenium::WebDriver::Wait.new.until do
-      driver.execute_script('document.body.style.zoom = "250%"')
       driver.execute_script(
         "return window.performance.timing.loadEventEnd > 0",
       ) && driver.execute_script(
