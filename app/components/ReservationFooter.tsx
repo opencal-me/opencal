@@ -66,14 +66,9 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
                       .then(response => response.blob())
                       .then(blob => {
                         const file = new File([blob], `${handle}.png`);
-                        navigator
-                          .share({
-                            title: "Share this activity on your story!",
-                            files: [file],
-                          })
-                          .catch(error => {
-                            console.warn("Share failed", formatJSON({ error }));
-                          });
+                        navigator.share({ files: [file] }).catch(error => {
+                          console.warn("Share failed", formatJSON({ error }));
+                        });
                       })
                       .finally(() => {
                         setStoryImageLoading(false);
