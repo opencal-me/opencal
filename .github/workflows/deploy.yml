@@ -25,4 +25,4 @@ jobs:
       - name: Set up Flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy
-        run: flyctl deploy --remote-only --memory=1024
+        run: flyctl deploy --remote-only --wait-timeout=240 --memory=1024
