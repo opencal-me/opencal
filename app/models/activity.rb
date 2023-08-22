@@ -226,10 +226,7 @@ class Activity < ApplicationRecord
   def set_attributes_from_google_event(event) # rubocop:disable Naming/AccessorMethodName, Layout/LineLength
     self.title = event.title
     self.description = event.description
-    self.during = scoped do
-      start = event.start_time
-      start.to_time..start.end_time
-    end
+    self.during = event.start_time.to_time..event.end_time.to_time
     self.location = event.location
   end
 
