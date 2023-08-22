@@ -62,5 +62,8 @@ export default defineConfig(({ ssrBuild }) => {
       ],
     },
     plugins,
+    ssr: {
+      noExternal: ["react-tweet"],
+    },
   };
 });
