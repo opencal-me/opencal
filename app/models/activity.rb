@@ -277,6 +277,7 @@ class Activity < ApplicationRecord
       event.attachments = [{
         "title" => "OpenCal",
         "fileUrl" => activity_url(self),
+        "mimeType" => "text/html",
         "iconLink" => root_url + "logo.png",
       }]
       event.save
