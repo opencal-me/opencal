@@ -10632,6 +10632,9 @@ module ActionView::Helpers::TextHelper
 
   mixes_in_class_methods ::ActionView::Helpers::SanitizeHelper::ClassMethods
 
+  # source://rails_autolink/1.1.8/lib/rails_autolink/helpers.rb#52
+  def auto_link(text, *args, &block); end
+
   # The preferred method of outputting text in your views is to use the
   # <%= "text" %> eRuby syntax. The regular _puts_ and _print_ methods
   # do not operate as expected in an eRuby code block. If you absolutely must
@@ -10920,6 +10923,21 @@ module ActionView::Helpers::TextHelper
   def word_wrap(text, line_width: T.unsafe(nil), break_sequence: T.unsafe(nil)); end
 
   private
+
+  # source://rails_autolink/1.1.8/lib/rails_autolink/helpers.rb#127
+  def auto_link_email_addresses(text, html_options = T.unsafe(nil), options = T.unsafe(nil)); end
+
+  # source://rails_autolink/1.1.8/lib/rails_autolink/helpers.rb#90
+  def auto_link_urls(text, html_options = T.unsafe(nil), options = T.unsafe(nil)); end
+
+  # source://rails_autolink/1.1.8/lib/rails_autolink/helpers.rb#146
+  def auto_linked?(left, right); end
+
+  # source://rails_autolink/1.1.8/lib/rails_autolink/helpers.rb#155
+  def conditional_html_safe(target, condition); end
+
+  # source://rails_autolink/1.1.8/lib/rails_autolink/helpers.rb#151
+  def conditional_sanitize(target, condition, sanitize_options = T.unsafe(nil)); end
 
   # source://actionview//lib/action_view/helpers/text_helper.rb#468
   def cut_excerpt_part(part_position, part, separator, options); end
@@ -14292,7 +14310,7 @@ class ActionView::StreamingTemplateRenderer::Body
 
   # This is the same logging logic as in ShowExceptions middleware.
   #
-  # source://sentry-rails/5.9.0/lib/sentry/rails/overrides/streaming_reporter.rb#5
+  # source://sentry-rails/5.10.0/lib/sentry/rails/overrides/streaming_reporter.rb#5
   def log_error(exception); end
 end
 
@@ -15135,14 +15153,6 @@ end
 #
 # source://actionview//lib/action_view/test_case.rb#12
 class ActionView::TestCase < ::ActiveSupport::TestCase
-  include ::ActionDispatch::TestProcess::FixtureFile
-  include ::ActionDispatch::TestProcess
-  include ::ActionDispatch::Assertions::ResponseAssertions
-  include ::ActionDispatch::Assertions::RoutingAssertions
-  include ::Rails::Dom::Testing::Assertions::DomAssertions
-  include ::Rails::Dom::Testing::Assertions::SelectorAssertions::CountDescribable
-  include ::Rails::Dom::Testing::Assertions::SelectorAssertions
-  include ::Rails::Dom::Testing::Assertions
   include ::AbstractController::Helpers
   include ::ActiveSupport::Benchmarkable
   include ::ActionView::Helpers::ActiveModelHelper
@@ -15162,6 +15172,14 @@ class ActionView::TestCase < ::ActiveSupport::TestCase
   include ::ActionView::Helpers::DebugHelper
   include ::ActionView::Helpers::TextHelper
   include ::ActionView::Helpers::FormTagHelper
+  include ::ActionDispatch::TestProcess::FixtureFile
+  include ::ActionDispatch::TestProcess
+  include ::ActionDispatch::Assertions::ResponseAssertions
+  include ::ActionDispatch::Assertions::RoutingAssertions
+  include ::Rails::Dom::Testing::Assertions::DomAssertions
+  include ::Rails::Dom::Testing::Assertions::SelectorAssertions::CountDescribable
+  include ::Rails::Dom::Testing::Assertions::SelectorAssertions
+  include ::Rails::Dom::Testing::Assertions
   include ::ActionDispatch::Assertions
   include ::ActionController::TemplateAssertions
   include ::ActionView::Context
@@ -15244,7 +15262,6 @@ module ActionView::TestCase::Behavior
   include ::ActionView::RoutingUrlFor
   extend ::ActiveSupport::Concern
   include GeneratedInstanceMethods
-  include ::Rails::Dom::Testing::Assertions
   include ::AbstractController::Helpers
   include ::ActionView::Helpers::UrlHelper
   include ::ActionView::Helpers::SanitizeHelper

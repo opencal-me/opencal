@@ -123,6 +123,45 @@ class Activity < ApplicationRecord
     ActivityMailer.created_email(self).deliver_later
   end
 
+  # == Parsing
+  sig { params(title: String).returns([String, T::Array[String]]) }
+  def self.parse_title(title)
+    @parsed_titles = T.let(
+      @parsed_titles,
+      T.nilable(T::Hash[String, [String, T::Array[String]]]),
+    )
+    @parsed_titles ||= Hash.new do |hash, title|
+      raise "Parsed titles hash exceed 100 entries" if hash.size > 100
+      hash.delete(hash.keys.first) if hash.size == 100
+      name, tags = if (matches = /^(.*) \[(.*)\]$/.match(title))
+        name, tags = matches.captures
+        tags = if (text = tags)
+          text.strip.split(" ")
+        end
+        [name || "", tags || []]
+      else
+        ["", []]
+      end
+      hash[title] = [name, tags]
+    end
+    @parsed_titles[title]
+  end
+
+  sig do
+    params(description: String, view_context: ActionView::Base)
+      .returns(String)
+  end
+  def self.parse_description_as_html(description, view_context:)
+    if description.start_with?("<")
+      doc = Nokogiri::HTML.parse(description)
+      html = doc.search("//body").inner_html
+      view_context.sanitize(html)
+    else
+      html = view_context.simple_format(description)
+      view_context.auto_link(html, html_options: { target: "_blank" })
+    end
+  end
+
   # == Importing
   sig { params(user: User).void }
   def self.import_for_user!(user)
@@ -199,30 +238,6 @@ class Activity < ApplicationRecord
     activity = find_or_initialize_by(owner:, google_event_id: event.id)
     activity.set_attributes_from_google_event(event)
     activity
-  end
-
-  # == Methods
-  sig { params(title: String).returns([String, T::Array[String]]) }
-  def self.parse_title(title)
-    @parsed_titles = T.let(
-      @parsed_titles,
-      T.nilable(T::Hash[String, [String, T::Array[String]]]),
-    )
-    @parsed_titles ||= Hash.new do |hash, title|
-      raise "Parsed titles hash exceed 100 entries" if hash.size > 100
-      hash.delete(hash.keys.first) if hash.size == 100
-      name, tags = if (matches = /^(.*) \[(.*)\]$/.match(title))
-        name, tags = matches.captures
-        tags = if (text = tags)
-          text.strip.split(" ")
-        end
-        [name || "", tags || []]
-      else
-        ["", []]
-      end
-      hash[title] = [name, tags]
-    end
-    @parsed_titles[title]
   end
 
   sig { returns(T::Boolean) }

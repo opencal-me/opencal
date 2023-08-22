@@ -22,8 +22,11 @@ module Types
 
     sig { returns(T.nilable(String)) }
     def description_html
-      if (doc = description_doc)
-        doc.search("//body").inner_html
+      if (description = object.description) && (controller = self.controller)
+        Activity.parse_description_as_html(
+          description,
+          view_context: controller.view_context,
+        )
       end
     end
 
@@ -45,23 +48,8 @@ module Types
       end
     end
 
-    # sig { returns(T.nilable(String)) }
-    # def description_html
-    #   description_doc&.to_html
-    # end
-
     # == Helpers
     sig { override.returns(Google::Event) }
     def object = super
-
-    private
-
-    # == Helpers
-    sig { returns(T.nilable(Nokogiri::HTML::Document)) }
-    def description_doc
-      if (description = object.description)
-        Nokogiri::HTML(description)
-      end
-    end
   end
 end

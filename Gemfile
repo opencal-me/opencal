@@ -162,6 +162,9 @@ gem "google_calendar", "~> 0.6.4"
 # Parse HTML with Nokogiri
 gem "nokogiri", "~> 1.15"
 
+# Automatically create anchors for links in text
+gem "rails_autolink", "~> 1.1"
+
 # Save screenshots of our webpages with Selenium
 gem "selenium-webdriver", "~> 4.10", require: false
 gem "selenium-devtools", "~> 0.115.0", require: false
@@ -225,6 +228,3 @@ group :test do
   gem "capybara"
   gem "webdrivers"
 end
-
-
-

@@ -3,6 +3,8 @@
 
 module Types
   class ActivityType < BaseObject
+    include ActionView::Helpers::SanitizeHelper
+
     # == Interfaces
     implements NodeType
 
@@ -32,8 +34,11 @@ module Types
 
     sig { returns(T.nilable(String)) }
     def description_html
-      if (doc = description_doc)
-        doc.search("//body").inner_html
+      if (description = object.description) && (controller = self.controller)
+        Activity.parse_description_as_html(
+          description,
+          view_context: controller.view_context,
+        )
       end
     end
 
