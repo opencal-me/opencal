@@ -9,17 +9,16 @@ type Activity implements Node {
   descriptionHtml: String
   end: DateTime!
   googleEventId: String!
-  handle: String!
 
   """ID of the object."""
   id: ID!
   location: String
+  name: String!
   openings: Int!
   owner: User!
   reservations: [Reservation!]!
   start: DateTime!
   storyImageUrl: String!
-  title: String!
   url: String!
 }
 

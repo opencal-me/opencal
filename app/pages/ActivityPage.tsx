@@ -21,7 +21,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
   data: { activity },
 }) => {
   invariant(activity, "Missing activity");
-  const { owner, start, title, descriptionHtml, coordinates, address } =
+  const { owner, start, name, descriptionHtml, coordinates, address } =
     activity;
 
   // == Start
@@ -71,7 +71,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
             </Time>
           </Text>
           <Title size="h3" lh={1.3}>
-            {title}
+            {name}
           </Title>
           {!!descriptionHtml && (
             <Spoiler
@@ -150,7 +150,7 @@ ActivityPage.layout = buildLayout<ActivityPageProps>(
         {...(viewer && {
           breadcrumbs: [
             { title: "Home", href: "/home" },
-            { title: activity.title, href: activity.url },
+            { title: activity.name, href: activity.url },
           ],
         })}
         {...{ viewer }}

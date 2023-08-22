@@ -41,6 +41,16 @@ class Activity < ApplicationRecord
   # TODO: Change this to reflect a default from the user's account settings.
   attribute :capacity, :integer, default: 5
 
+  sig { returns(String) }
+  def name
+    parsed_title.first
+  end
+
+  sig { returns(T::Array[String]) }
+  def tags
+    parsed_title.last.excluding("open")
+  end
+
   sig { returns(Time) }
   def start = during.begin
 
@@ -53,7 +63,7 @@ class Activity < ApplicationRecord
   # == Params
   sig { returns(String) }
   def to_param
-    prefix = FriendlyId::Candidates.new(self, title).first
+    prefix = FriendlyId::Candidates.new(self, name).first
     [prefix, handle].join("--")
   end
 
@@ -124,10 +134,17 @@ class Activity < ApplicationRecord
           end
           next unless owner_attendee && owner_attendee["organizer"]
         end
-        if event.status != "cancelled" && event.title&.end_with?(" [open]")
+        tags = if (title = event.title)
+          parse_title(title).last
+        else
+          []
+        end
+        if event.status != "cancelled" && tags.include?("open")
           activity = from_google_event(event, owner: user)
           activity.save!
-          activity.send_created_email if activity.previously_new_record?
+          if activity.previously_new_record? && tags.exclude?("silent")
+            activity.send_created_email
+          end
         elsif (activity = find_by(google_event_id: event.id, owner: user))
           activity.destroy!
         end
@@ -170,7 +187,10 @@ class Activity < ApplicationRecord
   def set_attributes_from_google_event(event) # rubocop:disable Naming/AccessorMethodName, Layout/LineLength
     self.title = event.title
     self.description = event.description
-    self.during = (event.start_time.to_time..event.end_time.to_time)
+    self.during = scoped do
+      start = event.start_time
+      start.to_time..start.end_time
+    end
     self.location = event.location
   end
 
@@ -182,6 +202,29 @@ class Activity < ApplicationRecord
   end
 
   # == Methods
+  sig { params(title: String).returns([String, T::Array[String]]) }
+  def self.parse_title(title)
+    @parsed_titles = T.let(
+      @parsed_titles,
+      T.nilable(T::Hash[String, [String, T::Array[String]]]),
+    )
+    @parsed_titles ||= Hash.new do |hash, title|
+      raise "Parsed titles hash exceed 100 entries" if hash.size > 100
+      hash.delete(hash.keys.first) if hash.size == 100
+      name, tags = if (matches = /^(.*) \[(.*)\]$/.match(title))
+        name, tags = matches.captures
+        tags = if (text = tags)
+          text.strip.split(" ")
+        end
+        [name || "", tags || []]
+      else
+        ["", []]
+      end
+      hash[title] = [name, tags]
+    end
+    @parsed_titles[title]
+  end
+
   sig { returns(T::Boolean) }
   def location_is_url?
     url_regexp = T.let(URI::DEFAULT_PARSER.regexp[:ABS_URI], Regexp)
@@ -195,14 +238,25 @@ class Activity < ApplicationRecord
 
   private
 
-  # == Normalization handlers
-  def normalize_title
-    unless self[:title]&.end_with?(" [open]")
-      self.title += " [open]"
-    end
+  # == Helpers
+  sig { returns([String, T::Array[String]]) }
+  def parsed_title
+    self.class.parse_title(title)
   end
 
-  # == Callback handlers
+  sig { returns(String) }
+  def closed_title
+    tags = self.tags
+    tags.empty? ? name : "#{name} [#{tags.join(" ")}]"
+  end
+
+  # == Normalization Handlers
+  sig { void }
+  def normalize_title
+    self.title = closed_title
+  end
+
+  # == Callback Handlers
   sig { void }
   def update_google_event
     event = google_event!
@@ -216,7 +270,7 @@ class Activity < ApplicationRecord
       event.save
     elsif destroyed?
       if event.status != "cancelled"
-        event.title.delete_suffix!(" [open]")
+        event.title = closed_title
         event.attachments = []
         event.save
       end

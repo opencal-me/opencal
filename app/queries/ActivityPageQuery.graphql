@@ -8,6 +8,7 @@ query ActivityPageQuery($activityId: ID!) {
     descriptionHtml
     end
     id
+    name
     owner {
       avatarUrl
       id
@@ -15,7 +16,6 @@ query ActivityPageQuery($activityId: ID!) {
     }
     ...ReservationFooterActivityFragment
     start
-    title
     url
   }
   viewer {

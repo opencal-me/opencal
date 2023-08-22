@@ -20,10 +20,10 @@ const HomePage: PageComponent<HomePageProps> = ({ data: { viewer } }) => {
             Your Activities
           </Title>
           <List listStyleType="none">
-            {activities.map(({ id, title, url }) => (
+            {activities.map(({ id, name, url }) => (
               <List.Item key={id}>
                 <Anchor component={Link} href={url}>
-                  {title}
+                  {name}
                 </Anchor>
               </List.Item>
             ))}

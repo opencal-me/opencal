@@ -12,7 +12,7 @@ const ActivityCreatedEmail: PageComponent<ActivityCreatedEmailProps> = ({
   data: { activity },
 }) => {
   invariant(activity, "Missing activity");
-  const { title, owner, url } = activity;
+  const { name, owner, url } = activity;
   return (
     <>
       <Text>Hi, {owner.firstName}!</Text>
@@ -31,7 +31,7 @@ const ActivityCreatedEmail: PageComponent<ActivityCreatedEmailProps> = ({
         on your calendar:
         <br />
         <Link href={url} target="_blank">
-          {title}
+          {name}
         </Link>
       </Text>
       <Text>

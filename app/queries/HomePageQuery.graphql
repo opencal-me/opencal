@@ -3,7 +3,7 @@ query HomePageQuery {
   viewer {
     activities {
       id
-      title
+      name
       url
     }
     ...AppViewerFragment

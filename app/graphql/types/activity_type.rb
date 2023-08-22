@@ -14,12 +14,12 @@ module Types
     field :google_event_id, String, null: false
     # field :handle, String, null: false, method: :to_param
     field :location, String
+    field :name, String, null: false
     field :openings, Integer, null: false
     field :owner, UserType, null: false
     field :reservations, [ReservationType], null: false
     field :start, DateTimeType, null: false
     field :story_image_url, String, null: false
-    field :title, String, null: false
     field :url, String, null: false
 
     # == Resolvers
@@ -43,11 +43,6 @@ module Types
     sig { returns(String) }
     def story_image_url
       story_activity_url(object, format: :png)
-    end
-
-    sig { returns(String) }
-    def title
-      object.title.delete_suffix(" [open]")
     end
 
     sig { returns(String) }

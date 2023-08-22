@@ -1,20 +1,19 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
-export type ActivityKeySpecifier = ('address' | 'coordinates' | 'descriptionHtml' | 'end' | 'googleEventId' | 'handle' | 'id' | 'location' | 'openings' | 'owner' | 'reservations' | 'start' | 'storyImageUrl' | 'title' | 'url' | ActivityKeySpecifier)[];
+export type ActivityKeySpecifier = ('address' | 'coordinates' | 'descriptionHtml' | 'end' | 'googleEventId' | 'id' | 'location' | 'name' | 'openings' | 'owner' | 'reservations' | 'start' | 'storyImageUrl' | 'url' | ActivityKeySpecifier)[];
 export type ActivityFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,
 	coordinates?: FieldPolicy<any> | FieldReadFunction<any>,
 	descriptionHtml?: FieldPolicy<any> | FieldReadFunction<any>,
 	end?: FieldPolicy<any> | FieldReadFunction<any>,
 	googleEventId?: FieldPolicy<any> | FieldReadFunction<any>,
-	handle?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	location?: FieldPolicy<any> | FieldReadFunction<any>,
+	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	openings?: FieldPolicy<any> | FieldReadFunction<any>,
 	owner?: FieldPolicy<any> | FieldReadFunction<any>,
 	reservations?: FieldPolicy<any> | FieldReadFunction<any>,
 	start?: FieldPolicy<any> | FieldReadFunction<any>,
 	storyImageUrl?: FieldPolicy<any> | FieldReadFunction<any>,
-	title?: FieldPolicy<any> | FieldReadFunction<any>,
 	url?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type CoordinatesKeySpecifier = ('latitude' | 'longitude' | CoordinatesKeySpecifier)[];

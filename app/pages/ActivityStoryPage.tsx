@@ -14,7 +14,7 @@ const ActivityStoryPage: PageComponent<ActivityStoryPageProps> = ({
   data: { activity },
 }) => {
   invariant(activity, "Missing activity");
-  const { title, start } = activity;
+  const { name, start } = activity;
 
   // == Start
   const startDateTime = useMemo(() => DateTime.fromISO(start), [start]);
@@ -42,7 +42,7 @@ const ActivityStoryPage: PageComponent<ActivityStoryPageProps> = ({
           come join me at
         </Text>
         <Title align="center" lh={1.3}>
-          {title}
+          {name}
         </Title>
         <Badge
           variant="outline"
