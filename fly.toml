@@ -13,7 +13,6 @@ kill_timeout = 10
   RAILS_DEFAULT_URL = "https://opencal.me"
   RAILS_MAILER_FROM = "OpenCal <robot@opencal.me>"
   RAILS_MAILER_REPLY_TO = "OpenCal Team <hello@opencal.me>"
-  RAILS_STORAGE_SERVICE = "local"
   SENTRY_TRACES_SAMPLE_RATE = "0.02"
 
 [[services]]

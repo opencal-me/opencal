@@ -5,8 +5,8 @@ import type { ActivityStoryPageQuery } from "~/helpers/graphql";
 
 export type ActivityStoryPageProps = PagePropsWithData<ActivityStoryPageQuery>;
 
-import logoSrc from "~/assets/images/logo-with-text.png";
 import PageLayout from "~/components/PageLayout";
+import logoSrc from "~/assets/images/logo-with-text.png";
 
 const SCALE_FACTOR = 2.5;
 
@@ -65,6 +65,9 @@ const ActivityStoryPage: PageComponent<ActivityStoryPageProps> = ({
 
 ActivityStoryPage.layout = page => (
   <PageLayout>
+    <Head>
+      <meta name="robots" content="noindex" />
+    </Head>
     <Global
       styles={{
         body: {

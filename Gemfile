@@ -172,6 +172,9 @@ gem "selenium-devtools", "~> 0.115.0", require: false
 # Detect what OS we are running on
 gem "os", "~> 1.1"
 
+# Show static pages
+gem "high_voltage", "~> 3.1"
+
 group :development, :test do
   # Auto-detect and warn about N+1 queries
   gem "bullet"

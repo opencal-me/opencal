@@ -11,12 +11,14 @@ export type AppMetaProps = {
   readonly title?: string | string[];
   readonly description?: string | null;
   readonly imageUrl?: string | null;
+  readonly noIndex?: boolean;
 };
 
 const AppMeta: FC<AppMetaProps> = ({
   title: titleProp,
   description = AppMetaSiteDescription,
   imageUrl = AppMetaSiteImage,
+  noIndex,
 }) => {
   const title = useMemo<string>(() => {
     return new Array(titleProp)
@@ -45,6 +47,7 @@ const AppMeta: FC<AppMetaProps> = ({
         <meta name="twitter:description" content={description} />
       )}
       {!!imageUrl && <meta name="twitter:image" content={imageUrl} />}
+      {noIndex && <meta name="robots" content="noindex" />}
     </Head>
   );
 };
