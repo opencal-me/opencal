@@ -52,10 +52,12 @@ LandingPage.layout = buildLayout<LandingPageProps>(
       footer={
         <Footer height={80}>
           <Stack align="center" justify="center" spacing={0} h="100%">
-            <ContactMeLink subject="hey!">
+            <ContactMeLink size="sm" subject="hey!">
               Got questions? Shoot us an email :)
             </ContactMeLink>
-            <Anchor href="/privacy">See our privacy policy</Anchor>
+            <Anchor href="/privacy" size="sm">
+              See our privacy policy
+            </Anchor>
           </Stack>
         </Footer>
       }
