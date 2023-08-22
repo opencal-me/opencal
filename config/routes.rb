@@ -75,8 +75,9 @@ Rails.application.routes.draw do
     end
   end
 
-  # == Landing
+  # == Pages
   root "landings#show"
+  get "/src" => redirect("https://github.com/opencal-me/opencal", status: 302)
 
   # == Development
   if Rails.env.development?
