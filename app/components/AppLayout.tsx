@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 
 import { AppShell, Breadcrumbs } from "@mantine/core";
 import type {
@@ -27,6 +27,7 @@ export type AppLayoutProps = AppMetaProps &
     readonly containerProps?: ContainerProps;
     readonly withContainer?: boolean;
     readonly withGutter?: boolean;
+    readonly footer?: ReactNode;
   };
 
 export type AppBreadcrumb = {
@@ -46,6 +47,7 @@ const AppLayout: FC<AppLayoutProps> = ({
   withGutter,
   children,
   padding,
+  footer,
   ...otherProps
 }) => {
   // == Breadcrumbs
@@ -123,7 +125,7 @@ const AppLayout: FC<AppLayoutProps> = ({
           {content}
         </Box>
       </AppShell>
-      {/* <AppFooter /> */}
+      {footer}
       <AppFlash />
     </PageLayout>
   );
