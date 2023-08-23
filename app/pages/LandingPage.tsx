@@ -13,7 +13,7 @@ const LandingPage: PageComponent<LandingPageProps> = ({ data: { viewer } }) => {
   const mounted = useMounted();
 
   return (
-    <Stack spacing="xl">
+    <Stack spacing="lg">
       {viewer && (
         <Anchor component={Link} href="/home">
           I&apos;m logged in! Take me to my events & activities :)
@@ -29,16 +29,27 @@ const LandingPage: PageComponent<LandingPageProps> = ({ data: { viewer } }) => {
           and let them join you on your life&apos;s adventures.
         </Text>
         <Text lh={1.4}> Still not sure what I mean? Check out this reel:</Text>
-        {mounted && <Tweet id="1693789569764761933" />}
-        {!viewer && (
-          <form action="/user/auth/google" method="post">
-            <FormAuthenticityField />
-            <Button type="submit" size="lg" fullWidth radius="xl">
-              Sign in with Google to get started.
-            </Button>
-          </form>
-        )}
       </Stack>
+      {mounted && (
+        <Box
+          data-theme="light"
+          sx={{
+            "> .react-tweet-theme": {
+              margin: 0,
+            },
+          }}
+        >
+          <Tweet id="1693789569764761933" />
+        </Box>
+      )}
+      {!viewer && (
+        <form action="/user/auth/google" method="post">
+          <FormAuthenticityField />
+          <Button type="submit" size="lg" fullWidth radius="xl">
+            Sign in with Google to get started.
+          </Button>
+        </form>
+      )}
     </Stack>
   );
 };

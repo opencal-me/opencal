@@ -42,10 +42,10 @@ jobs:
         uses: actions/setup-python@v4
       - name: Set up Overmind
         run: |
-          sudo apt-get install tmux
-            && sudo curl -Lo /usr/bin/overmind.gz https://github.com/DarthSim/overmind/releases/download/v$OVERMIND_VERSION/overmind-v$OVERMIND_VERSION-linux-amd64.gz
-            && sudo gzip -d /usr/bin/overmind.gz
-            && sudo chmod u+x /usr/bin/overmind
+          sudo apt-get install tmux \
+            && sudo curl -Lo /usr/bin/overmind.gz https://github.com/DarthSim/overmind/releases/download/v$OVERMIND_VERSION/overmind-v$OVERMIND_VERSION-linux-amd64.gz \
+            && sudo gzip -d /usr/bin/overmind.gz \
+            && sudo chmod u+x /usr/bin/overmind \
             && sudo chown $(whoami) /usr/bin/overmind
       - name: Set up environment
         run: bin/setup
