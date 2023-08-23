@@ -60,13 +60,6 @@ class Activity < ApplicationRecord
   # == FriendlyIdentifiable
   friendly_id :handle, slug_limit: 32
 
-  # == Params
-  sig { returns(String) }
-  def to_param
-    prefix = FriendlyId::Candidates.new(self, name).first
-    [prefix, handle].join("--")
-  end
-
   # == Associations
   belongs_to :owner, class_name: "User"
   has_one :address, dependent: :destroy
@@ -114,8 +107,15 @@ class Activity < ApplicationRecord
   # == Callbacks
   after_validation :geocode, if: :location_changed?, unless: :location_is_url?
 
-  # == Callbacks
+  # == Google Event: Callbacks
   after_commit :update_google_event, on: %i[create destroy]
+
+  # == Routing
+  sig { returns(String) }
+  def to_param
+    prefix = FriendlyId::Candidates.new(self, name).first
+    [prefix, handle].join("--")
+  end
 
   # == Emails
   sig { void }
@@ -237,6 +237,7 @@ class Activity < ApplicationRecord
     activity
   end
 
+  # == Methods
   sig { returns(T::Boolean) }
   def location_is_url?
     url_regexp = T.let(URI::DEFAULT_PARSER.regexp[:ABS_URI], Regexp)
@@ -268,7 +269,7 @@ class Activity < ApplicationRecord
     self.title = closed_title
   end
 
-  # == Callback Handlers
+  # == Google Event: Callback Handlers
   sig { void }
   def update_google_event
     event = google_event!
