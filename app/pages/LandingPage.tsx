@@ -28,7 +28,7 @@ const LandingPage: PageComponent<LandingPageProps> = ({ data: { viewer } }) => {
           , a lowkey way to share what you&apos;ll be up to with your friends,
           and let them join you on your life&apos;s adventures.
         </Text>
-        <Text lh={1.4}> Still not sure what I mean? Check out this reel:</Text>
+        <Text lh={1.4}>Curious to know how it works? Check out this reel:</Text>
       </Stack>
       {mounted && (
         <Box
