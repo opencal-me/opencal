@@ -87,7 +87,6 @@ class ActivitiesController < ApplicationController
   end
   def activity_story_image(activity, timezone:)
     self.class.activity_story_image_semaphore.synchronize do
-      require "selenium-webdriver"
       driver = webdriver
       driver.execute_cdp(
         "Emulation.setTimezoneOverride",

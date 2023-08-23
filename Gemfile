@@ -166,7 +166,7 @@ gem "nokogiri", "~> 1.15"
 gem "rails_autolink", "~> 1.1"
 
 # Save screenshots of our webpages with Selenium
-gem "selenium-webdriver", "~> 4.10", require: false
+gem "selenium-webdriver", "~> 4.11"
 
 # Detect what OS we are running on
 gem "os", "~> 1.1"
@@ -228,5 +228,4 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
-  gem "webdrivers"
 end

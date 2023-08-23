@@ -5,6 +5,7 @@ ARG NODE_MAJOR_VERSION=18
 ARG YARN_VERSION=1.22.19
 ARG POSTGRES_MAJOR_VERSION=14
 ARG OVERMIND_VERSION=2.4.0
+ARG CHROME_VERSION=stable
 
 # Configure base image
 FROM ruby:$RUBY_VERSION-slim-$DISTRO_NAME
@@ -12,6 +13,8 @@ FROM ruby:$RUBY_VERSION-slim-$DISTRO_NAME
 # Re-declare arguments, since they are reset by the FROM instructions
 #
 # See: https://github.com/moby/moby/issues/34129
+ARG DISTRO_NAME
+ARG RUBY_VERSION
 ARG NODE_MAJOR_VERSION
 ARG YARN_VERSION
 ARG POSTGRES_MAJOR_VERSION
@@ -68,13 +71,6 @@ RUN apt-get -y update -qq \
   && apt-get clean \
   && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/* /tmp/* /var/tmp/* \
   && truncate -s 0 /var/log/*log
-
-# Install Chromedriver
-RUN curl -o /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/$(google-chrome --version)/chromedriver_linux64.zip" \
-    && unzip /tmp/chromedriver.zip \
-    && mv /tmp/chromedriver /usr/bin/chromedriver \
-    && chmod u+x /usr/bin/chromedriver \
-    && rm /tmp/*
 
 # Install programs
 COPY Aptfile /tmp/Aptfile
