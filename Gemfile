@@ -167,7 +167,6 @@ gem "rails_autolink", "~> 1.1"
 
 # Save screenshots of our webpages with Selenium
 gem "selenium-webdriver", "~> 4.10", require: false
-gem "selenium-devtools", "~> 0.115.0", require: false
 
 # Detect what OS we are running on
 gem "os", "~> 1.1"
