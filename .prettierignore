@@ -3,6 +3,7 @@
 bin/
 app/ssr/dist/
 app/views/pages/privacy_policy.html
+app/views/pages/terms_of_service.html
 db/schema.rb
 log/
 node_modules/

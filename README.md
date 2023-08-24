@@ -13,3 +13,8 @@ git clone git@github.com:opencal-me/opencal
 cd opencal
 bin/setup
 ```
+
+## TODO
+
+- [ ] Sanitize all links from description to open in new tab, and have safe
+      'rel' attribute options.

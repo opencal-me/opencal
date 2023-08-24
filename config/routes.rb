@@ -77,6 +77,7 @@ Rails.application.routes.draw do
   # == Pages
   root "landings#show"
   get "/privacy" => "high_voltage/pages#show", id: "privacy_policy"
+  get "/tos" => "high_voltage/pages#show", id: "terms_of_service"
   get "/src" => redirect("https://github.com/opencal-me/opencal", status: 302)
 
   # == Development
