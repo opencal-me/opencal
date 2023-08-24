@@ -168,7 +168,7 @@ class User < ApplicationRecord
     google_refresh_token? && super
   end
 
-  sig { override.returns(String) }
+  sig { override.returns(T.any(Symbol, String)) }
   def inactive_message
     return "Missing or invalid Google refresh token." if google_refresh_token?
     super
@@ -177,9 +177,9 @@ class User < ApplicationRecord
   # == Google Calendar
   sig { params(id: String).returns(Google::Calendar) }
   def self.google_calendar(id)
-    @calendars = T.let(@calendars,
-                       T.nilable(T::Hash[T.untyped, Google::Calendar]))
-    @calendars ||= Hash.new do |hash, id|
+    @google_calendars = T.let(@google_calendars,
+                              T.nilable(T::Hash[T.untyped, Google::Calendar]))
+    @google_calendars ||= Hash.new do |hash, id|
       hash[id] = Google::Calendar.new(
         client_id: Google.client_id!,
         client_secret: Google.client_secret!,
@@ -187,7 +187,7 @@ class User < ApplicationRecord
         calendar: id,
       )
     end
-    @calendars[id]
+    @google_calendars[id]
   end
 
   sig { returns(T::Boolean) }
@@ -214,7 +214,7 @@ class User < ApplicationRecord
           update!(google_refresh_token: nil)
         end
       end
-      raise "Google Calendar authorization failed"
+      raise GoogleAuthorizationError, "Google Calendar authorization failed"
     end
   end
 

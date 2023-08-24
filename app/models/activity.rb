@@ -165,29 +165,33 @@ class Activity < ApplicationRecord
   # == Importing
   sig { params(user: User).void }
   def self.import_for_user!(user)
-    user.changed_google_events!.each do |event|
-      if (attendees = event.attendees)
-        owner_attendee = attendees.find do |attendee|
-          attendee["email"] == user.email
+    begin
+      user.changed_google_events!.each do |event|
+        if (attendees = event.attendees)
+          owner_attendee = attendees.find do |attendee|
+            attendee["email"] == user.email
+          end
+          next unless owner_attendee && owner_attendee["organizer"]
         end
-        next unless owner_attendee && owner_attendee["organizer"]
-      end
-      tags = if (title = event.title)
-        parse_title(title).last
-      else
-        []
-      end
-      if event.status != "cancelled" && tags.include?("open")
-        activity = from_google_event(event, owner: user)
-        activity.save!
-        if activity.previously_new_record? && tags.exclude?("silent")
-          activity.send_created_email
+        tags = if (title = event.title)
+          parse_title(title).last
+        else
+          []
         end
-      elsif (activity = find_by(google_event_id: event.id, owner: user))
-        activity.destroy!
+        if event.status != "cancelled" && tags.include?("open")
+          activity = from_google_event(event, owner: user)
+          activity.save!
+          if activity.previously_new_record? && tags.exclude?("silent")
+            activity.send_created_email
+          end
+        elsif (activity = find_by(google_event_id: event.id, owner: user))
+          activity.destroy!
+        end
       end
-      user.update_google_calendar_last_imported_at!
+    rescue User::GoogleAuthorizationError
+      return nil
     end
+    user.update_google_calendar_last_imported_at!
   end
 
   sig { params(user: User).void }
