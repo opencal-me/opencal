@@ -71,7 +71,7 @@ class Activity < ApplicationRecord
   end
 
   # == Normalizations
-  before_validation :normalize_title
+  before_validation :normalize_title, if: %i[title? title_changed?]
 
   # == Geocoding
   sig { returns(RGeo::Geographic::Factory) }
@@ -140,7 +140,7 @@ class Activity < ApplicationRecord
         end
         [name || "", tags || []]
       else
-        ["", []]
+        [title, []]
       end
       hash[title] = [name, tags]
     end
@@ -258,15 +258,21 @@ class Activity < ApplicationRecord
   end
 
   sig { returns(String) }
+  def opened_title
+    tags = "[#{[*self.tags, "open"].join(" ")}]"
+    [name, tags].compact.join(" ")
+  end
+
+  sig { returns(String) }
   def closed_title
-    tags = self.tags
-    tags.empty? ? name : "#{name} [#{tags.join(" ")}]"
+    tags = "[#{self.tags.join(" ")}]"
+    [name, tags].compact.join(" ")
   end
 
   # == Normalization Handlers
   sig { void }
   def normalize_title
-    self.title = closed_title
+    self.title = opened_title
   end
 
   # == Google Event: Callback Handlers
