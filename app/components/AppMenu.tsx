@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { format as formatTimeAgo } from "timeago.js";
 import CogIcon from "~icons/heroicons/cog-6-tooth-20-solid";
 import SignOutIcon from "~icons/heroicons/arrow-left-on-rectangle-20-solid";
+import HomeIcon from "~icons/heroicons/home-20-solid";
 
 import { Text } from "@mantine/core";
 import type { BoxProps, BadgeProps } from "@mantine/core";
@@ -12,7 +13,6 @@ import type { SharedPageProps } from "~/helpers/inertia";
 import { AppMenuQueryDocument } from "~/helpers/graphql";
 import type { AppViewerFragment } from "~/helpers/graphql";
 import type { Maybe } from "~/helpers/graphql";
-import FormAuthenticityField from "./FormAuthenticityField";
 
 export type AppMenuProps = Pick<BoxProps, "sx"> & {
   readonly viewer: Maybe<AppViewerFragment>;
@@ -85,6 +85,9 @@ const AppMenu: FC<AppMenuProps> = ({ viewer, sx }) => {
         </Badge>
       </Menu.Target>
       <Menu.Dropdown>
+        <Menu.Item component={Link} href="/home" icon={<HomeIcon />}>
+          Home
+        </Menu.Item>
         <Menu.Item component={Link} href="/user/settings" icon={<CogIcon />}>
           Settings
         </Menu.Item>
@@ -130,12 +133,9 @@ const AppMenu: FC<AppMenuProps> = ({ viewer, sx }) => {
       </Menu.Dropdown>
     </Menu>
   ) : (
-    <form action="/user/auth/google" method="post">
-      <FormAuthenticityField />
-      <Badge component="button" type="submit" color="gray.4" {...badgeProps}>
-        Sign In
-      </Badge>
-    </form>
+    <Badge component={Link} href="/login" color="gray.4" {...badgeProps}>
+      Sign In
+    </Badge>
   );
 };
 

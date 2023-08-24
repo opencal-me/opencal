@@ -14,11 +14,15 @@ module Users
       @user = T.let(@user, T.nilable(User))
     end
 
-    # GET /user/auth/google/callback
+    # GET|POST /user/auth/google/callback
     def google
       user = User.from_google_auth!(auth)
-      set_flash_message(:notice, :success, kind: "Google")
-      sign_in_and_redirect(user)
+      if user.google_refresh_token?
+        set_flash_message(:notice, :success, kind: "Google")
+        sign_in_and_redirect(user)
+      else
+        redirect_to(new_user_session_path(refresh: true))
+      end
     end
 
     protected

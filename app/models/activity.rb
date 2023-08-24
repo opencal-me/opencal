@@ -165,28 +165,26 @@ class Activity < ApplicationRecord
   # == Importing
   sig { params(user: User).void }
   def self.import_for_user!(user)
-    transaction do
-      user.changed_google_events.each do |event|
-        if (attendees = event.attendees)
-          owner_attendee = attendees.find do |attendee|
-            attendee["email"] == user.email
-          end
-          next unless owner_attendee && owner_attendee["organizer"]
+    user.changed_google_events!.each do |event|
+      if (attendees = event.attendees)
+        owner_attendee = attendees.find do |attendee|
+          attendee["email"] == user.email
         end
-        tags = if (title = event.title)
-          parse_title(title).last
-        else
-          []
+        next unless owner_attendee && owner_attendee["organizer"]
+      end
+      tags = if (title = event.title)
+        parse_title(title).last
+      else
+        []
+      end
+      if event.status != "cancelled" && tags.include?("open")
+        activity = from_google_event(event, owner: user)
+        activity.save!
+        if activity.previously_new_record? && tags.exclude?("silent")
+          activity.send_created_email
         end
-        if event.status != "cancelled" && tags.include?("open")
-          activity = from_google_event(event, owner: user)
-          activity.save!
-          if activity.previously_new_record? && tags.exclude?("silent")
-            activity.send_created_email
-          end
-        elsif (activity = find_by(google_event_id: event.id, owner: user))
-          activity.destroy!
-        end
+      elsif (activity = find_by(google_event_id: event.id, owner: user))
+        activity.destroy!
       end
       user.update_google_calendar_last_imported_at!
     end
@@ -199,11 +197,13 @@ class Activity < ApplicationRecord
 
   sig { params(max_users: Integer).void }
   def self.import(max_users: 10)
-    users = if Rails.env.production?
-      User.where(google_calendar_last_imported_at: nil)
-        .or(User.where("google_calendar_last_imported_at < ?", 5.minutes.ago))
-    else
-      User.all
+    users = User.where.not(google_refresh_token: nil)
+    if Rails.env.production?
+      users = users.and(
+        User.where(google_calendar_last_imported_at: nil).or(
+          User.where("google_calendar_last_imported_at < ?", 5.minutes.ago),
+        ),
+      )
     end
     users.limit(max_users).each { |user| import_for_user_later(user) }
   end
@@ -219,7 +219,7 @@ class Activity < ApplicationRecord
 
   sig { returns(Google::Event) }
   def google_event!
-    owner!.google_event(google_event_id)
+    owner!.google_event!(google_event_id)
   end
 
   sig { params(event: Google::Event).void }

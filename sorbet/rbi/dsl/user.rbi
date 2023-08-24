@@ -795,10 +795,10 @@ class User
     sig { void }
     def google_calendar_last_imported_at_will_change!; end
 
-    sig { returns(::String) }
+    sig { returns(T.nilable(::String)) }
     def google_refresh_token; end
 
-    sig { params(value: ::String).returns(::String) }
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
     def google_refresh_token=(value); end
 
     sig { returns(T::Boolean) }
@@ -813,10 +813,10 @@ class User
     sig { returns(T::Boolean) }
     def google_refresh_token_came_from_user?; end
 
-    sig { returns(T.nilable([::String, ::String])) }
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def google_refresh_token_change; end
 
-    sig { returns(T.nilable([::String, ::String])) }
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def google_refresh_token_change_to_be_saved; end
 
     sig { returns(T::Boolean) }
@@ -825,7 +825,7 @@ class User
     sig { returns(T.nilable(::String)) }
     def google_refresh_token_in_database; end
 
-    sig { returns(T.nilable([::String, ::String])) }
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def google_refresh_token_previous_change; end
 
     sig { returns(T::Boolean) }
@@ -1305,7 +1305,7 @@ class User
     sig { returns(T::Boolean) }
     def saved_change_to_google_calendar_last_imported_at?; end
 
-    sig { returns(T.nilable([::String, ::String])) }
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def saved_change_to_google_refresh_token; end
 
     sig { returns(T::Boolean) }

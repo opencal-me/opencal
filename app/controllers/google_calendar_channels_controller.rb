@@ -15,7 +15,10 @@ class GoogleCalendarChannelsController < ApplicationController
     if request.headers["X-Goog-Resource-State"] == "sync"
       head(:no_content) and return
     end
-    Activity.import_for_user_later(channel.owner!)
+    scoped do
+      user = channel.owner!
+      Activity.import_for_user_later(user) if user.google_calendar?
+    end
     head(:no_content)
   end
 

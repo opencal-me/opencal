@@ -45,6 +45,9 @@ module GeneratedUrlHelpersModule
   def new_rails_conductor_inbound_email_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def new_user_session_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def page_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }

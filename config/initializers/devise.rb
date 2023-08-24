@@ -288,7 +288,6 @@ Devise.setup do |config|
       email
       https://www.googleapis.com/auth/calendar.events
     ].join(","),
-    # prompt: "consent",
   )
 
   # ==> Warden configuration

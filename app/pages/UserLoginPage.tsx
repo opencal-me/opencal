@@ -1,45 +1,41 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
-import { Text } from "@mantine/core";
+import { Loader, Text } from "@mantine/core";
 
 import { UserLoginPageQuery } from "~/helpers/graphql";
 
-import UserLoginPageForm from "~/components/UserLoginPageForm";
+import FormAuthenticityField from "~/components/FormAuthenticityField";
 
 export type UserLoginPageProps = PagePropsWithData<UserLoginPageQuery> & {
-  readonly failed: boolean;
+  readonly authorizeAction: string;
 };
 
-const UserLoginPage: PageComponent<UserLoginPageProps> = () => (
-  <Card w={380} withBorder>
-    <Stack spacing="xs">
-      <Stack align="center" spacing={2}>
-        <Title size="h3">Sign In</Title>
-        <Text size="sm" color="dimmed">
-          Welcome back to{" "}
-          <Anchor component={Link} href="/" color="brand" weight={600}>
-            OpenCal
-          </Anchor>
+const UserLoginPage: PageComponent<UserLoginPageProps> = ({
+  authorizeAction,
+}) => {
+  const mounted = useMounted();
+
+  // == Autosubmit
+  const formRef = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    if (formRef.current && mounted) {
+      formRef.current.requestSubmit();
+    }
+  }, [mounted]);
+
+  return (
+    <Card w={340} withBorder>
+      <Stack align="center" spacing={8} py="md">
+        <Loader size="sm" />
+        <Text size="sm" color="dark.4">
+          Signing in with Google...
         </Text>
       </Stack>
-      <UserLoginPageForm />
-      <Text size="xs" color="gray.6">
-        Don&apos;t have an account?{" "}
-        <Anchor component={Link} href="/user/register">
-          Sign up instead.
-        </Anchor>
-      </Text>
-      <Divider />
-      <Stack spacing={0} fz="xs">
-        <Anchor component={Link} href="/user/password/reset">
-          Forgot your password?
-        </Anchor>
-        <Anchor component={Link} href="/user/verification/resend">
-          Didn&apos;t get a verification email?
-        </Anchor>
-      </Stack>
-    </Stack>
-  </Card>
-);
+      <form ref={formRef} action={authorizeAction} method="post">
+        <FormAuthenticityField />
+      </form>
+    </Card>
+  );
+};
 
 UserLoginPage.layout = buildLayout<UserLoginPageProps>(
   (page, { data: { viewer } }) => (

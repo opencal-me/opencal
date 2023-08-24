@@ -15,7 +15,7 @@
 #  encrypted_password               :string           not null
 #  first_name                       :string           not null
 #  google_calendar_last_imported_at :datetime
-#  google_refresh_token             :string           not null
+#  google_refresh_token             :string
 #  google_uid                       :string           not null
 #  last_name                        :string
 #  last_sign_in_at                  :datetime
@@ -33,7 +33,6 @@
 #  index_users_on_google_calendar_last_imported_at  (google_calendar_last_imported_at)
 #  index_users_on_reset_password_token              (reset_password_token) UNIQUE
 #
-# rubocop:enable Layout/LineLength
 class User < ApplicationRecord
   include Identifiable
 
@@ -88,7 +87,6 @@ class User < ApplicationRecord
   #                   if: %i[unconfirmed_email? email_changed?]
 
   # == Validations
-  validates :google_refresh_token, presence: true
   validates :first_name, presence: true, length: { maximum: 64 }
   validates :last_name, length: { maximum: 64 }, allow_nil: true
   validates :email,
@@ -165,9 +163,20 @@ class User < ApplicationRecord
     super(params)
   end
 
+  sig { override.returns(T::Boolean) }
+  def active_for_authentication?
+    google_refresh_token? && super
+  end
+
+  sig { override.returns(String) }
+  def inactive_message
+    return "Missing or invalid Google refresh token." if google_refresh_token?
+    super
+  end
+
   # == Google Calendar
-  sig { params(id: String, refresh_token: String).returns(Google::Calendar) }
-  def self.google_calendar(id, refresh_token:)
+  sig { params(id: String).returns(Google::Calendar) }
+  def self.google_calendar(id)
     @calendars = T.let(@calendars,
                        T.nilable(T::Hash[T.untyped, Google::Calendar]))
     @calendars ||= Hash.new do |hash, id|
@@ -178,45 +187,70 @@ class User < ApplicationRecord
         calendar: id,
       )
     end
-    @calendars[id].tap do |calendar|
-      calendar = T.let(calendar, Google::Calendar)
+    @calendars[id]
+  end
+
+  sig { returns(T::Boolean) }
+  def google_calendar? = google_refresh_token?
+
+  sig { returns(T.nilable(Google::Calendar)) }
+  def google_calendar
+    refresh_token = google_refresh_token or return
+    calendar = self.class.google_calendar(email)
+    begin
       calendar.login_with_refresh_token(refresh_token)
+      calendar
+    rescue Google::HTTPAuthorizationFailed => error
+      cause = error.cause
+      if cause.is_a?(Signet::AuthorizationError)
+        response = T.let(cause.response, Faraday::Response)
+        body = JSON.parse(response.body)
+        if body["error"] == "invalid_grant"
+          tag_logger do
+            logger.info(
+              "Google Calendar authorization failed; resetting refresh token",
+            )
+          end
+          update!(google_refresh_token: nil)
+        end
+      end
+      raise "Google Calendar authorization failed"
     end
   end
 
   sig { returns(Google::Calendar) }
-  def google_calendar
-    self.class.google_calendar(email, refresh_token: google_refresh_token)
+  def google_calendar!
+    google_calendar or raise "Missing Google refresh token"
   end
 
   sig { params(query: T.nilable(String)).returns(T::Array[Google::Event]) }
-  def google_events(query: nil)
+  def google_events!(query: nil)
     options = { query: query.presence }
     options.compact!
     options[:max_results] = 10
-    google_calendar_operation do |calendar|
+    with_google_calendar do |calendar|
       calendar.find_future_events(options)
     end
   end
 
   sig { params(id: String).returns(Google::Event) }
-  def google_event(id)
-    google_calendar_operation do |calendar|
+  def google_event!(id)
+    with_google_calendar do |calendar|
       calendar.find_event_by_id(id).first
     end
   end
 
   sig { returns(T::Array[Google::Event]) }
-  def changed_google_events
+  def changed_google_events!
     updated_min = google_calendar_last_imported_at || created_at or
       raise "User not yet created"
-    params = {
-      "updatedMin" => google_calendar.send(:encode_time, updated_min),
-      "maxResults" => 2500,
-      "orderBy" => "updated",
-      "singleEvents" => true,
-    }
-    google_calendar_operation do |calendar|
+    with_google_calendar do |calendar|
+      params = {
+        "updatedMin" => calendar.send(:encode_time, updated_min),
+        "maxResults" => 2500,
+        "orderBy" => "updated",
+        "singleEvents" => true,
+      }
       calendar.send(:event_lookup, "?" + params.to_query)
     end
   end
@@ -243,16 +277,21 @@ class User < ApplicationRecord
 
   # == Helpers
   sig do
-    type_parameters(:U).params(
-      block: T.proc.params(
-        calendar: Google::Calendar,
-      ).returns(T.type_parameter(:U)),
-    ).returns(T.type_parameter(:U))
+    type_parameters(:U)
+      .params(
+        block: T.proc.params(
+          calendar: Google::Calendar,
+        ).returns(T.type_parameter(:U)),
+      )
+      .returns(T.type_parameter(:U))
   end
-  def google_calendar_operation(&block)
-    yield google_calendar
-  rescue => _
-    raise "Google Calendar error"
+  def with_google_calendar(&block)
+    calendar = google_calendar!
+    begin
+      yield calendar
+    rescue => error
+      raise "Google Calendar error: #{error}"
+    end
   end
 
   # == Callback Handlers

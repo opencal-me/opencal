@@ -54,7 +54,11 @@ class GoogleCalendarChannel < ApplicationRecord
   # == Sync
   sig { void }
   def self.sync!
-    to_deregister.find_each(&:destroy!)
+    to_deregister.find_each do |channel|
+      channel.transaction do
+        channel.destroy! if channel.stoppable?
+      end
+    end
     users_to_register.find_each do |user|
       GoogleCalendarChannel.register_for_user!(user)
     end if registerable?
@@ -73,7 +77,9 @@ class GoogleCalendarChannel < ApplicationRecord
 
   sig { returns(User::PrivateRelation) }
   def self.users_to_register
-    User.where.not(email: GoogleCalendarChannel.select(:calendar_id))
+    User
+      .where.not(google_refresh_token: nil)
+      .where.not(email: GoogleCalendarChannel.select(:calendar_id))
   end
 
   sig { params(user: User).returns(GoogleCalendarChannel) }
@@ -100,7 +106,7 @@ class GoogleCalendarChannel < ApplicationRecord
     end
     id = SecureRandom.uuid
     address = callback_google_calendar_channel_url(id)
-    channel = owner!.google_calendar.watch_events(
+    channel = owner!.google_calendar!.watch_events(
       id:,
       token:,
       address:,
@@ -111,9 +117,13 @@ class GoogleCalendarChannel < ApplicationRecord
     self.expires_at = Time.zone.at(channel["expiration"].to_i / 1000)
   end
 
-  # == Methods
+  # == Stopping
+  def stoppable?
+    owner!.google_calendar?
+  end
+
   sig { void }
   def stop
-    owner!.google_calendar.stop_channel(id: T.must(id), resource_id:)
+    owner!.google_calendar!.stop_channel(id: T.must(id), resource_id:)
   end
 end

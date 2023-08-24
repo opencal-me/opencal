@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_21_191856) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_24_143238) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -193,7 +193,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_21_191856) do
     t.datetime "updated_at", null: false
     t.string "first_name", null: false
     t.string "google_uid", null: false
-    t.string "google_refresh_token", null: false
+    t.string "google_refresh_token"
     t.string "avatar_url"
     t.string "last_name"
     t.datetime "google_calendar_last_imported_at", precision: nil

@@ -5,7 +5,6 @@ import { Tweet } from "react-tweet";
 import type { LandingPageQuery } from "~/helpers/graphql";
 
 import ContactMeLink from "~/components/ContactMeLink";
-import FormAuthenticityField from "~/components/FormAuthenticityField";
 
 export type LandingPageProps = PagePropsWithData<LandingPageQuery>;
 
@@ -43,12 +42,9 @@ const LandingPage: PageComponent<LandingPageProps> = ({ data: { viewer } }) => {
         </Box>
       )}
       {!viewer && (
-        <form action="/user/auth/google" method="post">
-          <FormAuthenticityField />
-          <Button type="submit" size="lg" fullWidth radius="xl">
-            Sign in with Google to get started.
-          </Button>
-        </form>
+        <Button component={Link} href="/login" size="lg" fullWidth radius="xl">
+          Sign in with Google to get started.
+        </Button>
       )}
     </Stack>
   );

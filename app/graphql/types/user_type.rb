@@ -26,7 +26,7 @@ module Types
 
     sig { params(query: T.nilable(String)).returns(T::Array[Google::Event]) }
     def google_events(query: nil)
-      object.google_events(query:)
+      object.google_events!(query:)
     end
 
     # == Helpers

@@ -68,6 +68,11 @@ class ApplicationController < ActionController::Base
     authenticate_user!
   end
 
+  sig { override.returns(T.nilable(User)) }
+  def current_user
+    super
+  end
+
   sig { returns(T::Boolean) }
   def storable_location?
     request.get? && is_navigational_format? &&

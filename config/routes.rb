@@ -30,8 +30,7 @@ Rails.application.routes.draw do
              module: "users",
              as: :user_session,
              only: [] do
-               #  get :login, action: :new, as: :new
-               #  post :login, action: :create, as: ""
+               get :login, action: :new, as: :new
                post :logout, action: :destroy, as: :destroy
              end
     scope :user, module: "users", as: :user do

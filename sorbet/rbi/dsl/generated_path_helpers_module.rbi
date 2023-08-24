@@ -45,6 +45,9 @@ module GeneratedPathHelpersModule
   def new_rails_conductor_inbound_email_source_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def new_user_session_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def page_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
