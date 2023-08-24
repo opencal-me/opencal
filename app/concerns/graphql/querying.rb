@@ -24,6 +24,7 @@ module GraphQL::Querying
   end
   def query(name, variables = {})
     context = { current_user: }
+    context[:controller] = self if is_a?(ActionController::Base)
     variables = variables.transform_keys do |key|
       if key.is_a?(Symbol)
         key.to_s.camelize(:lower)

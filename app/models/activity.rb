@@ -253,6 +253,13 @@ class Activity < ApplicationRecord
     capacity - reservations.count
   end
 
+  sig { params(view_context: ActionView::Base).returns(T.nilable(String)) }
+  def description_html(view_context:)
+    if (description = self.description)
+      self.class.parse_description_as_html(description, view_context:)
+    end
+  end
+
   private
 
   # == Helpers

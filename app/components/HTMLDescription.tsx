@@ -19,7 +19,7 @@ const HTMLDescription: FC<HTMLDescriptionProps> = ({
     sx={[
       ...packSx(sx),
       ({ fontSizes, colors }) => ({
-        color: colors.dark[4],
+        color: colors.dark[3],
         fontSize: fontSizes.sm,
         p: {
           marginBottom: 0,

@@ -22,10 +22,10 @@ module Types
 
     sig { returns(T.nilable(String)) }
     def description_html
-      if (description = object.description) && (controller = self.controller)
+      if (description = object.description)
         Activity.parse_description_as_html(
           description,
-          view_context: controller.view_context,
+          view_context: controller!.view_context,
         )
       end
     end
