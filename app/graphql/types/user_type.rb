@@ -14,6 +14,7 @@ module Types
     field :google_events, [GoogleEventType], null: false do
       argument :query, String, required: false
     end
+    field :initials, String, null: false
     field :is_admin, Boolean, null: false, method: :admin?
     field :last_name, String
     field :name, String, null: false

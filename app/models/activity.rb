@@ -144,7 +144,7 @@ class Activity < ApplicationRecord
       end
       hash[title] = [name, tags]
     end
-    @parsed_titles[title]
+    @parsed_titles[title.strip]
   end
 
   sig do
@@ -271,13 +271,13 @@ class Activity < ApplicationRecord
   sig { returns(String) }
   def opened_title
     tags = "[#{[*self.tags, "open"].join(" ")}]"
-    [name, tags].compact.join(" ")
+    [name, tags].compact_blank.join(" ")
   end
 
   sig { returns(String) }
   def closed_title
     tags = "[#{self.tags.join(" ")}]"
-    [name, tags].compact.join(" ")
+    [name, tags].compact_blank.join(" ")
   end
 
   # == Normalization Handlers
@@ -292,17 +292,24 @@ class Activity < ApplicationRecord
     event = google_event!
     if previously_new_record?
       event.title = title
-      event.attachments = [{
-        "title" => "OpenCal",
-        "fileUrl" => activity_url(self),
-        "mimeType" => "text/html",
-        "iconLink" => root_url + "logo.png",
-      }]
+      event.attachments = scoped do
+        attachments = event.attachments || []
+        attachments << {
+          "title" => "OpenCal",
+          "fileUrl" => activity_url(self),
+          "mimeType" => "text/html",
+          "iconLink" => root_url + "logo.png",
+        }
+      end
       event.save
     elsif destroyed?
       if event.status != "cancelled"
         event.title = closed_title
-        event.attachments = []
+        if (attachments = event.attachments)
+          attachments.delete_if do |attachment|
+            attachment["title"] == "OpenCal"
+          end
+        end
         event.save
       end
     end

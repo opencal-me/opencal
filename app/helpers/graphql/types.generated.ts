@@ -264,6 +264,7 @@ export type User = Node & {
   googleEvents: Array<GoogleEvent>;
   /** ID of the object. */
   id: Scalars['ID']['output'];
+  initials: Scalars['String']['output'];
   isAdmin: Scalars['Boolean']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];

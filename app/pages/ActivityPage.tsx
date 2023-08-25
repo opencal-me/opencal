@@ -48,11 +48,11 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
         <Stack>
           <Group spacing="xs">
             {resolve(() => {
-              const { avatarUrl, name } = owner;
+              const { avatarUrl, initials } = owner;
               return (
                 !!avatarUrl && (
-                  <Avatar src={avatarUrl} size="sm" radius="xl">
-                    {name}
+                  <Avatar src={avatarUrl} size="sm" color="brand" radius="xl">
+                    {initials}
                   </Avatar>
                 )
               );

@@ -1,7 +1,12 @@
 query UserSettingsPageQuery {
   viewer {
     ...AppViewerFragment
+    avatarUrl
+    email
+    firstName
     id
-    ...UserSettingsPageViewerFragment
+    initials
+    lastName
+    name
   }
 }

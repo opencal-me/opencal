@@ -121,6 +121,7 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
         <Button
           component={Link}
           href={activity.url}
+          color="dark"
           leftIcon={<RightArrowIcon />}
         >
           Go To Activity

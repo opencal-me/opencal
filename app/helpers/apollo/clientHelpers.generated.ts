@@ -116,7 +116,7 @@ export type UpdateUserPayloadFieldPolicy = {
 	success?: FieldPolicy<any> | FieldReadFunction<any>,
 	user?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type UserKeySpecifier = ('activities' | 'avatarUrl' | 'email' | 'firstName' | 'googleEvents' | 'id' | 'isAdmin' | 'lastName' | 'name' | UserKeySpecifier)[];
+export type UserKeySpecifier = ('activities' | 'avatarUrl' | 'email' | 'firstName' | 'googleEvents' | 'id' | 'initials' | 'isAdmin' | 'lastName' | 'name' | UserKeySpecifier)[];
 export type UserFieldPolicy = {
 	activities?: FieldPolicy<any> | FieldReadFunction<any>,
 	avatarUrl?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -124,6 +124,7 @@ export type UserFieldPolicy = {
 	firstName?: FieldPolicy<any> | FieldReadFunction<any>,
 	googleEvents?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	initials?: FieldPolicy<any> | FieldReadFunction<any>,
 	isAdmin?: FieldPolicy<any> | FieldReadFunction<any>,
 	lastName?: FieldPolicy<any> | FieldReadFunction<any>,
 	name?: FieldPolicy<any> | FieldReadFunction<any>

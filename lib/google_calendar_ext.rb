@@ -46,8 +46,12 @@ module Google
   end
 
   class Event
+    extend T::Sig
+
+    sig { returns(T.nilable(T::Array[T::Hash[String, T.untyped]])) }
     attr_accessor :attachments
 
+    sig { params(e: T.untyped, calendar: Calendar).returns(Event) }
     def self.new_from_feed(e, calendar)
       params = {}
       %w(id status description location creator transparency updated reminders
@@ -70,6 +74,7 @@ module Google
       Event.new(params)
     end
 
+    sig { returns(String) }
     def to_json
       attributes = {
         "summary" => title,
@@ -98,6 +103,7 @@ module Google
       JSON.generate(attributes)
     end
 
+    sig { returns(T::Hash[String, T.untyped]) }
     def attachments_attributes
       return {} unless @attachments
       attachments = @attachments.map do |attachment|

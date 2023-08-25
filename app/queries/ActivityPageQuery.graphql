@@ -12,6 +12,7 @@ query ActivityPageQuery($activityId: ID!) {
     owner {
       avatarUrl
       id
+      initials
       name
     }
     ...ReservationFooterActivityFragment

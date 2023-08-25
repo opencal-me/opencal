@@ -12,7 +12,7 @@ module Google
 
     sig { returns(String) }
     def client_id!
-      client_id or raise "Missing Google client ID"
+      client_id or raise "Google client ID not set"
     end
 
     sig { returns(T.nilable(String)) }
@@ -22,7 +22,7 @@ module Google
 
     sig { returns(String) }
     def client_secret!
-      client_secret or raise "Missing Google client secret"
+      client_secret or raise "Google client secret not set"
     end
   end
 end

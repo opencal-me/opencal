@@ -1,7 +1,7 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
+import { Avatar, Text } from "@mantine/core";
 
 import type { UserSettingsPageQuery } from "~/helpers/graphql";
-import { Avatar } from "@mantine/core";
 
 // import UserSettingsPageForm from "~/components/UserSettingsPageForm";
 
@@ -11,33 +11,39 @@ const UserSettingsPage: PageComponent<UserSettingsPageProps> = ({
   data: { viewer },
 }) => {
   invariant(viewer, "Missing viewer");
-  const { avatarUrl, firstName, lastName, name, email } = viewer;
+  const { avatarUrl, firstName, lastName, initials, email, name } = viewer;
 
   // == Markup
   return (
     <Stack>
       <Card withBorder>
-        <Stack spacing="xs">
-          <Stack align="center" spacing={8}>
-            {!!avatarUrl && (
-              <Avatar
-                src={avatarUrl}
-                radius="100%"
-                size="md"
-                sx={{ alignSelf: "center" }}
-              >
+        <Stack>
+          <Title order={2} size="h4" lh={1} sx={{ alignSelf: "center" }}>
+            Your Profile
+          </Title>
+          <Stack spacing={8}>
+            <Group spacing={8}>
+              {!!avatarUrl && (
+                <Avatar
+                  src={avatarUrl}
+                  color="brand"
+                  radius="100%"
+                  size="md"
+                  sx={{ alignSelf: "center" }}
+                >
+                  {initials}
+                </Avatar>
+              )}
+              <Text color="dark" weight={500} size="sm">
                 {name}
-              </Avatar>
+              </Text>
+            </Group>
+            <TextInput label="Email" value={email} readOnly />
+            <TextInput label="First Name" value={firstName} readOnly />
+            {!!lastName && (
+              <TextInput label="Last Name" value={lastName} readOnly />
             )}
-            <Title order={2} size="h4" lh={1}>
-              Your Profile
-            </Title>
           </Stack>
-          <TextInput label="Email" value={email} readOnly />
-          <TextInput label="First Name" value={firstName} readOnly />
-          {!!lastName && (
-            <TextInput label="Last Name" value={lastName} readOnly />
-          )}
         </Stack>
       </Card>
     </Stack>

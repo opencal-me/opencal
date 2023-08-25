@@ -209,6 +209,7 @@ type User implements Node {
 
   """ID of the object."""
   id: ID!
+  initials: String!
   isAdmin: Boolean!
   lastName: String
   name: String!
