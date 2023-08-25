@@ -153,9 +153,6 @@ gem "sentry-rails", "~> 5.9"
 # Forward and reverse geocode with Geocoder
 gem "geocoder", "~> 1.8"
 
-# Handle CORS requests
-gem "rack-cors", "~> 2.0"
-
 # Load events from Google Calendar
 gem "google_calendar", "~> 0.6.4"
 
