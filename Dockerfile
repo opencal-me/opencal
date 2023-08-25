@@ -87,7 +87,7 @@ RUN curl -sS https://starship.rs/install.sh | sh -s -- --yes
 
 # Configure shell
 COPY .zcustomizations .inputrc /root/
-RUN echo -e '\n. "$HOME/.zcustomizations"' >> ~/.zshrc && chsh -s /bin/zsh
+RUN echo '\n. "$HOME/.zcustomizations"' >> ~/.zshrc && chsh -s /bin/zsh
 
 # Configure workdir and environment
 WORKDIR /app
