@@ -146,6 +146,7 @@ ActivityPage.layout = buildLayout<ActivityPageProps>(
     invariant(activity, "Missing activity");
     return (
       <AppLayout
+        noIndex
         padding={0}
         {...(viewer && {
           breadcrumbs: [
