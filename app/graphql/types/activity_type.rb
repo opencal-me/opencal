@@ -16,6 +16,7 @@ module Types
     field :end, DateTimeType, null: false, resolver_method: :resolve_end
     field :google_event_id, String, null: false
     # field :handle, String, null: false, method: :to_param
+    field :is_owned_by_viewer, Boolean, null: false
     field :location, String
     field :name, String, null: false
     field :openings, Integer, null: false
@@ -35,6 +36,11 @@ module Types
     sig { returns(T.nilable(String)) }
     def description_html
       object.description_html(view_context: controller!.view_context)
+    end
+
+    sig { returns(T::Boolean) }
+    def is_owned_by_viewer # rubocop:disable Naming/PredicateName
+      object.owner == current_user
     end
 
     sig { returns(Time) }

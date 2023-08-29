@@ -155,16 +155,18 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
 ActivityPage.layout = buildLayout<ActivityPageProps>(
   (page, { data: { viewer, activity } }) => {
     invariant(activity, "Missing activity");
+    const { owner } = activity;
     return (
       <AppLayout
+        title={activity.name}
         noIndex
+        breadcrumbs={[
+          activity.isOwnedByViewer
+            ? { title: "Home", href: "/home" }
+            : { title: `${owner.firstName}'s Activities`, href: owner.url },
+          { title: activity.name, href: activity.url },
+        ]}
         padding={0}
-        {...(viewer && {
-          breadcrumbs: [
-            { title: "Home", href: "/home" },
-            { title: activity.name, href: activity.url },
-          ],
-        })}
         {...{ viewer }}
       >
         {page}

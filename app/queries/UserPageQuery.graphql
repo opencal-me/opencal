@@ -5,6 +5,8 @@ query UserPageQuery($userId: ID!) {
     firstName
     id
     initials
+    isViewer
+    url
   }
   viewer {
     ...AppViewerFragment

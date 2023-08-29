@@ -46,7 +46,7 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
     start,
     durationSeconds,
     activity,
-    viewerIsOrganizer,
+    isOrganizedByViewer,
   },
   onCreateActivity,
   sx,
@@ -124,14 +124,14 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
         <Tooltip
           label="You must be the event organizer to create an activity."
           withArrow
-          disabled={viewerIsOrganizer}
+          disabled={isOrganizedByViewer}
         >
           <Box display="inline-block">
             <ActivityCreateButton
               googleEventId={eventId}
               onCreate={onCreateActivity}
               variant="light"
-              disabled={!viewerIsOrganizer}
+              disabled={!isOrganizedByViewer}
             />
           </Box>
         </Tooltip>

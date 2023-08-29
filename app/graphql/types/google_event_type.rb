@@ -9,10 +9,10 @@ module Types
     field :duration_seconds, Integer, null: false
     field :end, DateTimeType, null: false, method: :end_time
     field :id, String, null: false
+    field :is_organized_by_viewer, Boolean, null: false
     field :location, String
     field :start, DateTimeType, null: false, method: :start_time
     field :title, String
-    field :viewer_is_organizer, Boolean, null: false
 
     # == Resolvers
     sig { returns(T.nilable(Activity)) }
@@ -35,7 +35,7 @@ module Types
     end
 
     sig { returns(T::Boolean) }
-    def viewer_is_organizer
+    def is_organized_by_viewer # rubocop:disable Naming/PredicateName
       attendees = object.attendees or return true
       viewer = current_user!
       viewer_attendee = attendees.find do |attendee|

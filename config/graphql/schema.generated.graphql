@@ -13,6 +13,7 @@ type Activity implements Node {
 
   """ID of the object."""
   id: ID!
+  isOwnedByViewer: Boolean!
   location: String
   name: String!
   openings: Int!
@@ -76,10 +77,10 @@ type GoogleEvent {
   durationSeconds: Int!
   end: DateTime!
   id: String!
+  isOrganizedByViewer: Boolean!
   location: String
   start: DateTime!
   title: String
-  viewerIsOrganizer: Boolean!
 }
 
 type Image implements Node {
@@ -212,6 +213,7 @@ type User implements Node {
   id: ID!
   initials: String!
   isAdmin: Boolean!
+  isViewer: Boolean!
   lastName: String
   name: String!
   url: String!

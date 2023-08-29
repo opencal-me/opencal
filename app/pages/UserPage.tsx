@@ -48,7 +48,7 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { viewer, user } }) => {
         )}
         <Box sx={{ textAlign: "center" }}>
           <Title order={1} size="h3">
-            {firstName}&apos;s Activities
+            {firstName}&apos;s activities
           </Title>
           <Text size="sm" color="dimmed">
             Join an activity, and get involved with {firstName}&apos;s life :)
@@ -74,16 +74,26 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { viewer, user } }) => {
   );
 };
 
-UserPage.layout = buildLayout<UserPageProps>((page, { data: { viewer } }) => (
-  <AppLayout
-    breadcrumbs={[{ title: "Home", href: "/home" }]}
-    withContainer
-    containerSize="xs"
-    withGutter
-    {...{ viewer }}
-  >
-    {page}
-  </AppLayout>
-));
+UserPage.layout = buildLayout<UserPageProps>(
+  (page, { data: { viewer, user } }) => {
+    invariant(user, "Missing user");
+    return (
+      <AppLayout
+        title={`${user.firstName}'s activities`}
+        noIndex
+        breadcrumbs={[
+          ...(user.isViewer ? [{ title: "Home", href: "/home" }] : []),
+          { title: `${user.firstName}'s activities`, href: user.url },
+        ]}
+        withContainer
+        containerSize="xs"
+        withGutter
+        {...{ viewer }}
+      >
+        {page}
+      </AppLayout>
+    );
+  },
+);
 
 export default UserPage;

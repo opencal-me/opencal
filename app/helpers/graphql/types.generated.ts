@@ -28,6 +28,7 @@ export type Activity = Node & {
   googleEventId: Scalars['String']['output'];
   /** ID of the object. */
   id: Scalars['ID']['output'];
+  isOwnedByViewer: Scalars['Boolean']['output'];
   location?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   openings: Scalars['Int']['output'];
@@ -87,10 +88,10 @@ export type GoogleEvent = {
   durationSeconds: Scalars['Int']['output'];
   end: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
+  isOrganizedByViewer: Scalars['Boolean']['output'];
   location?: Maybe<Scalars['String']['output']>;
   start: Scalars['DateTime']['output'];
   title?: Maybe<Scalars['String']['output']>;
-  viewerIsOrganizer: Scalars['Boolean']['output'];
 };
 
 export type Image = Node & {
@@ -267,6 +268,7 @@ export type User = Node & {
   id: Scalars['ID']['output'];
   initials: Scalars['String']['output'];
   isAdmin: Scalars['Boolean']['output'];
+  isViewer: Scalars['Boolean']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   url: Scalars['String']['output'];

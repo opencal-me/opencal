@@ -40,7 +40,7 @@ const ActivityCard: FC<ActivityCardProps> = ({
     return dateTime.diffNow("seconds").seconds <= 0;
   }, [end]);
   return (
-    <Box pos="relative" {...otherProps}>
+    <Box pos="relative" {...(isOver && { mt: 6 })} {...otherProps}>
       <Card
         withBorder
         sx={({ fn }) => ({

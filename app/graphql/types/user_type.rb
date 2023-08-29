@@ -19,6 +19,7 @@ module Types
     end
     field :initials, String, null: false
     field :is_admin, Boolean, null: false, method: :admin?
+    field :is_viewer, Boolean, null: false
     field :last_name, String
     field :name, String, null: false
     field :url, String, null: false
@@ -44,6 +45,11 @@ module Types
       events = object.google_events!(query:)
       Activity.import_events!(events, owner: object) if Rails.env.development?
       events
+    end
+
+    sig { returns(T::Boolean) }
+    def is_viewer # rubocop:disable Naming/PredicateName
+      object == current_user
     end
 
     sig { returns(String) }

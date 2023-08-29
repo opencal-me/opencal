@@ -25,6 +25,7 @@ const HomePage: PageComponent<HomePageProps> = ({ data: { viewer } }) => {
 
 HomePage.layout = buildLayout<HomePageProps>((page, { data: { viewer } }) => (
   <AppLayout
+    title="Home"
     breadcrumbs={[{ title: "Home", href: "/home" }]}
     withContainer
     containerSize="xs"
