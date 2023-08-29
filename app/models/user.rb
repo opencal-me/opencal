@@ -198,7 +198,9 @@ class User < ApplicationRecord
 
   sig { override.returns(T.any(Symbol, String)) }
   def inactive_message
-    return "Missing or invalid Google refresh token." if google_refresh_token?
+    unless google_refresh_token?
+      return "Missing or invalid Google refresh token."
+    end
     super
   end
 

@@ -9,7 +9,6 @@ module Types
     # == Fields
     field :activities, [ActivityType], null: false do
       argument :show_recently_ended, Boolean, required: false
-      argument :timezone, String
     end
     field :avatar_url, String
     field :email, String, null: false
@@ -26,17 +25,12 @@ module Types
 
     # == Resolvers
     sig do
-      params(
-        timezone: String,
-        show_recently_ended: T.nilable(T::Boolean),
-      ).returns(Activity::PrivateAssociationRelation)
+      params(show_recently_ended: T.nilable(T::Boolean))
+        .returns(T::Enumerable[Activity])
     end
-    def activities(timezone:, show_recently_ended: nil)
-      cutoff = if show_recently_ended
-        Time.current.in_time_zone(timezone).beginning_of_day
-      else
-        Time.current.in_time_zone(timezone)
-      end
+    def activities(show_recently_ended: nil)
+      cutoff = Time.current
+      cutoff -= 12.hours if show_recently_ended
       object.activities.where("UPPER(during) >= ?", cutoff)
     end
 

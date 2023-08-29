@@ -1,6 +1,11 @@
 query HomePageQuery {
   announcement
   viewer {
+    activities(showRecentlyEnded: true) {
+      ...ActivityCardActivityFragment
+      id
+      url
+    }
     ...AppViewerFragment
     id
   }

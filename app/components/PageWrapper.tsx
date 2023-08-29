@@ -8,7 +8,7 @@ export type PageWrapperProps = PropsWithChildren;
 
 const PageWrapper: FC<PageWrapperProps> = ({ children }) => (
   <>
-    <ModalsProvider modalProps={{ size: "md" }}>{children}</ModalsProvider>
+    <ModalsProvider>{children}</ModalsProvider>
     <Notifications position="top-center" />
     <PageTracking />
   </>

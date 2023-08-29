@@ -9,6 +9,7 @@ module Users
     # == Filters
     before_action :authenticate_user!
 
+    # == Initialization
     def initialize(*args)
       super
       @user = T.let(@user, T.nilable(User))
@@ -16,6 +17,7 @@ module Users
 
     # GET|POST /user/auth/google/callback
     def google
+      cookies.permanent[:skip_google_oauth_instructions] = true
       user = User.from_google_auth!(auth)
       if user.google_refresh_token?
         set_flash_message(:notice, :success, kind: "Google")

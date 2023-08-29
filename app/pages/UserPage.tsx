@@ -1,11 +1,6 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
-import { currentTimezone } from "~/helpers/luxon";
 
-import { UserPageActivitiesQueryDocument } from "~/helpers/graphql";
-import type {
-  UserPageActivitiesQueryVariables,
-  UserPageQuery,
-} from "~/helpers/graphql";
+import type { UserPageQuery } from "~/helpers/graphql";
 
 import ActivityCard from "~/components/ActivityCard";
 import { Avatar, Text } from "@mantine/core";
@@ -15,22 +10,7 @@ export type UserPageProps = PagePropsWithData<UserPageQuery>;
 const UserPage: PageComponent<UserPageProps> = ({ data: { viewer, user } }) => {
   invariant(viewer, "Missing viewer");
   invariant(user, "Missing user");
-  const { id: userId, firstName, avatarUrl, initials } = user;
-
-  // == Activities Query
-  const onActivitiesError = useApolloAlertCallback("Failed to load activities");
-  const variables = useMemo<UserPageActivitiesQueryVariables>(
-    () => ({
-      userId,
-      timezone: currentTimezone(),
-    }),
-    [userId],
-  );
-  const { data } = useQuery(UserPageActivitiesQueryDocument, {
-    variables,
-    onError: onActivitiesError,
-  });
-  const { activities } = data?.user ?? {};
+  const { firstName, avatarUrl, initials, activities } = user;
 
   return (
     <Stack spacing="xl">
@@ -56,18 +36,12 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { viewer, user } }) => {
         </Box>
       </Stack>
       <Stack spacing="xs">
-        {activities ? (
-          !isEmpty(activities) ? (
-            activities.map(activity => (
-              <ActivityCard key={activity.id} {...{ activity }} />
-            ))
-          ) : (
-            <EmptyCard itemLabel="activities" />
-          )
-        ) : (
-          [...new Array(3)].map((value, index) => (
-            <Skeleton key={index} radius="md" h={64} />
+        {!isEmpty(activities) ? (
+          activities.map(activity => (
+            <ActivityCard key={activity.id} {...{ activity }} />
           ))
+        ) : (
+          <EmptyCard itemLabel="activities" />
         )}
       </Stack>
     </Stack>

@@ -1,6 +1,11 @@
 query UserPageQuery($userId: ID!) {
   announcement
   user(id: $userId) {
+    activities {
+      ...ActivityCardActivityFragment
+      id
+      url
+    }
     avatarUrl
     firstName
     id

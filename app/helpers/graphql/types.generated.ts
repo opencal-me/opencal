@@ -277,7 +277,6 @@ export type User = Node & {
 
 export type UserActivitiesArgs = {
   showRecentlyEnded?: InputMaybe<Scalars['Boolean']['input']>;
-  timezone: Scalars['String']['input'];
 };
 
 
