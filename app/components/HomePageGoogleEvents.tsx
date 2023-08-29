@@ -29,7 +29,7 @@ const HomePageGoogleEvents: FC<HomePageGoogleEventsProps> = ({
 
   // == Markup
   return (
-    <Stack spacing={8} {...otherProps}>
+    <Stack spacing={4} {...otherProps}>
       <Title order={2} size="h3">
         Your Events
       </Title>

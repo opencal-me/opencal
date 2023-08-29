@@ -6,20 +6,17 @@ module Users
     # == Actions
     # GET /<resource>/login
     def new
-      if (url = params[:redirect_url].presence)
-        store_location_for(:user, url)
+      if request.referer&.start_with?(root_url)
+        render(
+          inertia: "UserLoginPage",
+          props: {
+            "authorizeAction" =>
+              user_google_omniauth_authorize_path(prompt: "consent"),
+          },
+        )
+      else
+        redirect_to(root_path)
       end
-      authorize_params = {}
-      if params[:refresh].truthy?
-        authorize_params["prompt"] = "consent"
-      end
-      render(
-        inertia: "UserLoginPage",
-        props: {
-          "authorizeAction" =>
-            user_google_omniauth_authorize_path(authorize_params),
-        },
-      )
     end
 
     # POST /<resource>/login

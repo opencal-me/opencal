@@ -16,7 +16,7 @@ const HomePage: PageComponent<HomePageProps> = ({ data: { viewer } }) => {
 
   return (
     <Stack spacing="xl">
-      <Stack spacing={8}>
+      <Stack spacing={4}>
         <Title order={2} size="h3">
           Your Activities
         </Title>

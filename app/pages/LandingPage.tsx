@@ -5,7 +5,7 @@ import { Tweet } from "react-tweet";
 import type { LandingPageQuery } from "~/helpers/graphql";
 
 import ContactMeLink from "~/components/ContactMeLink";
-import LoginForm from "~/components/LoginForm";
+import UserLoginForm from "~/components/UserLoginForm";
 
 export type LandingPageProps = PagePropsWithData<LandingPageQuery>;
 
@@ -48,7 +48,7 @@ const LandingPage: PageComponent<LandingPageProps> = ({ data: { viewer } }) => {
               Go to your events and activities
             </Button>
           ) : (
-            <LoginForm>
+            <UserLoginForm>
               <Button
                 type="submit"
                 size="lg"
@@ -58,7 +58,7 @@ const LandingPage: PageComponent<LandingPageProps> = ({ data: { viewer } }) => {
               >
                 Sign in with Google to continue
               </Button>
-            </LoginForm>
+            </UserLoginForm>
           )}
         </Stack>
       </Card>

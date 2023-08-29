@@ -23,7 +23,7 @@ module Users
         set_flash_message(:notice, :success, kind: "Google")
         sign_in_and_redirect(user)
       else
-        redirect_to(new_user_session_path(refresh: true))
+        redirect_to(new_user_session_path)
       end
     end
 
@@ -32,7 +32,7 @@ module Users
     # == Helpers
     sig { override.params(scope: T.untyped).returns(String) }
     def after_omniauth_failure_path_for(scope)
-      root_path(scope)
+      new_user_session_path
     end
 
     private

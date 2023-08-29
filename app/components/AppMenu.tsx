@@ -15,7 +15,7 @@ import { AppMenuQueryDocument } from "~/helpers/graphql";
 import type { AppViewerFragment } from "~/helpers/graphql";
 import type { Maybe } from "~/helpers/graphql";
 
-import LoginForm from "./LoginForm";
+import UserLoginForm from "./UserLoginForm";
 
 export type AppMenuProps = Pick<BoxProps, "sx"> & {
   readonly viewer: Maybe<AppViewerFragment>;
@@ -140,11 +140,11 @@ const AppMenu: FC<AppMenuProps> = ({ viewer, sx }) => {
       </Menu.Dropdown>
     </Menu>
   ) : (
-    <LoginForm>
+    <UserLoginForm>
       <Badge component="button" type="submit" color="gray.4" {...badgeProps}>
         Sign In
       </Badge>
-    </LoginForm>
+    </UserLoginForm>
   );
 };
 

@@ -1,13 +1,13 @@
-import type { FC } from "react";
+import type { ComponentPropsWithoutRef, FC } from "react";
 import type { BoxProps } from "@mantine/core";
 import Cookie from "js-cookie";
 
 import FormAuthenticityField from "./FormAuthenticityField";
 import GoogleOAuthInstructions from "./GoogleOAuthInstructions";
 
-export type LoginFormProps = BoxProps;
+export type UserLoginFormProps = BoxProps & ComponentPropsWithoutRef<"form">;
 
-const LoginForm: FC<LoginFormProps> = ({ children, ...otherProps }) => (
+const UserLoginForm: FC<UserLoginFormProps> = ({ children, ...otherProps }) => (
   <Box
     component="form"
     action="/user/auth/google"
@@ -41,4 +41,4 @@ const LoginForm: FC<LoginFormProps> = ({ children, ...otherProps }) => (
   </Box>
 );
 
-export default LoginForm;
+export default UserLoginForm;

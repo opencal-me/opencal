@@ -7,8 +7,7 @@ import { Avatar, Text } from "@mantine/core";
 
 export type UserPageProps = PagePropsWithData<UserPageQuery>;
 
-const UserPage: PageComponent<UserPageProps> = ({ data: { viewer, user } }) => {
-  invariant(viewer, "Missing viewer");
+const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
   invariant(user, "Missing user");
   const { firstName, avatarUrl, initials, activities } = user;
 
