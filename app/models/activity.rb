@@ -192,11 +192,8 @@ class Activity < ApplicationRecord
     owner!.google_event!(google_event_id)
   end
 
-  sig do
-    params(title: String, include_open_tag: T::Boolean)
-      .returns([String, T::Array[String]])
-  end
-  def self.parse_google_event_title(title, include_open_tag: true)
+  sig { params(title: String).returns([String, T::Array[String]]) }
+  def self.parse_google_event_title(title)
     @parsed_titles = T.let(
       @parsed_titles,
       T.nilable(T::Hash[String, [String, T::Array[String]]]),
@@ -215,18 +212,15 @@ class Activity < ApplicationRecord
       end
       hash[title] = [name, tags]
     end
-    name, tags = @parsed_titles[title.strip]
-    tags.delete("open") unless include_open_tag
-    [name, tags]
+    @parsed_titles[title.strip]
   end
 
   sig { params(event: Google::Event, owner: User).returns(Activity) }
   def self.from_google_event(event, owner:)
     activity = find_or_initialize_by(owner:, google_event_id: event.id)
-    activity.name, activity.tags = parse_google_event_title(
-      event.title,
-      include_open_tag: false,
-    )
+    name, tags = parse_google_event_title(event.title)
+    activity.name = name
+    activity.tags = tags.excluding("open")
     activity.description = event.description
     activity.during = event.start_time.to_time..event.end_time.to_time
     activity.location = event.location
