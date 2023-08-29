@@ -38,7 +38,7 @@ module Types
       unless show_hidden
         activities = activities.merge(Activity.hidden.invert_where)
       end
-      activities
+      activities.order(:during)
     end
 
     sig { params(query: T.nilable(String)).returns(T::Array[Google::Event]) }
