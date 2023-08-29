@@ -8,6 +8,7 @@ module Types
 
     # == Fields
     field :activities, [ActivityType], null: false do
+      argument :show_hidden, Boolean, required: false
       argument :show_recently_ended, Boolean, required: false
     end
     field :avatar_url, String
@@ -25,13 +26,19 @@ module Types
 
     # == Resolvers
     sig do
-      params(show_recently_ended: T.nilable(T::Boolean))
-        .returns(T::Enumerable[Activity])
+      params(
+        show_hidden: T.nilable(T::Boolean),
+        show_recently_ended: T.nilable(T::Boolean),
+      ).returns(T::Enumerable[Activity])
     end
-    def activities(show_recently_ended: nil)
+    def activities(show_hidden: nil, show_recently_ended: nil)
       cutoff = Time.current
       cutoff -= 12.hours if show_recently_ended
-      object.activities.where("UPPER(during) >= ?", cutoff)
+      activities = object.activities.where("UPPER(during) >= ?", cutoff)
+      unless show_hidden
+        activities = activities.merge(Activity.hidden.invert_where)
+      end
+      activities
     end
 
     sig { params(query: T.nilable(String)).returns(T::Array[Google::Event]) }

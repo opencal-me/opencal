@@ -204,7 +204,7 @@ type UpdateUserPayload {
 }
 
 type User implements Node {
-  activities(showRecentlyEnded: Boolean): [Activity!]!
+  activities(showHidden: Boolean, showRecentlyEnded: Boolean): [Activity!]!
   avatarUrl: String
   email: String!
   firstName: String!

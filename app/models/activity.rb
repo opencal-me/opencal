@@ -103,9 +103,9 @@ class Activity < ApplicationRecord
   after_commit :update_google_event, on: %i[create destroy]
 
   # == Scopes
-  scope :listed, -> {
+  scope :hidden, -> {
     T.bind(self, PrivateRelation)
-    where.not(contains(tags: "hidden"))
+    where.contains(tags: ["hidden"])
   }
 
   # == Routing
@@ -269,11 +269,11 @@ class Activity < ApplicationRecord
   private
 
   # == Helpers
-  sig { params(include_open: T::Boolean).returns(String) }
+  sig { params(include_open: T::Boolean).returns(T.nilable(String)) }
   def tags_for_google_event_title(include_open: true)
     tags = self.tags.dup
     tags.prepend("open") if include_open
-    "[#{tags.join(" ")}]"
+    "[#{tags.join(" ")}]" if tags.present?
   end
 
   sig { params(include_open_tag: T::Boolean).returns(String) }

@@ -277,6 +277,7 @@ export type User = Node & {
 
 
 export type UserActivitiesArgs = {
+  showHidden?: InputMaybe<Scalars['Boolean']['input']>;
   showRecentlyEnded?: InputMaybe<Scalars['Boolean']['input']>;
 };
 

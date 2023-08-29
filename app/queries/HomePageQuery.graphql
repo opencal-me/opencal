@@ -1,7 +1,7 @@
 query HomePageQuery {
   announcement
   viewer {
-    activities(showRecentlyEnded: true) {
+    activities(showHidden: true, showRecentlyEnded: true) {
       ...ActivityCardActivityFragment
       id
       url
