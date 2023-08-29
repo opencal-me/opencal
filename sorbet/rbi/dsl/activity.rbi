@@ -878,6 +878,51 @@ class Activity
     def location_will_change!; end
 
     sig { returns(::String) }
+    def name; end
+
+    sig { params(value: ::String).returns(::String) }
+    def name=(value); end
+
+    sig { returns(T::Boolean) }
+    def name?; end
+
+    sig { returns(T.nilable(::String)) }
+    def name_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def name_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def name_came_from_user?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def name_change; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def name_change_to_be_saved; end
+
+    sig { returns(T::Boolean) }
+    def name_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def name_in_database; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def name_previous_change; end
+
+    sig { returns(T::Boolean) }
+    def name_previously_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def name_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def name_was; end
+
+    sig { void }
+    def name_will_change!; end
+
+    sig { returns(::String) }
     def owner_id; end
 
     sig { params(value: ::String).returns(::String) }
@@ -950,7 +995,13 @@ class Activity
     def restore_location!; end
 
     sig { void }
+    def restore_name!; end
+
+    sig { void }
     def restore_owner_id!; end
+
+    sig { void }
+    def restore_tags!; end
 
     sig { void }
     def restore_title!; end
@@ -1013,10 +1064,22 @@ class Activity
     def saved_change_to_location?; end
 
     sig { returns(T.nilable([::String, ::String])) }
+    def saved_change_to_name; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_name?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
     def saved_change_to_owner_id; end
 
     sig { returns(T::Boolean) }
     def saved_change_to_owner_id?; end
+
+    sig { returns(T.nilable([T::Array[::String], T::Array[::String]])) }
+    def saved_change_to_tags; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_tags?; end
 
     sig { returns(T.nilable([::String, ::String])) }
     def saved_change_to_title; end
@@ -1029,6 +1092,51 @@ class Activity
 
     sig { returns(T::Boolean) }
     def saved_change_to_updated_at?; end
+
+    sig { returns(T::Array[::String]) }
+    def tags; end
+
+    sig { params(value: T::Array[::String]).returns(T::Array[::String]) }
+    def tags=(value); end
+
+    sig { returns(T::Boolean) }
+    def tags?; end
+
+    sig { returns(T.nilable(T::Array[::String])) }
+    def tags_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def tags_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def tags_came_from_user?; end
+
+    sig { returns(T.nilable([T::Array[::String], T::Array[::String]])) }
+    def tags_change; end
+
+    sig { returns(T.nilable([T::Array[::String], T::Array[::String]])) }
+    def tags_change_to_be_saved; end
+
+    sig { returns(T::Boolean) }
+    def tags_changed?; end
+
+    sig { returns(T.nilable(T::Array[::String])) }
+    def tags_in_database; end
+
+    sig { returns(T.nilable([T::Array[::String], T::Array[::String]])) }
+    def tags_previous_change; end
+
+    sig { returns(T::Boolean) }
+    def tags_previously_changed?; end
+
+    sig { returns(T.nilable(T::Array[::String])) }
+    def tags_previously_was; end
+
+    sig { returns(T.nilable(T::Array[::String])) }
+    def tags_was; end
+
+    sig { void }
+    def tags_will_change!; end
 
     sig { returns(::String) }
     def title; end
@@ -1148,7 +1256,13 @@ class Activity
     def will_save_change_to_location?; end
 
     sig { returns(T::Boolean) }
+    def will_save_change_to_name?; end
+
+    sig { returns(T::Boolean) }
     def will_save_change_to_owner_id?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_tags?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_title?; end

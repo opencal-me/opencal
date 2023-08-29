@@ -163,7 +163,7 @@ ActivityPage.layout = buildLayout<ActivityPageProps>(
         breadcrumbs={[
           activity.isOwnedByViewer
             ? { title: "Home", href: "/home" }
-            : { title: `${owner.firstName}'s Activities`, href: owner.url },
+            : { title: `${owner.firstName}'s activities`, href: owner.url },
           { title: activity.name, href: activity.url },
         ]}
         padding={0}

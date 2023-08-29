@@ -12,7 +12,9 @@
 #  during          :tstzrange        not null
 #  handle          :string           not null
 #  location        :string
-#  title           :string           not null
+#  name            :string           default(""), not null
+#  tags            :string           default([]), not null, is an Array
+#  title           :string           default(""), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  google_event_id :string           not null
@@ -24,6 +26,7 @@
 #  index_activities_on_google_event_id  (google_event_id) UNIQUE
 #  index_activities_on_handle           (handle) UNIQUE
 #  index_activities_on_owner_id         (owner_id)
+#  index_activities_on_tags             (tags)
 #
 # Foreign Keys
 #
@@ -40,16 +43,6 @@ class Activity < ApplicationRecord
   # == Attributes
   # TODO: Change this to reflect a default from the user's account settings.
   attribute :capacity, :integer, default: 5
-
-  sig { returns(String) }
-  def name
-    parsed_title.first
-  end
-
-  sig { returns(T::Array[String]) }
-  def tags
-    parsed_title.last.excluding("open")
-  end
 
   sig { returns(Time) }
   def start = during.begin
@@ -77,6 +70,9 @@ class Activity < ApplicationRecord
 
   # == Normalizations
   before_validation :normalize_title, if: %i[title? title_changed?]
+
+  # == Callbacks
+  before_validation :set_name_and_tags_from_title, if: %i[title? title_changed?]
 
   # == Geocoding
   sig { returns(RGeo::Geographic::Factory) }
@@ -274,6 +270,8 @@ class Activity < ApplicationRecord
     self.class.parse_description_as_html(description, view_context:)
   end
 
+  private
+
   # == Helpers
   sig { returns([String, T::Array[String]]) }
   def parsed_title
@@ -296,6 +294,12 @@ class Activity < ApplicationRecord
   sig { void }
   def normalize_title
     self.title = opened_title
+  end
+
+  # == Callback Handlers
+  sig { void }
+  def set_name_and_tags_from_title
+    self.name, self.tags = parsed_title
   end
 
   # == Google Calendar: Callback Handlers

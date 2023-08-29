@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_29_022248) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_29_164626) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -45,7 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_29_022248) do
   end
 
   create_table "activities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title", null: false
+    t.string "title", default: "", null: false
     t.string "description"
     t.string "google_event_id", null: false
     t.uuid "owner_id", null: false
@@ -56,10 +56,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_29_022248) do
     t.datetime "updated_at", null: false
     t.string "handle", null: false
     t.integer "capacity", null: false
+    t.string "name", default: "", null: false
+    t.string "tags", default: [], null: false, array: true
     t.index ["coordinates"], name: "index_activities_on_coordinates", using: :gist
     t.index ["google_event_id"], name: "index_activities_on_google_event_id", unique: true
     t.index ["handle"], name: "index_activities_on_handle", unique: true
     t.index ["owner_id"], name: "index_activities_on_owner_id"
+    t.index ["tags"], name: "index_activities_on_tags"
   end
 
   create_table "addresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
