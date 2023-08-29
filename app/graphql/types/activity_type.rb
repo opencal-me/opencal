@@ -24,6 +24,7 @@ module Types
     field :reservations, [ReservationType], null: false
     field :start, DateTimeType, null: false
     field :story_image_url, String, null: false
+    field :tags, [String], null: false
     field :url, String, null: false
 
     # == Resolvers

@@ -14,7 +14,6 @@
 #  location        :string
 #  name            :string           default(""), not null
 #  tags            :string           default([]), not null, is an Array
-#  title           :string           default(""), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  google_event_id :string           not null
@@ -68,12 +67,6 @@ class Activity < ApplicationRecord
     owner or raise ActiveRecord::RecordNotFound, "Missing owner"
   end
 
-  # == Normalizations
-  before_validation :normalize_title, if: %i[title? title_changed?]
-
-  # == Callbacks
-  before_validation :set_name_and_tags_from_title, if: %i[title? title_changed?]
-
   # == Geocoding
   sig { returns(RGeo::Geographic::Factory) }
   def self.coordinates_factory
@@ -109,6 +102,12 @@ class Activity < ApplicationRecord
   # == Google Calendar: Callbacks
   after_commit :update_google_event, on: %i[create destroy]
 
+  # == Scopes
+  scope :listed, -> {
+    T.bind(self, PrivateRelation)
+    where.not(contains(tags: "hidden"))
+  }
+
   # == Routing
   sig { returns(String) }
   def to_param
@@ -122,51 +121,7 @@ class Activity < ApplicationRecord
     ActivityMailer.created_email(self).deliver_later
   end
 
-  # == Parsing
-  sig { params(title: String).returns([String, T::Array[String]]) }
-  def self.parse_title(title)
-    @parsed_titles = T.let(
-      @parsed_titles,
-      T.nilable(T::Hash[String, [String, T::Array[String]]]),
-    )
-    @parsed_titles ||= Hash.new do |hash, title|
-      raise "Parsed titles hash exceed 100 entries" if hash.size > 100
-      hash.delete(hash.keys.first) if hash.size == 100
-      name, tags = if (matches = /^(.*) \[(.*)\]$/.match(title))
-        name, tags = matches.captures
-        tags = if (text = tags)
-          text.strip.split(" ")
-        end
-        [name || "", tags || []]
-      else
-        [title, []]
-      end
-      hash[title] = [name, tags]
-    end
-    @parsed_titles[title.strip]
-  end
-
-  sig do
-    params(description: String, view_context: ActionView::Base)
-      .returns(String)
-  end
-  def self.parse_description_as_html(description, view_context:)
-    if description.start_with?("<")
-      doc = Nokogiri::HTML.parse(description)
-      html = doc.search("//body").inner_html
-      view_context.sanitize(html)
-    else
-      html = view_context.simple_format(description)
-      view_context.auto_link(html, html_options: { target: "_blank" })
-    end
-  end
-
   # == Importing
-  sig { params(events: T::Enumerable[Google::Event], owner: User).void }
-  def self.import_events!(events, owner:)
-    events.each { |event| import_event!(event, owner:) }
-  end
-
   sig { params(event: Google::Event, owner: User).void }
   def self.import_event!(event, owner:)
     if (attendees = event.attendees)
@@ -176,7 +131,7 @@ class Activity < ApplicationRecord
       return unless owner_attendee && owner_attendee["organizer"]
     end
     tags = if (title = event.title)
-      parse_title(title).last
+      parse_google_event_title(title).last
     else
       []
     end
@@ -198,7 +153,7 @@ class Activity < ApplicationRecord
     rescue User::GoogleAuthorizationError
       return nil
     end
-    import_events!(events, owner: user)
+    events.each { |event| import_event!(event, owner: user) }
     user.update_google_calendar_last_imported_at!
   end
 
@@ -237,22 +192,63 @@ class Activity < ApplicationRecord
     owner!.google_event!(google_event_id)
   end
 
-  sig { params(event: Google::Event).void }
-  def set_attributes_from_google_event(event) # rubocop:disable Naming/AccessorMethodName, Layout/LineLength
-    self.title = event.title
-    self.description = event.description
-    self.during = event.start_time.to_time..event.end_time.to_time
-    self.location = event.location
+  sig do
+    params(title: String, include_open_tag: T::Boolean)
+      .returns([String, T::Array[String]])
+  end
+  def self.parse_google_event_title(title, include_open_tag: true)
+    @parsed_titles = T.let(
+      @parsed_titles,
+      T.nilable(T::Hash[String, [String, T::Array[String]]]),
+    )
+    @parsed_titles ||= Hash.new do |hash, title|
+      raise "Parsed titles hash exceed 100 entries" if hash.size > 100
+      hash.delete(hash.keys.first) if hash.size == 100
+      name, tags = if (matches = /^(.*) \[(.*)\]$/.match(title))
+        name, tags = matches.captures
+        tags = if (text = tags)
+          text.strip.split(" ").uniq
+        end
+        [name || "", tags || []]
+      else
+        [title, []]
+      end
+      hash[title] = [name, tags]
+    end
+    name, tags = @parsed_titles[title.strip]
+    tags.delete("open") unless include_open_tag
+    [name, tags]
   end
 
   sig { params(event: Google::Event, owner: User).returns(Activity) }
   def self.from_google_event(event, owner:)
     activity = find_or_initialize_by(owner:, google_event_id: event.id)
-    activity.set_attributes_from_google_event(event)
+    activity.name, activity.tags = parse_google_event_title(
+      event.title,
+      include_open_tag: false,
+    )
+    activity.description = event.description
+    activity.during = event.start_time.to_time..event.end_time.to_time
+    activity.location = event.location
     activity
   end
 
   # == Methods
+  sig do
+    params(description: String, view_context: ActionView::Base)
+      .returns(String)
+  end
+  def self.parse_description_as_html(description, view_context:)
+    if description.start_with?("<")
+      doc = Nokogiri::HTML.parse(description)
+      html = doc.search("//body").inner_html
+      view_context.sanitize(html)
+    else
+      html = view_context.simple_format(description)
+      view_context.auto_link(html, html_options: { target: "_blank" })
+    end
+  end
+
   sig { returns(T::Boolean) }
   def location_is_url?
     url_regexp = T.let(URI::DEFAULT_PARSER.regexp[:ABS_URI], Regexp)
@@ -273,33 +269,17 @@ class Activity < ApplicationRecord
   private
 
   # == Helpers
-  sig { returns([String, T::Array[String]]) }
-  def parsed_title
-    self.class.parse_title(title)
+  sig { params(include_open: T::Boolean).returns(String) }
+  def tags_for_google_event_title(include_open: true)
+    tags = self.tags.dup
+    tags.prepend("open") if include_open
+    "[#{tags.join(" ")}]"
   end
 
-  sig { returns(String) }
-  def opened_title
-    tags = "[#{[*self.tags, "open"].join(" ")}]"
+  sig { params(include_open_tag: T::Boolean).returns(String) }
+  def google_event_title(include_open_tag: true)
+    tags = tags_for_google_event_title(include_open: include_open_tag)
     [name, tags].compact_blank.join(" ")
-  end
-
-  sig { returns(String) }
-  def closed_title
-    tags = "[#{self.tags.join(" ")}]"
-    [name, tags].compact_blank.join(" ")
-  end
-
-  # == Normalization Handlers
-  sig { void }
-  def normalize_title
-    self.title = opened_title
-  end
-
-  # == Callback Handlers
-  sig { void }
-  def set_name_and_tags_from_title
-    self.name, self.tags = parsed_title
   end
 
   # == Google Calendar: Callback Handlers
@@ -307,7 +287,7 @@ class Activity < ApplicationRecord
   def update_google_event
     event = google_event or return
     if previously_new_record?
-      event.title = title
+      event.title = google_event_title
       event.attachments = scoped do
         attachments = event.attachments || []
         attachments << {
@@ -320,7 +300,7 @@ class Activity < ApplicationRecord
       event.save
     elsif destroyed?
       if event.status != "cancelled"
-        event.title = closed_title
+        event.title = google_event_title(include_open_tag: false)
         if (attachments = event.attachments)
           attachments.delete_if do |attachment|
             attachment["title"] == "OpenCal"

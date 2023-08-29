@@ -21,6 +21,7 @@ type Activity implements Node {
   reservations: [Reservation!]!
   start: DateTime!
   storyImageUrl: String!
+  tags: [String!]!
   url: String!
 }
 

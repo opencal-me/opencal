@@ -36,6 +36,7 @@ export type Activity = Node & {
   reservations: Array<Reservation>;
   start: Scalars['DateTime']['output'];
   storyImageUrl: Scalars['String']['output'];
+  tags: Array<Scalars['String']['output']>;
   url: Scalars['String']['output'];
 };
 

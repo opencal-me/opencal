@@ -372,6 +372,9 @@ class Activity
     def limit(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def listed(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def lock(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
@@ -1004,9 +1007,6 @@ class Activity
     def restore_tags!; end
 
     sig { void }
-    def restore_title!; end
-
-    sig { void }
     def restore_updated_at!; end
 
     sig { returns(T.nilable([::Integer, ::Integer])) }
@@ -1081,12 +1081,6 @@ class Activity
     sig { returns(T::Boolean) }
     def saved_change_to_tags?; end
 
-    sig { returns(T.nilable([::String, ::String])) }
-    def saved_change_to_title; end
-
-    sig { returns(T::Boolean) }
-    def saved_change_to_title?; end
-
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def saved_change_to_updated_at; end
 
@@ -1137,51 +1131,6 @@ class Activity
 
     sig { void }
     def tags_will_change!; end
-
-    sig { returns(::String) }
-    def title; end
-
-    sig { params(value: ::String).returns(::String) }
-    def title=(value); end
-
-    sig { returns(T::Boolean) }
-    def title?; end
-
-    sig { returns(T.nilable(::String)) }
-    def title_before_last_save; end
-
-    sig { returns(T.untyped) }
-    def title_before_type_cast; end
-
-    sig { returns(T::Boolean) }
-    def title_came_from_user?; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def title_change; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def title_change_to_be_saved; end
-
-    sig { returns(T::Boolean) }
-    def title_changed?; end
-
-    sig { returns(T.nilable(::String)) }
-    def title_in_database; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def title_previous_change; end
-
-    sig { returns(T::Boolean) }
-    def title_previously_changed?; end
-
-    sig { returns(T.nilable(::String)) }
-    def title_previously_was; end
-
-    sig { returns(T.nilable(::String)) }
-    def title_was; end
-
-    sig { void }
-    def title_will_change!; end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def updated_at; end
@@ -1265,9 +1214,6 @@ class Activity
     def will_save_change_to_tags?; end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_title?; end
-
-    sig { returns(T::Boolean) }
     def will_save_change_to_updated_at?; end
   end
 
@@ -1337,6 +1283,9 @@ class Activity
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def limit(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def listed(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def lock(*args, &blk); end

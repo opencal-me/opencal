@@ -4,5 +4,6 @@ fragment ActivityCardActivityFragment on Activity {
   end
   name
   start
+  tags
   url
 }

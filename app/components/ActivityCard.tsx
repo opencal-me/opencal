@@ -32,7 +32,7 @@ const durationHumanizer = humanizeDuration.humanizer({
 });
 
 const ActivityCard: FC<ActivityCardProps> = ({
-  activity: { name, descriptionHtml, start, end, durationSeconds, url },
+  activity: { name, tags, descriptionHtml, start, end, durationSeconds, url },
   ...otherProps
 }) => {
   const isOver = useMemo(() => {
@@ -92,10 +92,19 @@ const ActivityCard: FC<ActivityCardProps> = ({
             <Text>{durationHumanizer(durationSeconds * 1000)}</Text>
           </Group>
         </Group>
+        {!isEmpty(tags) && (
+          <Group spacing={2}>
+            {tags.map(tag => (
+              <Badge key={tag} size="xs" color="gray" radius="sm">
+                {tag}
+              </Badge>
+            ))}
+          </Group>
+        )}
         {!!descriptionHtml && (
           <HTMLDescription>{descriptionHtml}</HTMLDescription>
         )}
-        <Space h={6} />
+        <Space h="xs" />
         <Button component={Link} href={url} leftIcon={<RightArrowIcon />}>
           Go To Activity
         </Button>
