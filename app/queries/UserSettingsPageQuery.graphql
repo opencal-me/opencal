@@ -7,6 +7,6 @@ query UserSettingsPageQuery {
     id
     initials
     lastName
-    name
+    # name
   }
 }

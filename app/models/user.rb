@@ -17,6 +17,7 @@
 #  google_calendar_last_imported_at :datetime
 #  google_refresh_token             :string
 #  google_uid                       :string           not null
+#  handle                           :string           not null
 #  last_name                        :string
 #  last_sign_in_at                  :datetime
 #  last_sign_in_ip                  :string
@@ -31,10 +32,13 @@
 #
 #  index_users_on_email                             (email) UNIQUE
 #  index_users_on_google_calendar_last_imported_at  (google_calendar_last_imported_at)
+#  index_users_on_handle                            (handle) UNIQUE
 #  index_users_on_reset_password_token              (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
   include Identifiable
+  include Handled
+  include FriendlyIdentifiable
 
   # == Constants
   MIN_PASSWORD_ENTROPY = T.let(14, Integer)
@@ -70,11 +74,24 @@ class User < ApplicationRecord
     ActionMailer::Base.email_address_with_name(email, name)
   end
 
-  sig { returns(String) }
-  def email_domain
-    domain = email.split("@").last
-    T.must(domain)
+  sig { returns([String, String]) }
+  def email_parts
+    parts = email.split("@")
+    unless parts.length == 2
+      raise "Invalid email address (expected 2 parts, instead got " \
+        "#{parts.count}})"
+    end
+    T.cast(parts, [String, String])
   end
+
+  sig { returns(String) }
+  def email_username = email_parts.first
+
+  sig { returns(String) }
+  def email_domain = email_parts.last
+
+  # == FriendlyIdentifiable
+  friendly_id :derived_handle
 
   # == Associations
   has_many :activities,
@@ -111,7 +128,14 @@ class User < ApplicationRecord
 
   # == Callbacks
   after_create_commit :send_welcome_email
-  after_create_commit :register_google_calendar_channel
+  after_create_commit :register_google_calendar_channel,
+                      if: :google_calendar_ready?
+
+  # == Scopes
+  scope :with_google_calendar_ready, -> {
+    T.bind(self, PrivateRelation)
+    where.not(google_refresh_token: nil)
+  }
 
   # == Finders
   sig { returns(PrivateRelation) }
@@ -195,7 +219,7 @@ class User < ApplicationRecord
   end
 
   sig { returns(T::Boolean) }
-  def google_calendar? = google_refresh_token?
+  def google_calendar_ready? = google_refresh_token?
 
   sig { returns(T.nilable(Google::Calendar)) }
   def google_calendar
@@ -244,6 +268,11 @@ class User < ApplicationRecord
     end
   end
 
+  sig { params(id: String).returns(T.nilable(Google::Event)) }
+  def google_event(id)
+    google_event!(id) if google_calendar_ready?
+  end
+
   sig { returns(T::Array[Google::Event]) }
   def changed_google_events!
     updated_min = google_calendar_last_imported_at || created_at or
@@ -278,6 +307,16 @@ class User < ApplicationRecord
   # end
 
   private
+
+  # == Handled: Helpers
+  sig { returns(String) }
+  def derived_handle
+    if email_domain == "gmail.com"
+      email_username
+    else
+      [email_username, email_domain].join("-")
+    end
+  end
 
   # == Helpers
   sig do

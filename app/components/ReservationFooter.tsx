@@ -1,11 +1,13 @@
 import type { FC } from "react";
 import ShareIcon from "~icons/lucide/share";
+import { currentTimezone } from "~/helpers/luxon";
 
 import { ActionIcon, Text } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import type { BoxProps } from "@mantine/core";
 
 import type { ReservationFooterActivityFragment } from "~/helpers/graphql";
+
 import { ReservationCreateForm } from "./ReservationCreateForm";
 
 export type ReservationFooterProps = Omit<BoxProps, "children"> & {
@@ -21,9 +23,8 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
   const { copy, copied } = useClipboard();
   useEffect(() => {
     if (copied) {
-      const localDateTime = DateTime.local();
       const url = new URL(storyImageUrl);
-      url.searchParams.set("timezone", localDateTime.zoneName);
+      url.searchParams.set("timezone", currentTimezone());
       open(url.toString(), "_blank");
     }
   }, [copied]);

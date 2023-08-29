@@ -57,6 +57,11 @@ class Activity < ApplicationRecord
   sig { returns(Time) }
   def end = during.end
 
+  sig { returns(Integer) }
+  def duration_seconds
+    (self.end - start).to_i
+  end
+
   # == FriendlyIdentifiable
   friendly_id :handle, slug_limit: 32
 
@@ -83,31 +88,29 @@ class Activity < ApplicationRecord
   def coordinates_factory = self.class.coordinates_factory
 
   geocoded_by :location do |activity, results|
-    if (result = results.first)
-      result = T.cast(result, Geocoder::Result::Here)
-      district = T.let(result.data.dig("address", "district"),
-                       T.nilable(String))
-      activity.coordinates = coordinates_factory.point(
-        result.longitude,
-        result.latitude,
-      )
-      activity.build_address(
-        full_address: result.address,
-        street_address: [result.street_number, result.route].compact.join(" "),
-        neighbourhood: district,
-        city: result.city,
-        country: result.country,
-        province: result.province,
-        postal_code: result.postal_code,
-      )
-      activity
-    end
+    result = results.first or next
+    result = T.cast(result, Geocoder::Result::Here)
+    district = T.let(result.data.dig("address", "district"), T.nilable(String))
+    activity.coordinates = coordinates_factory.point(
+      result.longitude,
+      result.latitude,
+    )
+    activity.build_address(
+      full_address: result.address,
+      street_address: [result.street_number, result.route].compact.join(" "),
+      neighbourhood: district,
+      city: result.city,
+      country: result.country,
+      province: result.province,
+      postal_code: result.postal_code,
+    )
+    activity
   end
 
   # == Callbacks
   after_validation :geocode, if: :location_changed?, unless: :location_is_url?
 
-  # == Google Event: Callbacks
+  # == Google Calendar: Callbacks
   after_commit :update_google_event, on: %i[create destroy]
 
   # == Routing
@@ -165,27 +168,30 @@ class Activity < ApplicationRecord
   # == Importing
   sig { params(events: T::Enumerable[Google::Event], owner: User).void }
   def self.import_events!(events, owner:)
-    events.each do |event|
-      if (attendees = event.attendees)
-        owner_attendee = attendees.find do |attendee|
-          attendee["email"] == owner.email
-        end
-        next unless owner_attendee && owner_attendee["organizer"]
+    events.each { |event| import_event!(event, owner:) }
+  end
+
+  sig { params(event: Google::Event, owner: User).void }
+  def self.import_event!(event, owner:)
+    if (attendees = event.attendees)
+      owner_attendee = attendees.find do |attendee|
+        attendee["email"] == owner.email
       end
-      tags = if (title = event.title)
-        parse_title(title).last
-      else
-        []
+      return unless owner_attendee && owner_attendee["organizer"]
+    end
+    tags = if (title = event.title)
+      parse_title(title).last
+    else
+      []
+    end
+    if event.status != "cancelled" && tags.include?("open")
+      activity = from_google_event(event, owner:)
+      activity.save!
+      if activity.previously_new_record? && tags.exclude?("silent")
+        activity.send_created_email
       end
-      if event.status != "cancelled" && tags.include?("open")
-        activity = from_google_event(event, owner:)
-        activity.save!
-        if activity.previously_new_record? && tags.exclude?("silent")
-          activity.send_created_email
-        end
-      elsif (activity = find_by(google_event_id: event.id, owner:))
-        activity.destroy!
-      end
+    elsif (activity = find_by(google_event_id: event.id, owner:))
+      activity.destroy!
     end
   end
 
@@ -225,6 +231,11 @@ class Activity < ApplicationRecord
   sig { returns(T::Boolean) }
   def google_event? = google_event_id?
 
+  sig { returns(T.nilable(Google::Event)) }
+  def google_event
+    owner!.google_event(google_event_id)
+  end
+
   sig { returns(Google::Event) }
   def google_event!
     owner!.google_event!(google_event_id)
@@ -259,9 +270,8 @@ class Activity < ApplicationRecord
 
   sig { params(view_context: ActionView::Base).returns(T.nilable(String)) }
   def description_html(view_context:)
-    if (description = self.description)
-      self.class.parse_description_as_html(description, view_context:)
-    end
+    description = self.description or return
+    self.class.parse_description_as_html(description, view_context:)
   end
 
   # == Helpers
@@ -291,7 +301,7 @@ class Activity < ApplicationRecord
   # == Google Calendar: Callback Handlers
   sig { void }
   def update_google_event
-    event = google_event!
+    event = google_event or return
     if previously_new_record?
       event.title = title
       event.attachments = scoped do

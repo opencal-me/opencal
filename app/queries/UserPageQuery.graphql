@@ -1,0 +1,13 @@
+query UserPageQuery($userId: ID!) {
+  announcement
+  user(id: $userId) {
+    avatarUrl
+    firstName
+    id
+    initials
+  }
+  viewer {
+    ...AppViewerFragment
+    id
+  }
+}

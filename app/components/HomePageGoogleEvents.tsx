@@ -1,14 +1,15 @@
 import type { FC } from "react";
 import type { BoxProps } from "@mantine/core";
 
-import { GoogleEventsQueryDocument } from "~/helpers/graphql";
+import { HomePageGoogleEventsQueryDocument } from "~/helpers/graphql";
 
-import GoogleEventCard, { GoogleEventCardProps } from "./GoogleEventCard";
+import GoogleEventCard from "./GoogleEventCard";
+import type { GoogleEventCardProps } from "./GoogleEventCard";
 
-export type GoogleEventsProps = Omit<BoxProps, "children"> &
+export type HomePageGoogleEventsProps = Omit<BoxProps, "children"> &
   Pick<GoogleEventCardProps, "onCreateActivity">;
 
-const GoogleEvents: FC<GoogleEventsProps> = ({
+const HomePageGoogleEvents: FC<HomePageGoogleEventsProps> = ({
   onCreateActivity,
   ...otherProps
 }) => {
@@ -18,7 +19,7 @@ const GoogleEvents: FC<GoogleEventsProps> = ({
 
   // == Query
   const onError = useApolloAlertCallback("Failed to load events");
-  const { data } = useQuery(GoogleEventsQueryDocument, {
+  const { data } = useQuery(HomePageGoogleEventsQueryDocument, {
     variables: {
       query: debouncedSearch,
     },
@@ -61,4 +62,4 @@ const GoogleEvents: FC<GoogleEventsProps> = ({
   );
 };
 
-export default GoogleEvents;
+export default HomePageGoogleEvents;

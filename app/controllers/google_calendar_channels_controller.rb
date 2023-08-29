@@ -17,7 +17,7 @@ class GoogleCalendarChannelsController < ApplicationController
     end
     scoped do
       user = channel.owner!
-      Activity.import_for_user_later(user) if user.google_calendar?
+      Activity.import_for_user_later(user) if user.google_calendar_ready?
     end
     head(:no_content)
   end

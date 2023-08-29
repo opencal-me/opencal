@@ -42,7 +42,7 @@ const Time: FC<TimeProps> = ({
     <Skeleton
       visible={!formattedTime}
       sx={{
-        display: "inline",
+        display: "contents",
         height: "min-content",
         width: "fit-content",
         ...(loading && {

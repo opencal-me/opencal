@@ -1,0 +1,8 @@
+fragment ActivityCardActivityFragment on Activity {
+  descriptionHtml
+  durationSeconds
+  end
+  name
+  start
+  url
+}

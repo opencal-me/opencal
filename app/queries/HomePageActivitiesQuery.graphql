@@ -1,0 +1,10 @@
+query HomePageActivitiesQuery($timezone: String!) {
+  viewer {
+    activities(timezone: $timezone, showRecentlyEnded: true) {
+      ...ActivityCardActivityFragment
+      id
+      url
+    }
+    id
+  }
+}

@@ -1,4 +1,4 @@
-query GoogleEventsQuery($query: String) {
+query HomePageGoogleEventsQuery($query: String) {
   viewer {
     googleEvents(query: $query) {
       ...GoogleEventCardEventFragment

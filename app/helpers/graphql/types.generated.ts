@@ -23,6 +23,7 @@ export type Activity = Node & {
   address?: Maybe<Scalars['String']['output']>;
   coordinates?: Maybe<Coordinates>;
   descriptionHtml?: Maybe<Scalars['String']['output']>;
+  durationSeconds: Scalars['Int']['output'];
   end: Scalars['DateTime']['output'];
   googleEventId: Scalars['String']['output'];
   /** ID of the object. */
@@ -268,6 +269,13 @@ export type User = Node & {
   isAdmin: Scalars['Boolean']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
+  url: Scalars['String']['output'];
+};
+
+
+export type UserActivitiesArgs = {
+  showRecentlyEnded?: InputMaybe<Scalars['Boolean']['input']>;
+  timezone: Scalars['String']['input'];
 };
 
 

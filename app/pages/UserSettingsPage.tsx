@@ -11,7 +11,7 @@ const UserSettingsPage: PageComponent<UserSettingsPageProps> = ({
   data: { viewer },
 }) => {
   invariant(viewer, "Missing viewer");
-  const { avatarUrl, firstName, lastName, initials, email, name } = viewer;
+  const { avatarUrl, firstName, lastName, initials, email } = viewer;
 
   // == Markup
   return (
@@ -35,7 +35,7 @@ const UserSettingsPage: PageComponent<UserSettingsPageProps> = ({
                 </Avatar>
               )}
               <Text color="dark" weight={500} size="sm">
-                {name}
+                {firstName}
               </Text>
             </Group>
             <TextInput label="Email" value={email} readOnly />

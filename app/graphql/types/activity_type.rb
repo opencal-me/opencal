@@ -12,6 +12,7 @@ module Types
     field :address, String
     field :coordinates, CoordinatesType
     field :description_html, String
+    field :duration_seconds, Integer, null: false
     field :end, DateTimeType, null: false, resolver_method: :resolve_end
     field :google_event_id, String, null: false
     # field :handle, String, null: false, method: :to_param
@@ -27,9 +28,8 @@ module Types
     # == Resolvers
     sig { returns(T.nilable(String)) }
     def address
-      if (address = object.address)
-        address.values_at(:street_address, :city, :country).compact.join(", ")
-      end
+      address = object.address or return
+      address.values_at(:street_address, :city, :country).compact.join(", ")
     end
 
     sig { returns(T.nilable(String)) }
@@ -59,9 +59,8 @@ module Types
     # == Helpers
     sig { returns(T.nilable(Nokogiri::HTML::Document)) }
     def description_doc
-      if (description = object.description)
-        Nokogiri::HTML.parse(description)
-      end
+      description = object.description or return
+      Nokogiri::HTML.parse(description)
     end
   end
 end

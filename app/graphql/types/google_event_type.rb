@@ -22,12 +22,11 @@ module Types
 
     sig { returns(T.nilable(String)) }
     def description_html
-      if (description = object.description)
-        Activity.parse_description_as_html(
-          description,
-          view_context: controller!.view_context,
-        )
-      end
+      description = object.description or return
+      Activity.parse_description_as_html(
+        description,
+        view_context: controller!.view_context,
+      )
     end
 
     sig { returns(Integer) }
@@ -37,15 +36,12 @@ module Types
 
     sig { returns(T::Boolean) }
     def viewer_is_organizer
-      if (attendees = object.attendees)
-        viewer = current_user!
-        viewer_attendee = attendees.find do |attendee|
-          attendee["email"] == viewer.email
-        end
-        !!(viewer_attendee && viewer_attendee["organizer"])
-      else
-        true
+      attendees = object.attendees or return true
+      viewer = current_user!
+      viewer_attendee = attendees.find do |attendee|
+        attendee["email"] == viewer.email
       end
+      !!(viewer_attendee && viewer_attendee["organizer"])
     end
 
     # == Helpers

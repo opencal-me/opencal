@@ -67,6 +67,7 @@ const AppMenu: FC<AppMenuProps> = ({ viewer, sx }) => {
         dropdown: { padding: "0 !important" },
         item: {
           padding: "8px 10px",
+          borderRadius: 0,
         },
         itemIcon: {
           width: 16,
@@ -87,6 +88,9 @@ const AppMenu: FC<AppMenuProps> = ({ viewer, sx }) => {
       <Menu.Dropdown>
         <Menu.Item component={Link} href="/home" icon={<HomeIcon />}>
           Home
+        </Menu.Item>
+        <Menu.Item component={Link} href={viewer.url} icon={<UserIcon />}>
+          Profile
         </Menu.Item>
         <Menu.Item component={Link} href="/user/settings" icon={<CogIcon />}>
           Settings

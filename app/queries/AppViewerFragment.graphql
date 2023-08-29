@@ -2,4 +2,5 @@ fragment AppViewerFragment on User {
   firstName
   id
   isAdmin
+  url
 }

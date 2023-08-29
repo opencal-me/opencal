@@ -14,6 +14,7 @@ query ActivityPageQuery($activityId: ID!) {
       id
       initials
       name
+      url
     }
     ...ReservationFooterActivityFragment
     start

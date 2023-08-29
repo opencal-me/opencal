@@ -1,9 +1,10 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
-export type ActivityKeySpecifier = ('address' | 'coordinates' | 'descriptionHtml' | 'end' | 'googleEventId' | 'id' | 'location' | 'name' | 'openings' | 'owner' | 'reservations' | 'start' | 'storyImageUrl' | 'url' | ActivityKeySpecifier)[];
+export type ActivityKeySpecifier = ('address' | 'coordinates' | 'descriptionHtml' | 'durationSeconds' | 'end' | 'googleEventId' | 'id' | 'location' | 'name' | 'openings' | 'owner' | 'reservations' | 'start' | 'storyImageUrl' | 'url' | ActivityKeySpecifier)[];
 export type ActivityFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,
 	coordinates?: FieldPolicy<any> | FieldReadFunction<any>,
 	descriptionHtml?: FieldPolicy<any> | FieldReadFunction<any>,
+	durationSeconds?: FieldPolicy<any> | FieldReadFunction<any>,
 	end?: FieldPolicy<any> | FieldReadFunction<any>,
 	googleEventId?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -116,7 +117,7 @@ export type UpdateUserPayloadFieldPolicy = {
 	success?: FieldPolicy<any> | FieldReadFunction<any>,
 	user?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type UserKeySpecifier = ('activities' | 'avatarUrl' | 'email' | 'firstName' | 'googleEvents' | 'id' | 'initials' | 'isAdmin' | 'lastName' | 'name' | UserKeySpecifier)[];
+export type UserKeySpecifier = ('activities' | 'avatarUrl' | 'email' | 'firstName' | 'googleEvents' | 'id' | 'initials' | 'isAdmin' | 'lastName' | 'name' | 'url' | UserKeySpecifier)[];
 export type UserFieldPolicy = {
 	activities?: FieldPolicy<any> | FieldReadFunction<any>,
 	avatarUrl?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -127,7 +128,8 @@ export type UserFieldPolicy = {
 	initials?: FieldPolicy<any> | FieldReadFunction<any>,
 	isAdmin?: FieldPolicy<any> | FieldReadFunction<any>,
 	lastName?: FieldPolicy<any> | FieldReadFunction<any>,
-	name?: FieldPolicy<any> | FieldReadFunction<any>
+	name?: FieldPolicy<any> | FieldReadFunction<any>,
+	url?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type StrictTypedTypePolicies = {
 	Activity?: Omit<TypePolicy, "fields" | "keyFields"> & {

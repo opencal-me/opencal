@@ -7,7 +7,10 @@ module Types
     implements NodeType
 
     # == Fields
-    field :activities, [ActivityType], null: false
+    field :activities, [ActivityType], null: false do
+      argument :show_recently_ended, Boolean, required: false
+      argument :timezone, String
+    end
     field :avatar_url, String
     field :email, String, null: false
     field :first_name, String, null: false
@@ -18,11 +21,22 @@ module Types
     field :is_admin, Boolean, null: false, method: :admin?
     field :last_name, String
     field :name, String, null: false
+    field :url, String, null: false
 
     # == Resolvers
-    sig { returns(Activity::PrivateAssociationRelation) }
-    def activities
-      object.activities.where("LOWER(during) >= NOW()")
+    sig do
+      params(
+        timezone: String,
+        show_recently_ended: T.nilable(T::Boolean),
+      ).returns(Activity::PrivateAssociationRelation)
+    end
+    def activities(timezone:, show_recently_ended: nil)
+      cutoff = if show_recently_ended
+        Time.current.in_time_zone(timezone).beginning_of_day
+      else
+        Time.current.in_time_zone(timezone)
+      end
+      object.activities.where("UPPER(during) >= ?", cutoff)
     end
 
     sig { params(query: T.nilable(String)).returns(T::Array[Google::Event]) }
@@ -30,6 +44,11 @@ module Types
       events = object.google_events!(query:)
       Activity.import_events!(events, owner: object) if Rails.env.development?
       events
+    end
+
+    sig { returns(String) }
+    def url
+      user_url(object)
     end
 
     # == Helpers

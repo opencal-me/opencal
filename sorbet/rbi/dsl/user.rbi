@@ -431,6 +431,9 @@ class User
     def where(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def with_google_calendar_ready(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def without(*args, &blk); end
   end
 
@@ -885,6 +888,51 @@ class User
     sig { void }
     def google_uid_will_change!; end
 
+    sig { returns(::String) }
+    def handle; end
+
+    sig { params(value: ::String).returns(::String) }
+    def handle=(value); end
+
+    sig { returns(T::Boolean) }
+    def handle?; end
+
+    sig { returns(T.nilable(::String)) }
+    def handle_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def handle_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def handle_came_from_user?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def handle_change; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def handle_change_to_be_saved; end
+
+    sig { returns(T::Boolean) }
+    def handle_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def handle_in_database; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def handle_previous_change; end
+
+    sig { returns(T::Boolean) }
+    def handle_previously_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def handle_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def handle_was; end
+
+    sig { void }
+    def handle_will_change!; end
+
     sig { returns(T.nilable(::String)) }
     def id; end
 
@@ -1231,6 +1279,9 @@ class User
     def restore_google_uid!; end
 
     sig { void }
+    def restore_handle!; end
+
+    sig { void }
     def restore_id!; end
 
     sig { void }
@@ -1316,6 +1367,12 @@ class User
 
     sig { returns(T::Boolean) }
     def saved_change_to_google_uid?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def saved_change_to_handle; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_handle?; end
 
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def saved_change_to_id; end
@@ -1492,6 +1549,9 @@ class User
     def will_save_change_to_google_uid?; end
 
     sig { returns(T::Boolean) }
+    def will_save_change_to_handle?; end
+
+    sig { returns(T::Boolean) }
     def will_save_change_to_id?; end
 
     sig { returns(T::Boolean) }
@@ -1650,6 +1710,9 @@ class User
     def where(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def with_google_calendar_ready(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def without(*args, &blk); end
   end
 
@@ -1658,6 +1721,9 @@ class User
     include GeneratedAssociationRelationMethods
 
     Elem = type_member { { fixed: ::User } }
+
+    sig { returns(T.self_type) }
+    def friendly; end
 
     sig { returns(T::Array[::User]) }
     def to_a; end
@@ -1723,6 +1789,9 @@ class User
     end
     def destroy(*records); end
 
+    sig { returns(T.self_type) }
+    def friendly; end
+
     sig { returns(T::Array[::User]) }
     def load_target; end
 
@@ -1765,6 +1834,9 @@ class User
     include GeneratedRelationMethods
 
     Elem = type_member { { fixed: ::User } }
+
+    sig { returns(T.self_type) }
+    def friendly; end
 
     sig { returns(T::Array[::User]) }
     def to_a; end

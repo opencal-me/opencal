@@ -67,8 +67,8 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
       ]}
       {...otherProps}
     >
-      <Group align="start">
-        <Text weight={500} sx={{ flexGrow: 1 }}>
+      <Group align="start" noWrap>
+        <Text weight={500} lh={1.2} sx={{ flexGrow: 1 }}>
           {title ?? "(no title)"}
         </Text>
         <Group
@@ -76,6 +76,7 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
           noWrap
           lh={1.4}
           sx={({ fontSizes, fn }) => ({
+            flexShrink: 0,
             fontSize: fontSizes.sm,
             color: fn.dimmed(),
             lh: 1.4,
@@ -115,7 +116,6 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
         <Button
           component={Link}
           href={activity.url}
-          color="dark"
           leftIcon={<RightArrowIcon />}
         >
           Go To Activity
@@ -130,6 +130,7 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
             <ActivityCreateButton
               googleEventId={eventId}
               onCreate={onCreateActivity}
+              variant="light"
               disabled={!viewerIsOrganizer}
             />
           </Box>

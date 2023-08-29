@@ -58,9 +58,20 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
               );
             })}
             <Text size="sm">
-              <Text span weight={600}>
+              <Anchor
+                component={Link}
+                href={owner.url}
+                weight={600}
+                sx={({ transitionTimingFunction, fn }) => ({
+                  textDecoration: "underline",
+                  transition: `color 150ms ${transitionTimingFunction}`,
+                  "&:hover": {
+                    color: fn.darken(fn.primaryColor(), 0.25),
+                  },
+                })}
+              >
                 {owner.name}
-              </Text>{" "}
+              </Anchor>{" "}
               wants you to join them
             </Text>
           </Group>

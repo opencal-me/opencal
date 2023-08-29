@@ -156,5 +156,8 @@ module GeneratedPathHelpersModule
   def user_google_omniauth_callback_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def user_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def user_registrations_path(*args); end
 end

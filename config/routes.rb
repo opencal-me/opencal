@@ -67,6 +67,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # == Users
+  resources :users, path: "/u", only: :show
+
   # == Google Calendar Channels
   resources :google_calendar_channels, only: [] do
     member do

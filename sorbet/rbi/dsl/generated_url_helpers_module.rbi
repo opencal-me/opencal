@@ -157,4 +157,7 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def user_registrations_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def user_url(*args); end
 end
