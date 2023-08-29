@@ -144,6 +144,9 @@ module GeneratedPathHelpersModule
   def test_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def tos_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def update_rails_disk_service_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }

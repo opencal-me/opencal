@@ -32,6 +32,11 @@ class GoogleCalendarChannel < ApplicationRecord
   # == Attributes
   attribute :token, :string, default: -> { Devise.friendly_token }
 
+  sig { returns(T::Boolean) }
+  def expired?
+    expires_at <= 5.seconds.from_now
+  end
+
   # == Associations
   belongs_to :owner, class_name: "User"
 
@@ -40,25 +45,33 @@ class GoogleCalendarChannel < ApplicationRecord
     owner or raise ActiveRecord::RecordNotFound, "Missing owner"
   end
 
+  sig { returns(Google::Calendar) }
+  def google_calendar!
+    owner!.google_calendar!
+  end
+
   # == Callbacks
   before_destroy :stop
 
-  # == Scopes
-  scope :to_deregister, -> {
+  # == Removal: Scopes
+  scope :to_remove, -> {
     T.bind(self, PrivateRelation)
     prefix = Rails.application.routes.url_helpers.root_url
     sanitized_prefix = ActiveRecord::Base.sanitize_sql_like(prefix)
-    where("callback_url NOT LIKE ?", sanitized_prefix + "%").or(
-      where("expires_at <= ?", 6.hours.from_now),
-    )
+    joins(:owner)
+      .where.not(owner: { google_refresh_token: nil }).and(
+        where("callback_url NOT LIKE ?", sanitized_prefix + "%").or(
+          where("expires_at <= ?", 6.hours.from_now),
+        ),
+      )
   }
 
   # == Sync
   sig { void }
   def self.sync!
-    to_deregister.find_each do |channel|
+    to_remove.find_each do |channel|
       channel.transaction do
-        channel.destroy! if channel.stoppable?
+        channel.destroy!
       end
     end
     users_to_register.find_each do |user|
@@ -108,7 +121,7 @@ class GoogleCalendarChannel < ApplicationRecord
     end
     id = SecureRandom.uuid
     address = callback_google_calendar_channel_url(id)
-    channel = owner!.google_calendar!.watch_events(
+    channel = google_calendar!.watch_events(
       id:,
       token:,
       address:,
@@ -120,12 +133,10 @@ class GoogleCalendarChannel < ApplicationRecord
   end
 
   # == Stopping
-  def stoppable?
-    owner!.google_calendar?
-  end
-
   sig { void }
   def stop
-    owner!.google_calendar!.stop_channel(id: T.must(id), resource_id:)
+    unless expired?
+      google_calendar!.stop_channel(id: T.must(id), resource_id:)
+    end
   end
 end
