@@ -220,7 +220,7 @@ class Activity < ApplicationRecord
     activity = find_or_initialize_by(owner:, google_event_id: event.id)
     name, tags = parse_google_event_title(event.title)
     activity.name = name
-    activity.tags = tags.excluding("open")
+    activity.tags = tags.excluding("open", "silent")
     activity.description = event.description
     activity.during = event.start_time.to_time..event.end_time.to_time
     activity.location = event.location
