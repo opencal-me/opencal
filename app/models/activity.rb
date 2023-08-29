@@ -163,34 +163,40 @@ class Activity < ApplicationRecord
   end
 
   # == Importing
+  sig { params(events: T::Enumerable[Google::Event], owner: User).void }
+  def self.import_events!(events, owner:)
+    events.each do |event|
+      if (attendees = event.attendees)
+        owner_attendee = attendees.find do |attendee|
+          attendee["email"] == owner.email
+        end
+        next unless owner_attendee && owner_attendee["organizer"]
+      end
+      tags = if (title = event.title)
+        parse_title(title).last
+      else
+        []
+      end
+      if event.status != "cancelled" && tags.include?("open")
+        activity = from_google_event(event, owner:)
+        activity.save!
+        if activity.previously_new_record? && tags.exclude?("silent")
+          activity.send_created_email
+        end
+      elsif (activity = find_by(google_event_id: event.id, owner:))
+        activity.destroy!
+      end
+    end
+  end
+
   sig { params(user: User).void }
   def self.import_for_user!(user)
-    begin
-      user.changed_google_events!.each do |event|
-        if (attendees = event.attendees)
-          owner_attendee = attendees.find do |attendee|
-            attendee["email"] == user.email
-          end
-          next unless owner_attendee && owner_attendee["organizer"]
-        end
-        tags = if (title = event.title)
-          parse_title(title).last
-        else
-          []
-        end
-        if event.status != "cancelled" && tags.include?("open")
-          activity = from_google_event(event, owner: user)
-          activity.save!
-          if activity.previously_new_record? && tags.exclude?("silent")
-            activity.send_created_email
-          end
-        elsif (activity = find_by(google_event_id: event.id, owner: user))
-          activity.destroy!
-        end
-      end
+    events = begin
+      user.changed_google_events!
     rescue User::GoogleAuthorizationError
       return nil
     end
+    import_events!(events, owner: user)
     user.update_google_calendar_last_imported_at!
   end
 
@@ -201,15 +207,13 @@ class Activity < ApplicationRecord
 
   sig { params(max_users: Integer).void }
   def self.import(max_users: 10)
-    users = User.where.not(google_refresh_token: nil)
-    if Rails.env.production?
-      users = users.and(
-        User.where(google_calendar_last_imported_at: nil).or(
-          User.where("google_calendar_last_imported_at < ?", 5.minutes.ago),
-        ),
-      )
+    User.where.not(google_refresh_token: nil).and(
+      User.where(google_calendar_last_imported_at: nil).or(
+        User.where("google_calendar_last_imported_at < ?", 5.minutes.ago),
+      ),
+    ).limit(max_users).each do |user|
+      import_for_user_later(user)
     end
-    users.limit(max_users).each { |user| import_for_user_later(user) }
   end
 
   sig { params(max_users: T.nilable(Integer)).void }
@@ -260,8 +264,6 @@ class Activity < ApplicationRecord
     end
   end
 
-  private
-
   # == Helpers
   sig { returns([String, T::Array[String]]) }
   def parsed_title
@@ -286,7 +288,7 @@ class Activity < ApplicationRecord
     self.title = opened_title
   end
 
-  # == Google Event: Callback Handlers
+  # == Google Calendar: Callback Handlers
   sig { void }
   def update_google_event
     event = google_event!

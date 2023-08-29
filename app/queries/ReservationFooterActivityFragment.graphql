@@ -1,6 +1,10 @@
 fragment ReservationFooterActivityFragment on Activity {
   id
   openings
+  owner {
+    firstName
+    id
+  }
   storyImageUrl
   url
 }

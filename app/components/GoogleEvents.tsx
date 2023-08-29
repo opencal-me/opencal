@@ -34,8 +34,8 @@ const GoogleEvents: FC<GoogleEventsProps> = ({
       </Title>
       <Stack spacing="xs">
         <TextInput
-          variant="filled"
           size="md"
+          variant="filled"
           placeholder="Search events..."
           value={search}
           onChange={({ target }) => setSearch(target.value)}

@@ -77,11 +77,12 @@ export const ReservationCreateForm: FC<ReservationCreateFormProps> = ({
       {...otherProps}
     >
       <Stack>
-        <Stack spacing={8}>
+        <Stack spacing="xs">
           <TextInput
             label="Name"
             placeholder="Scott Langille"
             required
+            size="md"
             {...getInputProps("name")}
           />
           <TextInput
@@ -89,6 +90,7 @@ export const ReservationCreateForm: FC<ReservationCreateFormProps> = ({
             description="A calendar invitation will be sent to this email address."
             placeholder="scott@example.com"
             required
+            size="md"
             {...getInputProps("email")}
           />
         </Stack>

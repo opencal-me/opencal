@@ -27,7 +27,9 @@ module Types
 
     sig { params(query: T.nilable(String)).returns(T::Array[Google::Event]) }
     def google_events(query: nil)
-      object.google_events!(query:)
+      events = object.google_events!(query:)
+      Activity.import_events!(events, owner: object) if Rails.env.development?
+      events
     end
 
     # == Helpers

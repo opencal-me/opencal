@@ -19,6 +19,11 @@ Rails.application.configure do
         description: "Import activities from Google Calendar.",
         cron: "* * * * *",
       },
+      "sync_google_calendar_channels": {
+        class: "SyncGoogleCalendarChannelsJob",
+        description: "Sync Google Calendar channels.",
+        cron: "0 * * * *",
+      },
     }
 
     # == Errors

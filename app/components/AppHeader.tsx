@@ -27,10 +27,10 @@ const AppHeader: FC<AppHeaderProps> = ({ viewer }) => (
       component={Link}
       href="/"
       leftIcon={<Image src={iconSrc} width={24} />}
-      color="dark"
       compact
-      variant="subtle"
       radius="xl"
+      variant="subtle"
+      color="dark"
       py={4}
       pl={1}
       pr={8}

@@ -13,7 +13,7 @@ export type ReservationFooterProps = Omit<BoxProps, "children"> & {
 };
 
 const ReservationFooter: FC<ReservationFooterProps> = ({
-  activity: { id: activityId, openings, url, storyImageUrl },
+  activity: { id: activityId, openings, owner, url, storyImageUrl },
   sx,
   ...otherProps
 }) => {
@@ -68,7 +68,14 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
               px="xl"
               onClick={() => {
                 openModal({
-                  title: "Reserve your spot!",
+                  title: (
+                    <Box>
+                      <Text span>Reserve your spot</Text>
+                      <Text size="sm" weight={400} color="dimmed" lh={1.3}>
+                        Let {owner.firstName} know you&apos;re coming!
+                      </Text>
+                    </Box>
+                  ),
                   children: (
                     <ReservationCreateForm
                       onReserve={() => {

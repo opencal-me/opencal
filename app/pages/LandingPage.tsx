@@ -18,34 +18,41 @@ const LandingPage: PageComponent<LandingPageProps> = ({ data: { viewer } }) => {
           I&apos;m logged in! Take me to my events & activities :)
         </Anchor>
       )}
-      <Stack spacing={8}>
-        <Text lh={1.4}>
-          Hi! This is{" "}
-          <Text span weight={500}>
-            OpenCal
-          </Text>
-          , a lowkey way to share what you&apos;ll be up to with your friends,
-          and let them join you on your life&apos;s adventures.
+      <Text lh={1.3}>
+        Hi! This is{" "}
+        <Text span weight={600}>
+          OpenCal
         </Text>
-        <Text lh={1.4}>Curious to know how it works? Check out this reel:</Text>
-      </Stack>
-      {mounted && (
-        <Box
-          data-theme="light"
-          sx={{
-            "> .react-tweet-theme": {
-              margin: 0,
-            },
-          }}
-        >
-          <Tweet id="1693789569764761933" />
-        </Box>
-      )}
+        , a lowkey way to share what you&apos;ll be up to with your friends, and
+        let them join you on your life&apos;s adventures.
+      </Text>
       {!viewer && (
-        <Button component={Link} href="/login" size="lg" fullWidth radius="xl">
-          Sign in with Google to get started.
+        <Button
+          component={Link}
+          href="/login"
+          size="lg"
+          radius="md"
+          variant="gradient"
+          gradient={{ from: "brand", to: "indigo" }}
+        >
+          Sign in with Google to get started
         </Button>
       )}
+      <Stack spacing={8}>
+        <Text lh={1.3}>Curious to know how it works? Check out this reel:</Text>
+        {mounted && (
+          <Box
+            data-theme="light"
+            sx={{
+              "> .react-tweet-theme": {
+                margin: 0,
+              },
+            }}
+          >
+            <Tweet id="1693789569764761933" />
+          </Box>
+        )}
+      </Stack>
     </Stack>
   );
 };
