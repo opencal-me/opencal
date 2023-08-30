@@ -109,7 +109,7 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
         </Group>
       </Group>
       {!!descriptionHtml && (
-        <HTMLDescription>{descriptionHtml}</HTMLDescription>
+        <HTMLDescription mah={120}>{descriptionHtml}</HTMLDescription>
       )}
       <Space h={6} />
       {activity ? (
