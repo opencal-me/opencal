@@ -39,6 +39,7 @@ const ActivityCard: FC<ActivityCardProps> = ({
     const dateTime = DateTime.fromISO(end);
     return dateTime.diffNow("seconds").seconds <= 0;
   }, [end]);
+
   return (
     <Box pos="relative" {...(isOver && { mt: 6 })} {...otherProps}>
       <Card
