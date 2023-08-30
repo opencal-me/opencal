@@ -93,7 +93,7 @@ const ActivityCard: FC<ActivityCardProps> = ({
           </Group>
         </Group>
         {!isEmpty(tags) && (
-          <Group spacing={2}>
+          <Group spacing={4} mb={4}>
             {tags.map(tag => (
               <Badge key={tag} size="xs" color="gray" radius="sm">
                 {tag}
@@ -104,7 +104,7 @@ const ActivityCard: FC<ActivityCardProps> = ({
         {!!descriptionHtml && (
           <HTMLDescription mah={120}>{descriptionHtml}</HTMLDescription>
         )}
-        <Space h="xs" />
+        <Space h={6} />
         <Button component={Link} href={url} leftIcon={<RightArrowIcon />}>
           Go To Activity
         </Button>
