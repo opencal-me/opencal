@@ -7,33 +7,35 @@
 #
 # Table name: users
 #
-#  id                               :uuid             not null, primary key
-#  avatar_url                       :string
-#  current_sign_in_at               :datetime
-#  current_sign_in_ip               :string
-#  email                            :string           not null
-#  encrypted_password               :string           not null
-#  first_name                       :string           not null
-#  google_calendar_last_imported_at :datetime
-#  google_refresh_token             :string
-#  google_uid                       :string           not null
-#  handle                           :string           not null
-#  last_name                        :string
-#  last_sign_in_at                  :datetime
-#  last_sign_in_ip                  :string
-#  remember_created_at              :datetime
-#  reset_password_sent_at           :datetime
-#  reset_password_token             :string
-#  sign_in_count                    :integer          default(0), not null
-#  created_at                       :datetime         not null
-#  updated_at                       :datetime         not null
+#  id                              :uuid             not null, primary key
+#  avatar_url                      :string
+#  current_sign_in_at              :datetime
+#  current_sign_in_ip              :string
+#  email                           :string           not null
+#  encrypted_password              :string           not null
+#  first_name                      :string           not null
+#  google_calendar_last_synced_at  :datetime
+#  google_calendar_next_page_token :string
+#  google_calendar_sync_token      :string
+#  google_refresh_token            :string
+#  google_uid                      :string           not null
+#  handle                          :string           not null
+#  last_name                       :string
+#  last_sign_in_at                 :datetime
+#  last_sign_in_ip                 :string
+#  remember_created_at             :datetime
+#  reset_password_sent_at          :datetime
+#  reset_password_token            :string
+#  sign_in_count                   :integer          default(0), not null
+#  created_at                      :datetime         not null
+#  updated_at                      :datetime         not null
 #
 # Indexes
 #
-#  index_users_on_email                             (email) UNIQUE
-#  index_users_on_google_calendar_last_imported_at  (google_calendar_last_imported_at)
-#  index_users_on_handle                            (handle) UNIQUE
-#  index_users_on_reset_password_token              (reset_password_token) UNIQUE
+#  index_users_on_email                           (email) UNIQUE
+#  index_users_on_google_calendar_last_synced_at  (google_calendar_last_synced_at)
+#  index_users_on_handle                          (handle) UNIQUE
+#  index_users_on_reset_password_token            (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
   include Identifiable
@@ -60,6 +62,11 @@ class User < ApplicationRecord
   ]
 
   # == Attributes
+  sig { returns(ActiveSupport::TimeWithZone) }
+  def created_at!
+    created_at or raise "Missing created timestamp"
+  end
+
   sig { returns(String) }
   def name
     [first_name, last_name].compact.join(" ")
@@ -132,9 +139,16 @@ class User < ApplicationRecord
                       if: :google_calendar_ready?
 
   # == Scopes
-  scope :with_google_calendar_ready, -> {
+  scope :google_calendar_ready, -> {
     T.bind(self, PrivateRelation)
     where.not(google_refresh_token: nil)
+  }
+
+  scope :google_calendar_out_of_sync, -> {
+    T.bind(self, PrivateRelation)
+    where(google_calendar_last_synced_at: nil).or(
+      where("google_calendar_last_synced_at < ?", 5.minutes.ago),
+    )
   }
 
   # == Finders
@@ -275,24 +289,16 @@ class User < ApplicationRecord
     google_event!(id) if google_calendar_ready?
   end
 
-  sig { returns(T::Array[Google::Event]) }
-  def changed_google_events!
-    updated_min = google_calendar_last_imported_at || created_at or
-      raise "User not yet created"
-    with_google_calendar do |calendar|
-      params = {
-        "updatedMin" => calendar.send(:encode_time, updated_min),
-        "maxResults" => 2500,
-        "orderBy" => "updated",
-        "singleEvents" => true,
-      }
-      calendar.send(:event_lookup, "?" + params.to_query)
-    end
+  sig do
+    params(block: T.proc.params(event: Google::Event).void).void
   end
-
-  sig { void }
-  def update_google_calendar_last_imported_at!
-    update!(google_calendar_last_imported_at: Time.current)
+  def sync_google_calendar(&block)
+    with_google_calendar do |calendar|
+      loop do
+        sync_next_google_calendar_page(calendar:, &block)
+        break unless google_calendar_next_page_token?
+      end
+    end
   end
 
   # == Methods
@@ -336,6 +342,39 @@ class User < ApplicationRecord
       yield calendar
     rescue => error
       raise "Google Calendar error: #{error}"
+    end
+  end
+
+  sig do
+    params(
+      calendar: Google::Calendar,
+      block: T.proc.params(event: Google::Event).void,
+    ).void
+  end
+  def sync_next_google_calendar_page(calendar:, &block)
+    params = {
+      "updatedMin" => calendar.send(:encode_time, created_at!),
+      "singleEvents" => true,
+      "syncToken" => google_calendar_next_sync_token,
+      "pageToken" => google_calendar_next_page_token,
+    }
+    response = scoped do |; response| # rubocop:disable Layout/SpaceAroundBlockParameters
+      query = "?" + params.compact.to_query
+      response = calendar.send(:send_events_request, query, :get)
+      JSON.parse(response.body)
+    end
+    events = T.let(
+      Google::Event.build_from_google_feed(response, calendar) || [],
+      T::Array[Google::Event],
+    )
+    transaction do
+      events.each(&block)
+      self.google_calendar_next_sync_token = response["nextSyncToken"]
+      self.google_calendar_next_page_token = response["nextPageToken"]
+      unless google_calendar_next_page_token?
+        self.google_calendar_last_synced_at = Time.current
+      end
+      save!
     end
   end
 

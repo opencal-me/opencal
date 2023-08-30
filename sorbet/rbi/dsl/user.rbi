@@ -286,6 +286,12 @@ class User
     def from(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def google_calendar_out_of_sync(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def google_calendar_ready(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def group(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
@@ -429,9 +435,6 @@ class User
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelationWhereChain) }
     def where(*args, &blk); end
-
-    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
-    def with_google_calendar_ready(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def without(*args, &blk); end
@@ -754,49 +757,139 @@ class User
     def first_name_will_change!; end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
-    def google_calendar_last_imported_at; end
+    def google_calendar_last_synced_at; end
 
     sig { params(value: T.nilable(::ActiveSupport::TimeWithZone)).returns(T.nilable(::ActiveSupport::TimeWithZone)) }
-    def google_calendar_last_imported_at=(value); end
+    def google_calendar_last_synced_at=(value); end
 
     sig { returns(T::Boolean) }
-    def google_calendar_last_imported_at?; end
+    def google_calendar_last_synced_at?; end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
-    def google_calendar_last_imported_at_before_last_save; end
+    def google_calendar_last_synced_at_before_last_save; end
 
     sig { returns(T.untyped) }
-    def google_calendar_last_imported_at_before_type_cast; end
+    def google_calendar_last_synced_at_before_type_cast; end
 
     sig { returns(T::Boolean) }
-    def google_calendar_last_imported_at_came_from_user?; end
+    def google_calendar_last_synced_at_came_from_user?; end
 
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
-    def google_calendar_last_imported_at_change; end
+    def google_calendar_last_synced_at_change; end
 
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
-    def google_calendar_last_imported_at_change_to_be_saved; end
+    def google_calendar_last_synced_at_change_to_be_saved; end
 
     sig { returns(T::Boolean) }
-    def google_calendar_last_imported_at_changed?; end
+    def google_calendar_last_synced_at_changed?; end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
-    def google_calendar_last_imported_at_in_database; end
+    def google_calendar_last_synced_at_in_database; end
 
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
-    def google_calendar_last_imported_at_previous_change; end
+    def google_calendar_last_synced_at_previous_change; end
 
     sig { returns(T::Boolean) }
-    def google_calendar_last_imported_at_previously_changed?; end
+    def google_calendar_last_synced_at_previously_changed?; end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
-    def google_calendar_last_imported_at_previously_was; end
+    def google_calendar_last_synced_at_previously_was; end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
-    def google_calendar_last_imported_at_was; end
+    def google_calendar_last_synced_at_was; end
 
     sig { void }
-    def google_calendar_last_imported_at_will_change!; end
+    def google_calendar_last_synced_at_will_change!; end
+
+    sig { returns(T.nilable(::String)) }
+    def google_calendar_next_page_token; end
+
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    def google_calendar_next_page_token=(value); end
+
+    sig { returns(T::Boolean) }
+    def google_calendar_next_page_token?; end
+
+    sig { returns(T.nilable(::String)) }
+    def google_calendar_next_page_token_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def google_calendar_next_page_token_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def google_calendar_next_page_token_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def google_calendar_next_page_token_change; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def google_calendar_next_page_token_change_to_be_saved; end
+
+    sig { returns(T::Boolean) }
+    def google_calendar_next_page_token_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def google_calendar_next_page_token_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def google_calendar_next_page_token_previous_change; end
+
+    sig { returns(T::Boolean) }
+    def google_calendar_next_page_token_previously_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def google_calendar_next_page_token_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def google_calendar_next_page_token_was; end
+
+    sig { void }
+    def google_calendar_next_page_token_will_change!; end
+
+    sig { returns(T.nilable(::String)) }
+    def google_calendar_next_sync_token; end
+
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    def google_calendar_next_sync_token=(value); end
+
+    sig { returns(T::Boolean) }
+    def google_calendar_next_sync_token?; end
+
+    sig { returns(T.nilable(::String)) }
+    def google_calendar_next_sync_token_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def google_calendar_next_sync_token_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def google_calendar_next_sync_token_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def google_calendar_next_sync_token_change; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def google_calendar_next_sync_token_change_to_be_saved; end
+
+    sig { returns(T::Boolean) }
+    def google_calendar_next_sync_token_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def google_calendar_next_sync_token_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def google_calendar_next_sync_token_previous_change; end
+
+    sig { returns(T::Boolean) }
+    def google_calendar_next_sync_token_previously_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def google_calendar_next_sync_token_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def google_calendar_next_sync_token_was; end
+
+    sig { void }
+    def google_calendar_next_sync_token_will_change!; end
 
     sig { returns(T.nilable(::String)) }
     def google_refresh_token; end
@@ -1270,7 +1363,13 @@ class User
     def restore_first_name!; end
 
     sig { void }
-    def restore_google_calendar_last_imported_at!; end
+    def restore_google_calendar_last_synced_at!; end
+
+    sig { void }
+    def restore_google_calendar_next_page_token!; end
+
+    sig { void }
+    def restore_google_calendar_next_sync_token!; end
 
     sig { void }
     def restore_google_refresh_token!; end
@@ -1351,10 +1450,22 @@ class User
     def saved_change_to_first_name?; end
 
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
-    def saved_change_to_google_calendar_last_imported_at; end
+    def saved_change_to_google_calendar_last_synced_at; end
 
     sig { returns(T::Boolean) }
-    def saved_change_to_google_calendar_last_imported_at?; end
+    def saved_change_to_google_calendar_last_synced_at?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_google_calendar_next_page_token; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_google_calendar_next_page_token?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_google_calendar_next_sync_token; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_google_calendar_next_sync_token?; end
 
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def saved_change_to_google_refresh_token; end
@@ -1540,7 +1651,13 @@ class User
     def will_save_change_to_first_name?; end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_google_calendar_last_imported_at?; end
+    def will_save_change_to_google_calendar_last_synced_at?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_google_calendar_next_page_token?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_google_calendar_next_sync_token?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_google_refresh_token?; end
@@ -1615,6 +1732,12 @@ class User
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def from(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def google_calendar_out_of_sync(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def google_calendar_ready(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def group(*args, &blk); end
@@ -1708,9 +1831,6 @@ class User
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelationWhereChain) }
     def where(*args, &blk); end
-
-    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
-    def with_google_calendar_ready(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def without(*args, &blk); end

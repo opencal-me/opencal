@@ -148,13 +148,9 @@ class Activity < ApplicationRecord
 
   sig { params(user: User).void }
   def self.import_for_user!(user)
-    events = begin
-      user.changed_google_events!
-    rescue User::GoogleAuthorizationError
-      return nil
-    end
-    events.each { |event| import_event!(event, owner: user) }
-    user.update_google_calendar_last_imported_at!
+    user.sync_google_calendar { |event| import_event!(event, owner: user) }
+  rescue User::GoogleAuthorizationError
+    nil
   end
 
   sig { params(user: User).void }
@@ -164,13 +160,10 @@ class Activity < ApplicationRecord
 
   sig { params(max_users: Integer).void }
   def self.import(max_users: 10)
-    User.where.not(google_refresh_token: nil).and(
-      User.where(google_calendar_last_imported_at: nil).or(
-        User.where("google_calendar_last_imported_at < ?", 5.minutes.ago),
-      ),
-    ).limit(max_users).each do |user|
-      import_for_user_later(user)
-    end
+    User.google_calendar_ready.merge(User.google_calendar_out_of_sync)
+      .limit(max_users).each do |user|
+        import_for_user_later(user)
+      end
   end
 
   sig { params(max_users: T.nilable(Integer)).void }

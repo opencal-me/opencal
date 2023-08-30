@@ -58,7 +58,7 @@ class GoogleCalendarChannel < ApplicationRecord
     T.bind(self, PrivateRelation)
     prefix = Rails.application.routes.url_helpers.root_url
     sanitized_prefix = ActiveRecord::Base.sanitize_sql_like(prefix)
-    joins(:owner).merge(User.with_google_calendar_ready).and(
+    joins(:owner).merge(User.google_calendar_ready).and(
       where("callback_url NOT LIKE ?", sanitized_prefix + "%").or(
         where("expires_at <= ?", 6.hours.from_now),
       ),
