@@ -130,13 +130,13 @@ class Activity < ApplicationRecord
       end
       return unless owner_attendee && owner_attendee["organizer"]
     end
-    tags = if (title = event.title)
-      parse_google_event_title(title).last
+    name, tags = if (title = event.title)
+      parse_google_event_title(title)
     else
-      []
+      ["", []]
     end
     if event.status != "cancelled" && tags.include?("open")
-      activity = from_google_event(event, owner:)
+      activity = _from_google_event(event, owner:, name:, tags:)
       activity.save!
       if activity.previously_new_record? && tags.exclude?("silent")
         activity.send_created_email
@@ -187,37 +187,32 @@ class Activity < ApplicationRecord
 
   sig { params(title: String).returns([String, T::Array[String]]) }
   def self.parse_google_event_title(title)
-    @parsed_titles = T.let(
-      @parsed_titles,
-      T.nilable(T::Hash[String, [String, T::Array[String]]]),
-    )
-    @parsed_titles ||= Hash.new do |hash, title|
-      raise "Parsed titles hash exceed 100 entries" if hash.size > 100
-      hash.delete(hash.keys.first) if hash.size == 100
-      name, tags = if (matches = /^(.*) \[(.*)\]$/.match(title))
-        name, tags = matches.captures
-        tags = if (text = tags)
-          text.strip.split(" ").uniq
-        end
-        [name || "", tags || []]
+    scanner = StringScanner.new(title)
+    name_parts, tags = [], []
+    until scanner.eos?
+      name_bit = scanner.scan_until(/\[/)
+      if name_bit
+        name_parts << name_bit[0..-2]
       else
-        [title, []]
+        name_parts << scanner.rest
+        break
       end
-      hash[title] = [name, tags]
+      tags_bit = scanner.scan_until(/\]/)
+      if tags_bit
+        tags.concat(tags_bit[0..-2].strip.split(" "))
+      else
+        name_parts << "[" + scanner.rest
+        break
+      end
     end
-    @parsed_titles[title.strip]
+    name = name_parts.filter_map { |part| part.strip.presence }.join(" ")
+    [name, tags.uniq]
   end
 
   sig { params(event: Google::Event, owner: User).returns(Activity) }
   def self.from_google_event(event, owner:)
-    activity = find_or_initialize_by(owner:, google_event_id: event.id)
     name, tags = parse_google_event_title(event.title)
-    activity.name = name
-    activity.tags = tags.excluding("open", "silent")
-    activity.description = event.description
-    activity.during = event.start_time.to_time..event.end_time.to_time
-    activity.location = event.location
-    activity
+    _from_google_event(event, owner:, name:, tags:)
   end
 
   # == Methods
@@ -254,6 +249,25 @@ class Activity < ApplicationRecord
   end
 
   private
+
+  # == Google Event: Helpers
+  sig do
+    params(
+      event: Google::Event,
+      owner: User,
+      name: String,
+      tags: T::Array[String],
+    ).returns(Activity)
+  end
+  private_class_method def self._from_google_event(event, owner:, name:, tags:)
+    activity = find_or_initialize_by(owner:, google_event_id: event.id)
+    activity.name = name
+    activity.tags = tags.excluding("open", "silent")
+    activity.description = event.description
+    activity.during = event.start_time.to_time..event.end_time.to_time
+    activity.location = event.location
+    activity
+  end
 
   # == Helpers
   sig { params(include_open: T::Boolean).returns(T.nilable(String)) }

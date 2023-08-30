@@ -353,13 +353,15 @@ class User < ApplicationRecord
   end
   def sync_next_google_calendar_page(calendar:, &block)
     params = {
-      "updatedMin" => calendar.send(:encode_time, created_at!),
       "singleEvents" => true,
       "syncToken" => google_calendar_next_sync_token,
       "pageToken" => google_calendar_next_page_token,
-    }
+    }.compact
+    unless google_calendar_next_sync_token?
+      params["updatedMin"] = calendar.send(:encode_time, created_at!)
+    end
     response = scoped do |; response| # rubocop:disable Layout/SpaceAroundBlockParameters
-      query = "?" + params.compact.to_query
+      query = "?" + params.to_query
       response = calendar.send(:send_events_request, query, :get)
       JSON.parse(response.body)
     end
