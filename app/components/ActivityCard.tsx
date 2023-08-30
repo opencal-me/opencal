@@ -94,7 +94,7 @@ const ActivityCard: FC<ActivityCardProps> = ({
           </Group>
         </Group>
         {!isEmpty(tags) && (
-          <Group spacing={4} mb={4}>
+          <Group spacing={4} mb={4} mt={2}>
             {tags.map(tag => (
               <Badge key={tag} size="xs" color="gray" radius="sm">
                 {tag}

@@ -21,7 +21,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
   data: { activity },
 }) => {
   invariant(activity, "Missing activity");
-  const { owner, start, name, descriptionHtml, coordinates, address } =
+  const { owner, start, name, descriptionHtml, coordinates, address, tags } =
     activity;
 
   // == Start
@@ -81,9 +81,20 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
               {startDateTime}
             </Time>
           </Text>
-          <Title size="h3" lh={1.3}>
-            {name}
-          </Title>
+          <Box>
+            <Title size="h3" lh={1.3}>
+              {name}
+            </Title>
+            {!isEmpty(tags) && (
+              <Group spacing={4} mt={4}>
+                {tags.map(tag => (
+                  <Badge key={tag} color="gray" radius="sm">
+                    {tag}
+                  </Badge>
+                ))}
+              </Group>
+            )}
+          </Box>
           {!!descriptionHtml && (
             <Spoiler
               maxHeight={200}

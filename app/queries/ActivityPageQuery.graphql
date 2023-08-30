@@ -19,6 +19,7 @@ query ActivityPageQuery($activityId: ID!) {
     }
     ...ReservationFooterActivityFragment
     start
+    tags
     url
   }
   viewer {
