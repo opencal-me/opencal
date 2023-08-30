@@ -36,6 +36,10 @@ class Activity < ApplicationRecord
   include Handled
   include FriendlyIdentifiable
 
+  # == Constants
+  URL_REGEXP = T.let(URI::DEFAULT_PARSER.regexp[:ABS_URI], Regexp)
+  COODINATES_REGEXP = /^-?[0-9]+(\.[0-9]+)?, ?-?[0-9]+(\.[0-9]+)?$/
+
   # == Handled: Attributes
   attribute :handle, :string, default: -> { generate_handle }
 
@@ -52,6 +56,21 @@ class Activity < ApplicationRecord
   sig { returns(Integer) }
   def duration_seconds
     (self.end - start).to_i
+  end
+
+  sig { returns(T::Boolean) }
+  def location_is_url?
+    URL_REGEXP.match?(location)
+  end
+
+  sig { returns(T::Boolean) }
+  def location_is_coordinates?
+    COODINATES_REGEXP.match?(location)
+  end
+
+  sig { returns(T::Boolean) }
+  def location_is_address?
+    !location_is_url? && !location_is_coordinates?
   end
 
   # == FriendlyIdentifiable
@@ -97,7 +116,7 @@ class Activity < ApplicationRecord
   end
 
   # == Callbacks
-  after_validation :geocode, if: :location_changed?, unless: :location_is_url?
+  after_validation :geocode, if: %i[location_changed? location_is_address?]
 
   # == Google Calendar: Callbacks
   after_commit :update_google_event, on: %i[create destroy]
@@ -229,12 +248,6 @@ class Activity < ApplicationRecord
       html = view_context.simple_format(description)
       view_context.auto_link(html, html_options: { target: "_blank" })
     end
-  end
-
-  sig { returns(T::Boolean) }
-  def location_is_url?
-    url_regexp = T.let(URI::DEFAULT_PARSER.regexp[:ABS_URI], Regexp)
-    url_regexp.match?(location)
   end
 
   sig { returns(Integer) }
