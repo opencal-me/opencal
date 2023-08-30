@@ -119,7 +119,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
                   border: `${rem(1)} solid ${colors.gray[3]}`,
                 })}
               >
-                <Map initialViewState={{ ...coordinates, zoom: 12.5 }}>
+                <Map initialViewState={{ ...coordinates, zoom: 11 }}>
                   <Marker {...coordinates} />
                 </Map>
               </Box>
