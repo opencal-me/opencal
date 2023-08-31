@@ -27,7 +27,7 @@ class Reservation < ApplicationRecord
   include Identifiable
 
   # == Attributes
-  enumerize :status, in: %i[pending confirmed rejected], default: :confirmed
+  enumerize :status, in: %i[requested approved rejected], default: :approved
 
   # == Associations
   belongs_to :activity

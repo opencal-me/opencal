@@ -36,6 +36,9 @@ module GeneratedUrlHelpersModule
   def home_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def kai_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def mailcatcher_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -130,6 +133,9 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def root_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def scott_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def src_url(*args); end

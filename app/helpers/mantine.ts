@@ -35,14 +35,52 @@ export const APP_THEME: MantineThemeOverride = {
     }),
   },
   components: {
+    Alert: {
+      styles: {
+        title: {
+          textTransform: "lowercase",
+        },
+      },
+    },
+    Badge: {
+      styles: {
+        inner: {
+          textTransform: "lowercase",
+        },
+      },
+    },
     Button: {
       defaultProps: {
         radius: "md",
+      },
+      styles: {
+        inner: {
+          textTransform: "lowercase",
+        },
       },
     },
     Card: {
       defaultProps: {
         radius: "md",
+      },
+    },
+    Checkbox: {
+      styles: {
+        label: {
+          textTransform: "lowercase",
+        },
+      },
+    },
+    Input: {
+      defaultProps: {
+        radius: "md",
+      },
+    },
+    InputWrapper: {
+      styles: {
+        label: {
+          textTransform: "lowercase",
+        },
       },
     },
     LoadingOverlay: {
@@ -52,14 +90,11 @@ export const APP_THEME: MantineThemeOverride = {
         },
       },
     },
-    ThemeIcon: {
-      defaultProps: {
-        variant: "default",
-      },
-    },
-    Input: {
-      defaultProps: {
-        radius: "md",
+    Menu: {
+      styles: {
+        itemLabel: {
+          textTransform: "lowercase",
+        },
       },
     },
     Modal: {
@@ -69,6 +104,25 @@ export const APP_THEME: MantineThemeOverride = {
           ...(style as CSSObject),
         },
       }),
+    },
+    Text: {
+      styles: {
+        root: {
+          textTransform: "lowercase",
+        },
+      },
+    },
+    ThemeIcon: {
+      defaultProps: {
+        variant: "default",
+      },
+    },
+    Tooltip: {
+      styles: {
+        tooltip: {
+          textTransform: "lowercase",
+        },
+      },
     },
   },
 };

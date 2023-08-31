@@ -70,6 +70,10 @@ Rails.application.routes.draw do
   # == Users
   resources :users, path: "/u", only: :show
 
+  # == Superusers
+  get :scott, to: redirect("/u/scottrlangille", status: 302)
+  get :kai, to: redirect("/u/hulloitskai", status: 302)
+
   # == Google Calendar Channels
   resources :google_calendar_channels, only: [] do
     member do

@@ -19,7 +19,8 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
   sx,
   ...otherProps
 }) => {
-  const { /* openings, */ owner, url, storyImageUrl } = activity;
+  const { openings, owner, url, storyImageUrl } = activity;
+  const hasOpenings = openings > 0;
 
   // == Copy Story Image
   const { copy, copied } = useClipboard();
@@ -79,36 +80,43 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
                 <Text component={ShareIcon} />
               </ActionIcon>
             </Tooltip>
-            <Button
-              variant="gradient"
-              gradient={{ from: "brand", to: "indigo" }}
-              px="xl"
-              fz="md"
-              fw={800}
-              sx={{ boxShadow: "2px 2px 10px #00388b80" }}
-              onClick={() => {
-                openModal({
-                  title: (
-                    <Box>
-                      <Text span>Reserve your spot</Text>
-                      <Text size="sm" weight={400} color="dimmed" lh={1.3}>
-                        Let {owner.firstName} know you&apos;re coming!
-                      </Text>
-                    </Box>
-                  ),
-                  children: (
-                    <ReservationCreateForm
-                      onReserve={() => {
-                        closeAllModals();
-                      }}
-                      {...{ activity }}
-                    />
-                  ),
-                });
-              }}
+            <Tooltip
+              label="Sorry, this event is full!"
+              withArrow
+              disabled={hasOpenings}
             >
-              I&apos;ll be there!
-            </Button>
+              <Button
+                variant="gradient"
+                gradient={{ from: "brand", to: "indigo" }}
+                px="xl"
+                fz="md"
+                fw={800}
+                sx={{ boxShadow: "2px 2px 10px #00388b80" }}
+                disabled={!hasOpenings}
+                onClick={() => {
+                  openModal({
+                    title: (
+                      <Box>
+                        <Text span>Reserve your spot</Text>
+                        <Text size="sm" weight={400} color="dimmed" lh={1.3}>
+                          Let {owner.firstName} know you&apos;re coming!
+                        </Text>
+                      </Box>
+                    ),
+                    children: (
+                      <ReservationCreateForm
+                        onReserve={() => {
+                          closeAllModals();
+                        }}
+                        {...{ activity }}
+                      />
+                    ),
+                  });
+                }}
+              >
+                I&apos;ll be there!
+              </Button>
+            </Tooltip>
           </Group>
         </Group>
       </Container>

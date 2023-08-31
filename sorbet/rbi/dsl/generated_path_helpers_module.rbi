@@ -36,6 +36,9 @@ module GeneratedPathHelpersModule
   def home_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def kai_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def mailcatcher_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -130,6 +133,9 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def root_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def scott_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def src_path(*args); end
