@@ -53,7 +53,7 @@ class GoogleCalendarChannel < ApplicationRecord
   # == Callbacks
   before_destroy :stop
 
-  # == Removal: Scopes
+  # == Scopes
   scope :to_remove, -> {
     T.bind(self, PrivateRelation)
     prefix = Rails.application.routes.url_helpers.root_url

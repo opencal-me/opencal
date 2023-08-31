@@ -5,6 +5,7 @@ module Google
   class Calendar
     extend T::Sig
 
+    # == Methods
     sig { params(event: Event).returns(T.untyped) }
     def save_event(event)
       method = event.new_event? ? :post : :put
@@ -48,9 +49,14 @@ module Google
   class Event
     extend T::Sig
 
+    # == Attributes
     sig { returns(T.nilable(T::Array[T::Hash[String, T.untyped]])) }
     attr_accessor :attachments
 
+    # == Modifiers
+    public :is_recurring_event?
+
+    # == Builders
     sig { params(e: T.untyped, calendar: Calendar).returns(Event) }
     def self.new_from_feed(e, calendar)
       params = {}
@@ -74,6 +80,7 @@ module Google
       Event.new(params)
     end
 
+    # == Serialization
     sig { returns(String) }
     def to_json
       attributes = {

@@ -246,6 +246,62 @@ class User
 
     sig { params(value: T::Enumerable[::GoogleCalendarChannel]).void }
     def google_calendar_channels=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def subscriber_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def subscriber_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :subscribers, through: :subscriptions_as_subject`.
+    # 🔗 [Rails guide for `has_many_through` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-through-association)
+    sig { returns(::User::PrivateCollectionProxy) }
+    def subscribers; end
+
+    sig { params(value: T::Enumerable[::User]).void }
+    def subscribers=(value); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :subscribes_to, through: :subscriptions_as_subscriber`.
+    # 🔗 [Rails guide for `has_many_through` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-through-association)
+    sig { returns(::User::PrivateCollectionProxy) }
+    def subscribes_to; end
+
+    sig { params(value: T::Enumerable[::User]).void }
+    def subscribes_to=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def subscribes_to_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def subscribes_to_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :subscriptions_as_subject`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::Subscription::PrivateCollectionProxy) }
+    def subscriptions_as_subject; end
+
+    sig { params(value: T::Enumerable[::Subscription]).void }
+    def subscriptions_as_subject=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def subscriptions_as_subject_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def subscriptions_as_subject_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :subscriptions_as_subscriber`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::Subscription::PrivateCollectionProxy) }
+    def subscriptions_as_subscriber; end
+
+    sig { params(value: T::Enumerable[::Subscription]).void }
+    def subscriptions_as_subscriber=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def subscriptions_as_subscriber_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def subscriptions_as_subscriber_ids=(ids); end
   end
 
   module GeneratedAssociationRelationMethods

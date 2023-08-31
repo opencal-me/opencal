@@ -15,5 +15,6 @@ module Types
 
     field :create_activity, mutation: Mutations::CreateActivity
     field :create_reservation, mutation: Mutations::CreateReservation
+    field :create_subscription, mutation: Mutations::CreateSubscription
   end
 end

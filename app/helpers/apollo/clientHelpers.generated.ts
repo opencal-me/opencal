@@ -38,6 +38,12 @@ export type CreateReservationPayloadFieldPolicy = {
 	reservation?: FieldPolicy<any> | FieldReadFunction<any>,
 	success?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type CreateSubscriptionPayloadKeySpecifier = ('clientMutationId' | 'subject' | 'success' | CreateSubscriptionPayloadKeySpecifier)[];
+export type CreateSubscriptionPayloadFieldPolicy = {
+	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
+	subject?: FieldPolicy<any> | FieldReadFunction<any>,
+	success?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type GoogleEventKeySpecifier = ('activity' | 'descriptionHtml' | 'durationSeconds' | 'end' | 'id' | 'isOrganizedByViewer' | 'location' | 'start' | 'title' | GoogleEventKeySpecifier)[];
 export type GoogleEventFieldPolicy = {
 	activity?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -61,10 +67,11 @@ export type InputFieldErrorFieldPolicy = {
 	field?: FieldPolicy<any> | FieldReadFunction<any>,
 	message?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('createActivity' | 'createReservation' | 'testMutation' | 'updateUser' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('createActivity' | 'createReservation' | 'createSubscription' | 'testMutation' | 'updateUser' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	createActivity?: FieldPolicy<any> | FieldReadFunction<any>,
 	createReservation?: FieldPolicy<any> | FieldReadFunction<any>,
+	createSubscription?: FieldPolicy<any> | FieldReadFunction<any>,
 	testMutation?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateUser?: FieldPolicy<any> | FieldReadFunction<any>
 };
@@ -150,6 +157,10 @@ export type StrictTypedTypePolicies = {
 	CreateReservationPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | CreateReservationPayloadKeySpecifier | (() => undefined | CreateReservationPayloadKeySpecifier),
 		fields?: CreateReservationPayloadFieldPolicy,
+	},
+	CreateSubscriptionPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | CreateSubscriptionPayloadKeySpecifier | (() => undefined | CreateSubscriptionPayloadKeySpecifier),
+		fields?: CreateSubscriptionPayloadFieldPolicy,
 	},
 	GoogleEvent?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | GoogleEventKeySpecifier | (() => undefined | GoogleEventKeySpecifier),

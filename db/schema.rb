@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_30_031940) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_31_011756) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -180,6 +180,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_30_031940) do
     t.index ["activity_id"], name: "index_reservations_on_activity_id"
   end
 
+  create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "subscriber_id", null: false
+    t.uuid "subject_id", null: false
+    t.string "status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["subject_id"], name: "index_subscriptions_on_subject_id"
+    t.index ["subscriber_id"], name: "index_subscriptions_on_subscriber_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "encrypted_password", null: false
@@ -214,4 +224,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_30_031940) do
   add_foreign_key "addresses", "activities"
   add_foreign_key "google_calendar_channels", "users", column: "owner_id"
   add_foreign_key "reservations", "activities"
+  add_foreign_key "subscriptions", "users", column: "subject_id"
+  add_foreign_key "subscriptions", "users", column: "subscriber_id"
 end

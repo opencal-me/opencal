@@ -2,15 +2,6 @@
 # frozen_string_literal: true
 
 class ActivitiesController < ApplicationController
-  class << self
-    sig { returns(Mutex) }
-    def activity_story_image_semaphore
-      @activity_story_image_semaphore = T.let(@activity_story_image_semaphore,
-                                              T.nilable(Mutex))
-      @activity_story_image_semaphore ||= Mutex.new
-    end
-  end
-
   # == Filters
   before_action :set_activity
 
@@ -19,14 +10,14 @@ class ActivitiesController < ApplicationController
     activity = T.must(@activity)
     if params[:id] == activity.to_param
       authorize!(activity, to: :show?)
-      data = query!("ActivityPageQuery", { activity_id: activity.to_gid.to_s })
+      data = query!("ActivityPageQuery",
+                    { activity_id: activity.to_gid.to_s })
       render(inertia: "ActivityPage", props: { data: })
     else
       redirect_to(activity_path(activity))
     end
   end
 
-  # == Actions
   def story
     activity = T.must(@activity)
     respond_to do |format|
@@ -48,6 +39,14 @@ class ActivitiesController < ApplicationController
         )
       end
     end
+  end
+
+  # == Helpers
+  sig { returns(Mutex) }
+  def self.activity_story_image_semaphore
+    @activity_story_image_semaphore = T.let(@activity_story_image_semaphore,
+                                            T.nilable(Mutex))
+    @activity_story_image_semaphore ||= Mutex.new
   end
 
   private

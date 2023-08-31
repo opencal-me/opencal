@@ -16,7 +16,7 @@
 #  first_name                      :string           not null
 #  google_calendar_last_synced_at  :datetime
 #  google_calendar_next_page_token :string
-#  google_calendar_sync_token      :string
+#  google_calendar_next_sync_token :string
 #  google_refresh_token            :string
 #  google_uid                      :string           not null
 #  handle                          :string           not null
@@ -45,7 +45,7 @@ class User < ApplicationRecord
   # == Constants
   MIN_PASSWORD_ENTROPY = T.let(14, Integer)
 
-  # == Devise: Configuration
+  # == Devise
   # Others modules are: :lockable, :timeoutable, and :omniauthable.
   devise :database_authenticatable,
          :registerable,
@@ -109,6 +109,24 @@ class User < ApplicationRecord
            inverse_of: :owner,
            foreign_key: :owner_id,
            dependent: :destroy
+
+  has_many :subscriptions_as_subject,
+           class_name: "Subscription",
+           inverse_of: :subject,
+           foreign_key: :subject_id,
+           dependent: :destroy
+  has_many :subscribers, through: :subscriptions_as_subject
+  has_many :subscriptions_as_subscriber,
+           class_name: "Subscription",
+           inverse_of: :subscriber,
+           foreign_key: :subscriber_id,
+           dependent: :destroy
+  has_many :subscribes_to, through: :subscriptions_as_subscriber, source: :subject
+
+  sig { returns(Subscription::PrivateAssociationRelation) }
+  def subscriptions
+    subscriptions_as_subject.or(subscriptions_as_subscriber)
+  end
 
   # == Normalizations
   # before_validation :remove_unconfirmed_email_if_matches_email,
@@ -301,59 +319,14 @@ class User < ApplicationRecord
     end
   end
 
-  # == Methods
-  sig { returns(T::Boolean) }
-  def admin?
-    Admin.emails.include?(email) || Admin.email_domains.include?(email_domain)
-  end
-
-  # # == Devise: Callback handlers
-  # sig { void }
-  # def after_confirmation
-  #   super
-  #   send_welcome_email if confirmed_at_previously_was.nil?
-  # end
-
-  private
-
-  # == Handled: Helpers
-  sig { returns(String) }
-  def derived_handle
-    if email_domain == "gmail.com"
-      email_username
-    else
-      [email_username, email_domain].join("-")
-    end
-  end
-
-  # == Helpers
-  sig do
-    type_parameters(:U)
-      .params(
-        block: T.proc.params(
-          calendar: Google::Calendar,
-        ).returns(T.type_parameter(:U)),
-      )
-      .returns(T.type_parameter(:U))
-  end
-  def with_google_calendar(&block)
-    calendar = google_calendar!
-    begin
-      yield calendar
-    rescue => error
-      raise "Google Calendar error: #{error}"
-    end
-  end
-
   sig do
     params(
       calendar: Google::Calendar,
       block: T.proc.params(event: Google::Event).void,
     ).void
   end
-  def sync_next_google_calendar_page(calendar:, &block)
+  private def sync_next_google_calendar_page(calendar:, &block)
     params = {
-      "singleEvents" => true,
       "syncToken" => google_calendar_next_sync_token,
       "pageToken" => google_calendar_next_page_token,
     }.compact
@@ -377,6 +350,51 @@ class User < ApplicationRecord
         self.google_calendar_last_synced_at = Time.current
       end
       save!
+    end
+  end
+
+  # == Methods
+  sig { returns(T::Boolean) }
+  def admin?
+    Admin.emails.include?(email) || Admin.email_domains.include?(email_domain)
+  end
+
+  # protected
+  #
+  # # == Callback Handlers
+  # sig { void }
+  # def after_confirmation
+  #   super
+  #   send_welcome_email if confirmed_at_previously_was.nil?
+  # end
+
+  private
+
+  # == Helpers
+  sig { returns(String) }
+  def derived_handle
+    if email_domain == "gmail.com"
+      email_username
+    else
+      [email_username, email_domain].join("-")
+    end
+  end
+
+  sig do
+    type_parameters(:U)
+      .params(
+        block: T.proc.params(
+          calendar: Google::Calendar,
+        ).returns(T.type_parameter(:U)),
+      )
+      .returns(T.type_parameter(:U))
+  end
+  def with_google_calendar(&block)
+    calendar = google_calendar!
+    begin
+      yield calendar
+    rescue => error
+      raise "Google Calendar error: #{error}"
     end
   end
 

@@ -8,10 +8,13 @@ module Handled
 
   # == Annotations
   abstract!
-  requires_ancestor { ApplicationRecord }
+  requires_ancestor { ActiveRecord::Base }
+  requires_ancestor { RequiresColumns }
 
   included do
-    T.bind(self, T.all(T.class_of(ApplicationRecord), ClassMethods))
+    T.bind(self, T.all(T.class_of(ActiveRecord::Base),
+                       ClassMethods,
+                       RequiresColumns::ClassMethods))
 
     # == Configuration
     requires_columns :handle

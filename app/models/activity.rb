@@ -40,10 +40,9 @@ class Activity < ApplicationRecord
   URL_REGEXP = T.let(URI::DEFAULT_PARSER.regexp[:ABS_URI], Regexp)
   COODINATES_REGEXP = /^-?[0-9]+(\.[0-9]+)?, ?-?[0-9]+(\.[0-9]+)?$/
 
-  # == Handled: Attributes
+  # == Attributes
   attribute :handle, :string, default: -> { generate_handle }
 
-  # == Attributes
   # TODO: Change this to reflect a default from the user's account settings.
   attribute :capacity, :integer, default: 5
 
@@ -117,8 +116,6 @@ class Activity < ApplicationRecord
 
   # == Callbacks
   after_validation :geocode, if: %i[location_changed? location_is_address?]
-
-  # == Google Calendar: Callbacks
   after_commit :update_google_event, on: %i[create destroy]
 
   # == Scopes
@@ -154,7 +151,7 @@ class Activity < ApplicationRecord
     else
       ["", []]
     end
-    if event.status != "cancelled" && tags.include?("open")
+    if google_event_is_activity?(event, tags:)
       activity = _from_google_event(event, owner:, name:, tags:)
       activity.save!
       if activity.previously_new_record? && tags.exclude?("silent")
@@ -234,6 +231,33 @@ class Activity < ApplicationRecord
     _from_google_event(event, owner:, name:, tags:)
   end
 
+  # == Google Event: Helpers
+  sig do
+    params(event: Google::Event, tags: T::Array[String]).returns(T::Boolean)
+  end
+  private_class_method def self.google_event_is_activity?(event, tags:)
+    event.status != "cancelled" && tags.include?("open") &&
+      !event.is_recurring_event?
+  end
+
+  sig do
+    params(
+      event: Google::Event,
+      owner: User,
+      name: String,
+      tags: T::Array[String],
+    ).returns(Activity)
+  end
+  private_class_method def self._from_google_event(event, owner:, name:, tags:)
+    activity = find_or_initialize_by(owner:, google_event_id: event.id)
+    activity.name = name
+    activity.tags = tags.excluding("open", "silent")
+    activity.description = event.description
+    activity.during = event.start_time.to_time..event.end_time.to_time
+    activity.location = event.location
+    activity
+  end
+
   # == Methods
   sig do
     params(description: String, view_context: ActionView::Base)
@@ -263,25 +287,6 @@ class Activity < ApplicationRecord
 
   private
 
-  # == Google Event: Helpers
-  sig do
-    params(
-      event: Google::Event,
-      owner: User,
-      name: String,
-      tags: T::Array[String],
-    ).returns(Activity)
-  end
-  private_class_method def self._from_google_event(event, owner:, name:, tags:)
-    activity = find_or_initialize_by(owner:, google_event_id: event.id)
-    activity.name = name
-    activity.tags = tags.excluding("open", "silent")
-    activity.description = event.description
-    activity.during = event.start_time.to_time..event.end_time.to_time
-    activity.location = event.location
-    activity
-  end
-
   # == Helpers
   sig { params(include_open: T::Boolean).returns(T.nilable(String)) }
   def tags_for_google_event_title(include_open: true)
@@ -296,7 +301,7 @@ class Activity < ApplicationRecord
     [name, tags].compact_blank.join(" ")
   end
 
-  # == Google Calendar: Callback Handlers
+  # == Callback Handlers
   sig { void }
   def update_google_event
     event = google_event or return
