@@ -2,6 +2,9 @@
 # frozen_string_literal: true
 
 class ReservationPolicy < ApplicationPolicy
+  # == Aliases
+  alias_method :show?, :manage?
+
   # == Rules
   def index? = false
 
