@@ -1,0 +1,7 @@
+fragment ReservationCreateFormActivityFragment on Activity {
+  id
+  owner {
+    firstName
+    id
+  }
+}

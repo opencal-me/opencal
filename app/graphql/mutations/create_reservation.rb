@@ -17,6 +17,7 @@ module Mutations
     argument :activity_id, ID, loads: Types::ActivityType
     argument :email, String
     argument :name, String
+    argument :phone, String, required: false
 
     # == Resolver
     sig do

@@ -10,6 +10,7 @@ module Types
     field :end, DateTimeType, null: false, method: :end_time
     field :id, String, null: false
     field :is_organized_by_viewer, Boolean, null: false
+    field :is_recurring, Boolean, null: false
     field :location, String
     field :start, DateTimeType, null: false, method: :start_time
     field :title, String
@@ -42,6 +43,11 @@ module Types
         attendee["email"] == viewer.email
       end
       !!(viewer_attendee && viewer_attendee["organizer"])
+    end
+
+    sig { returns(T::Boolean) }
+    def is_recurring # rubocop:disable Naming/PredicateName
+      object.recurring_event_id.present?
     end
 
     # == Helpers

@@ -47,11 +47,13 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
     durationSeconds,
     activity,
     isOrganizedByViewer,
+    isRecurring,
   },
   onCreateActivity,
   sx,
   ...otherProps
 }) => {
+  const isEligibleForActivity = isOrganizedByViewer && !isRecurring;
   return (
     <Card
       withBorder
@@ -122,16 +124,23 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
         </Button>
       ) : (
         <Tooltip
-          label="You must be the event organizer to create an activity."
+          label="This event cannot be turned into an OpenCal activity."
+          {...(!isOrganizedByViewer && {
+            label: "You must be the event organizer to create an activity.",
+          })}
+          {...(isRecurring && {
+            label:
+              "Recurring events cannot be turned into an OpenCal activity.",
+          })}
           withArrow
-          disabled={isOrganizedByViewer}
+          disabled={isEligibleForActivity}
         >
           <Box display="inline-block">
             <ActivityCreateButton
               googleEventId={eventId}
               onCreate={onCreateActivity}
               variant="light"
-              disabled={!isOrganizedByViewer}
+              disabled={!isEligibleForActivity}
             />
           </Box>
         </Tooltip>

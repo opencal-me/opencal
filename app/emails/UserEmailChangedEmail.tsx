@@ -18,7 +18,11 @@ const UserEmailChangedEmail: PageComponent<UserEmailChangedEmailProps> = ({
       <Text>Hi, {firstName}!</Text>
       <Text>
         We&apos;re contacting you to let you know that your email has been
-        changed to <Link href={`mailto:${name}%20<${email}>`}>{email}</Link>.
+        changed to{" "}
+        <Link href={`mailto:${encodeURIComponent(name)}%20<${email}>`}>
+          {email}
+        </Link>
+        .
       </Text>
     </>
   );

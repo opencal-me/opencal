@@ -289,7 +289,6 @@ class User < ApplicationRecord
   def google_events!(query: nil)
     options = { query: query.presence }
     options.compact!
-    options[:max_results] = 10
     with_google_calendar do |calendar|
       calendar.find_future_events(options)
     end
@@ -327,6 +326,7 @@ class User < ApplicationRecord
   end
   private def sync_next_google_calendar_page(calendar:, &block)
     params = {
+      "singleEvents" => true,
       "syncToken" => google_calendar_next_sync_token,
       "pageToken" => google_calendar_next_page_token,
     }.compact

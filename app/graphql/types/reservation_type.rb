@@ -11,6 +11,7 @@ module Types
     field :created_at, DateTimeType, null: false
     field :email, String, null: false
     field :name, String, null: false
+    field :phone, String
     field :status, ReservationStatusType, null: false
 
     # == Resolvers

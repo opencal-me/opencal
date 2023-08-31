@@ -17,11 +17,7 @@ module Queries
     end
     def resolve(activity:)
       return unless activity
-      return unless allowed_to?(:show?, activity)
-      if Rails.env.development?
-        ::Activity.import_event!(activity.google_event!, owner: activity.owner!)
-      end
-      activity
+      activity if allowed_to?(:show?, activity)
     end
   end
 end

@@ -1,0 +1,17 @@
+query ReservationCreatedEmailQuery($reservationId: ID!) {
+  reservation(id: $reservationId) {
+    activity {
+      id
+      name
+      owner {
+        firstName
+        id
+      }
+      url
+    }
+    email
+    id
+    name
+    phone
+  }
+}

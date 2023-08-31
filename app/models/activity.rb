@@ -236,8 +236,9 @@ class Activity < ApplicationRecord
     params(event: Google::Event, tags: T::Array[String]).returns(T::Boolean)
   end
   private_class_method def self.google_event_is_activity?(event, tags:)
-    event.status != "cancelled" && tags.include?("open") &&
-      !event.is_recurring_event?
+    !!(event.status != "cancelled" &&
+        tags.include?("open") &&
+        event.recurring_event_id.nil?)
   end
 
   sig do

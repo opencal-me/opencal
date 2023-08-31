@@ -50,19 +50,37 @@ module Google
     extend T::Sig
 
     # == Attributes
+    sig { returns(T.nilable(String)) }
+    attr_accessor :recurring_event_id
+
     sig { returns(T.nilable(T::Array[T::Hash[String, T.untyped]])) }
     attr_accessor :attachments
 
-    # == Modifiers
-    public :is_recurring_event?
+    # == Initializer
+    sig { params(params: T::Hash[Symbol, T.untyped]).void }
+    def initialize(params = {})
+      %i[id status raw html_link title location calendar quickadd
+         attendees description reminders recurrence start_time end_time color_id
+         extended_properties guests_can_invite_others
+         guests_can_see_other_guests send_notifications
+         attachments recurring_event_id].each do |attribute|
+           instance_variable_set("@#{attribute}", params[attribute])
+         end
+
+      self.visibility   = params[:visibility]
+      self.transparency = params[:transparency]
+      self.all_day      = params[:all_day] if params[:all_day]
+      self.creator_name = params[:creator]["displayName"] if params[:creator]
+      self.new_event_with_id_specified = !!params[:new_event_with_id_specified]
+    end
 
     # == Builders
     sig { params(e: T.untyped, calendar: Calendar).returns(Event) }
     def self.new_from_feed(e, calendar)
       params = {}
-      %w(id status description location creator transparency updated reminders
-         attendees visibility attachments).each do |p|
-           params[p.to_sym] = e[p]
+      %w[id status description location creator transparency updated reminders
+         attendees visibility attachments recurringEventId].each do |p|
+           params[p.underscore.to_sym] = e[p]
          end
 
       params[:raw] = e

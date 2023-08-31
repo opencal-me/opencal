@@ -15,10 +15,12 @@ export type ReservationFooterProps = Omit<BoxProps, "children"> & {
 };
 
 const ReservationFooter: FC<ReservationFooterProps> = ({
-  activity: { id: activityId, openings, owner, url, storyImageUrl },
+  activity,
   sx,
   ...otherProps
 }) => {
+  const { /* openings, */ owner, url, storyImageUrl } = activity;
+
   // == Copy Story Image
   const { copy, copied } = useClipboard();
   useEffect(() => {
@@ -43,10 +45,23 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
       {...otherProps}
     >
       <Container size="xs" w="100%">
-        <Group position="apart">
-          <Text size="sm" color="gray.7">
+        <Group spacing="sm" position="apart" noWrap>
+          {/* <Text size="sm" color="gray.7">
             {openings} {openings === 1 ? "spot" : "spots"} remaining
-          </Text>
+          </Text> */}
+          <Box>
+            <Text
+              size="sm"
+              color="gray.7"
+              sx={({ fn }) => ({
+                [fn.smallerThan(420)]: {
+                  display: "none",
+                },
+              })}
+            >
+              Get involved with {owner.firstName}&apos;s life :)
+            </Text>
+          </Box>
           <Group spacing={8}>
             <Tooltip
               label="Copy the activity URL, and open promo image"
@@ -65,8 +80,12 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
               </ActionIcon>
             </Tooltip>
             <Button
-              color="dark"
+              variant="gradient"
+              gradient={{ from: "brand", to: "indigo" }}
               px="xl"
+              fz="md"
+              fw={800}
+              sx={{ boxShadow: "2px 2px 10px #00388b80" }}
               onClick={() => {
                 openModal({
                   title: (
@@ -82,7 +101,7 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
                       onReserve={() => {
                         closeAllModals();
                       }}
-                      {...{ activityId }}
+                      {...{ activity }}
                     />
                   ),
                 });

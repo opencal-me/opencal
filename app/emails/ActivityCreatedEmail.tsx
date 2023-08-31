@@ -28,8 +28,7 @@ const ActivityCreatedEmail: PageComponent<ActivityCreatedEmailProps> = ({
         >
           [open]
         </Box>{" "}
-        on your calendar:
-        <br />
+        on your calendar:{" "}
         <Link href={url} target="_blank">
           {name}
         </Link>

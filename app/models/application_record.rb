@@ -6,8 +6,8 @@ class ApplicationRecord < ActiveRecord::Base
   extend T::Helpers
   extend Enumerize
 
-  include RequiresColumns
-  include RemovesBlanks
+  include RequiresColumn
+  include RemovesBlank
   include Routing
   include Logging
 

@@ -8,6 +8,7 @@
 #  id          :uuid             not null, primary key
 #  email       :string           not null
 #  name        :string           not null
+#  phone       :string
 #  status      :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
@@ -41,6 +42,10 @@ class Reservation < ApplicationRecord
     activity!.google_event!
   end
 
+  # == Normalizations
+  removes_blank :phone
+  before_validation :normalize_phone
+
   # == Validations
   validates :name, presence: true, length: { maximum: 129 }
   validates :email,
@@ -51,9 +56,17 @@ class Reservation < ApplicationRecord
               scope: :activity,
               message: "already added",
             }
+  validates :phone, phone: { possible: true }, allow_nil: true
 
   # == Callbacks
   after_create_commit :update_google_event
+  after_create_commit :send_created_email
+
+  # == Emails
+  sig { void }
+  def send_created_email
+    ReservationMailer.created_email(self).deliver_later
+  end
 
   # == Methods
   sig { returns(T::Hash[String, T.untyped]) }
@@ -62,6 +75,15 @@ class Reservation < ApplicationRecord
   end
 
   private
+
+  # == Normalization Handlers
+  sig { void }
+  def normalize_phone
+    if (phone_str = phone)
+      phone = Phonelib.parse(phone_str)
+      self.phone = phone.international if phone.possible?
+    end
+  end
 
   # == Callback Handlers
   sig { void }

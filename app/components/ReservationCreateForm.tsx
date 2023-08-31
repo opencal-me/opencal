@@ -3,21 +3,23 @@ import type { BoxProps } from "@mantine/core";
 import JoinIcon from "~icons/heroicons/hand-raised-20-solid";
 
 import { CreateReservationMutationDocument } from "~/helpers/graphql";
+import type { ReservationCreateFormActivityFragment } from "~/helpers/graphql";
 
 export type ReservationCreateFormProps = Omit<BoxProps, "children"> & {
-  readonly activityId: string;
+  readonly activity: ReservationCreateFormActivityFragment;
   readonly onReserve: () => void;
 };
 
 type ReservationCreateFormValues = {
   readonly name: string;
   readonly email: string;
+  readonly phone: string;
 };
 
 export type ReservationCreateFormSubmission = ReservationCreateFormValues;
 
 export const ReservationCreateForm: FC<ReservationCreateFormProps> = ({
-  activityId,
+  activity: { id: activityId, owner },
   onReserve,
   ...otherProps
 }) => {
@@ -29,10 +31,12 @@ export const ReservationCreateForm: FC<ReservationCreateFormProps> = ({
     initialValues: {
       name: "",
       email: "",
+      phone: "",
     },
-    transformValues: ({ name, email }) => ({
+    transformValues: ({ name, email, phone }) => ({
       name: name.trim(),
       email: email.trim(),
+      phone: phone.trim(),
     }),
   });
 
@@ -76,8 +80,8 @@ export const ReservationCreateForm: FC<ReservationCreateFormProps> = ({
       })}
       {...otherProps}
     >
-      <Stack>
-        <Stack spacing="xs">
+      <Stack spacing="lg">
+        <Stack>
           <TextInput
             label="Name"
             placeholder="Scott Langille"
@@ -87,11 +91,23 @@ export const ReservationCreateForm: FC<ReservationCreateFormProps> = ({
           />
           <TextInput
             label="Email"
-            description="A calendar invitation will be sent to this email address."
+            description="We'll send you a calendar invite to this email address."
             placeholder="scott@example.com"
             required
             size="md"
             {...getInputProps("email")}
+          />
+          <TextInput
+            label="Phone Number"
+            description={
+              <>
+                In case something comes up, so {owner.firstName} can contact
+                you.
+              </>
+            }
+            placeholder="+1 (555) 555-5555"
+            size="md"
+            {...getInputProps("phone")}
           />
         </Stack>
         <Group position="right" spacing="xs">
