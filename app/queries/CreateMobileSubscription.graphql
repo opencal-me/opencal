@@ -1,0 +1,13 @@
+mutation CreateMobileSubscriptionMutation(
+  $input: CreateMobileSubscriptionInput!
+) {
+  payload: createMobileSubscription(input: $input) {
+    errors {
+      field
+      message
+    }
+    subscription {
+      id
+    }
+  }
+}

@@ -19,13 +19,6 @@ export type ActivityFieldPolicy = {
 	tags?: FieldPolicy<any> | FieldReadFunction<any>,
 	url?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type AddMobileSubscriberPayloadKeySpecifier = ('clientMutationId' | 'errors' | 'subscriber' | 'success' | AddMobileSubscriberPayloadKeySpecifier)[];
-export type AddMobileSubscriberPayloadFieldPolicy = {
-	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
-	errors?: FieldPolicy<any> | FieldReadFunction<any>,
-	subscriber?: FieldPolicy<any> | FieldReadFunction<any>,
-	success?: FieldPolicy<any> | FieldReadFunction<any>
-};
 export type CoordinatesKeySpecifier = ('latitude' | 'longitude' | CoordinatesKeySpecifier)[];
 export type CoordinatesFieldPolicy = {
 	latitude?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -36,6 +29,13 @@ export type CreateActivityPayloadFieldPolicy = {
 	activity?: FieldPolicy<any> | FieldReadFunction<any>,
 	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
 	errors?: FieldPolicy<any> | FieldReadFunction<any>,
+	success?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type CreateMobileSubscriptionPayloadKeySpecifier = ('clientMutationId' | 'errors' | 'subscription' | 'success' | CreateMobileSubscriptionPayloadKeySpecifier)[];
+export type CreateMobileSubscriptionPayloadFieldPolicy = {
+	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
+	errors?: FieldPolicy<any> | FieldReadFunction<any>,
+	subscription?: FieldPolicy<any> | FieldReadFunction<any>,
 	success?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type CreateReservationPayloadKeySpecifier = ('clientMutationId' | 'errors' | 'reservation' | 'success' | CreateReservationPayloadKeySpecifier)[];
@@ -74,10 +74,16 @@ export type MobileSubscriberFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	phone?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('addMobileSubscriber' | 'createActivity' | 'createReservation' | 'testMutation' | 'updateUser' | MutationKeySpecifier)[];
+export type MobileSubscriptionKeySpecifier = ('id' | 'subject' | 'subscriber' | MobileSubscriptionKeySpecifier)[];
+export type MobileSubscriptionFieldPolicy = {
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	subject?: FieldPolicy<any> | FieldReadFunction<any>,
+	subscriber?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type MutationKeySpecifier = ('createActivity' | 'createMobileSubscription' | 'createReservation' | 'testMutation' | 'updateUser' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
-	addMobileSubscriber?: FieldPolicy<any> | FieldReadFunction<any>,
 	createActivity?: FieldPolicy<any> | FieldReadFunction<any>,
+	createMobileSubscription?: FieldPolicy<any> | FieldReadFunction<any>,
 	createReservation?: FieldPolicy<any> | FieldReadFunction<any>,
 	testMutation?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateUser?: FieldPolicy<any> | FieldReadFunction<any>
@@ -159,10 +165,6 @@ export type StrictTypedTypePolicies = {
 		keyFields?: false | ActivityKeySpecifier | (() => undefined | ActivityKeySpecifier),
 		fields?: ActivityFieldPolicy,
 	},
-	AddMobileSubscriberPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
-		keyFields?: false | AddMobileSubscriberPayloadKeySpecifier | (() => undefined | AddMobileSubscriberPayloadKeySpecifier),
-		fields?: AddMobileSubscriberPayloadFieldPolicy,
-	},
 	Coordinates?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | CoordinatesKeySpecifier | (() => undefined | CoordinatesKeySpecifier),
 		fields?: CoordinatesFieldPolicy,
@@ -170,6 +172,10 @@ export type StrictTypedTypePolicies = {
 	CreateActivityPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | CreateActivityPayloadKeySpecifier | (() => undefined | CreateActivityPayloadKeySpecifier),
 		fields?: CreateActivityPayloadFieldPolicy,
+	},
+	CreateMobileSubscriptionPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | CreateMobileSubscriptionPayloadKeySpecifier | (() => undefined | CreateMobileSubscriptionPayloadKeySpecifier),
+		fields?: CreateMobileSubscriptionPayloadFieldPolicy,
 	},
 	CreateReservationPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | CreateReservationPayloadKeySpecifier | (() => undefined | CreateReservationPayloadKeySpecifier),
@@ -190,6 +196,10 @@ export type StrictTypedTypePolicies = {
 	MobileSubscriber?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | MobileSubscriberKeySpecifier | (() => undefined | MobileSubscriberKeySpecifier),
 		fields?: MobileSubscriberFieldPolicy,
+	},
+	MobileSubscription?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | MobileSubscriptionKeySpecifier | (() => undefined | MobileSubscriptionKeySpecifier),
+		fields?: MobileSubscriptionFieldPolicy,
 	},
 	Mutation?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | MutationKeySpecifier | (() => undefined | MutationKeySpecifier),

@@ -2,34 +2,36 @@ import type { FC } from "react";
 import type { BoxProps } from "@mantine/core";
 import SubscribeIcon from "~icons/heroicons/device-phone-mobile-20-solid";
 
-import { AddMobileSubscriberMutationDocument } from "~/helpers/graphql";
+import { CreateMobileSubscriptionMutationDocument } from "~/helpers/graphql";
 
-export type MobileSubscribeFormProps = Omit<BoxProps, "children"> & {
+export type MobileSubscriptionFormProps = Omit<BoxProps, "children"> & {
   readonly subjectId: string;
 };
 
-type MobileSubscribeFormValues = {
-  readonly phone: string;
+type MobileSubscriptionFormValues = {
+  readonly subscriberPhone: string;
 };
 
-const MobileSubscribeForm: FC<MobileSubscribeFormProps> = ({
+const MobileSubscriptionForm: FC<MobileSubscriptionFormProps> = ({
   subjectId,
   ...otherProps
 }) => {
   const { getInputProps, setErrors, onSubmit, reset } =
-    useForm<MobileSubscribeFormValues>({
+    useForm<MobileSubscriptionFormValues>({
       initialValues: {
-        phone: "",
+        subscriberPhone: "",
       },
     });
 
   // == Mutation
-  const onAddError = useApolloAlertCallback("Failed to subscribe to updates");
-  const [runAddMutation, { loading: adding }] = useMutation(
-    AddMobileSubscriberMutationDocument,
+  const onCreateError = useApolloAlertCallback(
+    "Failed to subscribe to updates",
+  );
+  const [runCreateMutation, { loading: adding }] = useMutation(
+    CreateMobileSubscriptionMutationDocument,
     {
-      onCompleted: ({ payload: { subscriber, errors } }) => {
-        if (subscriber) {
+      onCompleted: ({ payload: { subscription, errors } }) => {
+        if (subscription) {
           reset();
           showNotice({
             title: "You've subscribed to updates!",
@@ -42,19 +44,19 @@ const MobileSubscribeForm: FC<MobileSubscribeFormProps> = ({
           showFormErrorsAlert(formErrors, "Couldn't subscribe to updates");
         }
       },
-      onError: onAddError,
+      onError: onCreateError,
     },
   );
 
   return (
     <Box
       component="form"
-      onSubmit={onSubmit(values => {
-        runAddMutation({
+      onSubmit={onSubmit(({ subscriberPhone }) => {
+        runCreateMutation({
           variables: {
             input: {
               subjectId,
-              ...values,
+              subscriberPhone,
             },
           },
         });
@@ -74,7 +76,7 @@ const MobileSubscribeForm: FC<MobileSubscribeFormProps> = ({
               border: `${rem(1)} solid ${colors.gray[3]}`,
             },
           })}
-          {...getInputProps("phone")}
+          {...getInputProps("subscriberPhone")}
         />
         <Button type="submit" leftIcon={<SubscribeIcon />} loading={adding}>
           Subscribe
@@ -84,4 +86,4 @@ const MobileSubscribeForm: FC<MobileSubscribeFormProps> = ({
   );
 };
 
-export default MobileSubscribeForm;
+export default MobileSubscriptionForm;

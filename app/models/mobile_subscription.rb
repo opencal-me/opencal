@@ -33,7 +33,21 @@ class MobileSubscription < ApplicationRecord
              inverse_of: :subscriptions
   belongs_to :subject, class_name: "User"
 
+  sig { returns(MobileSubscriber) }
+  def subscriber!
+    subscriber or raise ActiveRecord::RecordNotFound, "Subscriber not found"
+  end
+
+  sig { returns(User) }
+  def subject!
+    subject or raise ActiveRecord::RecordNotFound, "Subject not found"
+  end
+
   # == Validations
   validates :subscriber,
             uniqueness: { scope: :subject, message: "already subscribed" }
+
+  # == Emails
+  def send_created_email_later
+  end
 end

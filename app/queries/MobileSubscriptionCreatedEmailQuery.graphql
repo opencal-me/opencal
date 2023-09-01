@@ -1,0 +1,7 @@
+query MobileSubscriptionCreatedEmailQuery($subjectId: ID!) {
+  subject: user(id: $subjectId) {
+    id
+    name
+    url
+  }
+}

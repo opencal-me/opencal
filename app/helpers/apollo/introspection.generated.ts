@@ -10,6 +10,7 @@
       "Activity",
       "Image",
       "MobileSubscriber",
+      "MobileSubscription",
       "Reservation",
       "User"
     ]

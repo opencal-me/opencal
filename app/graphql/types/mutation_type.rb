@@ -13,8 +13,9 @@ module Types
     # field :update_user_email, mutation: Mutations::UpdateUserEmail
     field :update_user, mutation: Mutations::UpdateUser
 
-    field :add_mobile_subscriber, mutation: Mutations::AddMobileSubscriber
     field :create_activity, mutation: Mutations::CreateActivity
+    field :create_mobile_subscription,
+          mutation: Mutations::CreateMobileSubscription
     field :create_reservation, mutation: Mutations::CreateReservation
   end
 end

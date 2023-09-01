@@ -5,7 +5,7 @@ import type { UserPageQuery } from "~/helpers/graphql";
 
 import ActivityCard from "~/components/ActivityCard";
 import UserBio from "~/components/UserBio";
-import MobileSubscribeForm from "~/components/MobileSubscribeForm";
+import UserMobileSubscribeForm from "~/components/MobileSubscriptionForm";
 
 export type UserPageProps = PagePropsWithData<UserPageQuery>;
 
@@ -61,7 +61,7 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
             <Text size="sm" color="gray.7">
               Get notified when {firstName} is up to something!
             </Text>
-            <MobileSubscribeForm subjectId={userId} />
+            <UserMobileSubscribeForm subjectId={userId} />
           </Stack>
         </>
       )}
