@@ -140,20 +140,26 @@ class Activity < ApplicationRecord
   end
 
   # == Notifications
+  sig { params(subscription: MobileSubscription).returns(String) }
+  def mobile_subscriber_notification_message(subscription:)
+    subject = subscription.subject!
+    "New activity from #{subject.first_name}: #{name} (#{activity_url(self)})"
+  end
+
   sig { void }
   def send_mobile_subscriber_notifications
     owner = owner!
-    owner.mobile_subscribers.find_each do |subscriber|
-      message =
-        "new activity from #{owner.first_name}: #{name} (#{activity_url(self)})"
-      message.downcase!
-      Telnyx.send_message(message, to: subscriber.phone)
-    end
+    owner.mobile_subscriptions.includes(:subscription, :subscriber)
+      .find_each do |subscription|
+        subscriber = subscription.subscriber!
+        message = mobile_subscriber_notification_message(subscription:)
+        Telnyx.send_message(message, to: subscriber.phone)
+      end
   end
 
   sig { void }
   def send_mobile_subscriber_notifications_later
-    NotifyActivityMobileSubscribersJob.perform_later(self)
+    SendActivityMobileSubscriberNotificationsJob.perform_later(self)
   end
 
   # == Importing
