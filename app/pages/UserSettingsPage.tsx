@@ -49,6 +49,10 @@ UserSettingsPage.layout = buildLayout<UserSettingsPageProps>(
   (page, { data: { viewer } }) => (
     <AppLayout
       title="Settings"
+      breadcrumbs={[
+        { title: "Home", href: "/" },
+        { title: "Settings", href: "/user/settings" },
+      ]}
       withContainer
       withGutter
       containerSize={440}
