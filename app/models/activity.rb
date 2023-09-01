@@ -197,7 +197,7 @@ class Activity < ApplicationRecord
 
   sig { params(user: User).void }
   def self.import_for_user_later(user)
-    ImportActivitiesForUserJob.perform_later(user)
+    ImportActivitiesForUserJob.set(wait: 10.seconds).perform_later(user)
   end
 
   sig { params(max_users: Integer).void }
