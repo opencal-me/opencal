@@ -31,9 +31,6 @@ module Types
           authorize_field: { to: :manage? }
     field :url, String, null: false
 
-    # == Authorization Fields
-    expose_authorization_rules :edit?
-
     # == Resolvers
     sig do
       params(

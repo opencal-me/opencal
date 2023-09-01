@@ -248,7 +248,6 @@ type User implements Node {
   activities(showHidden: Boolean, showRecentlyEnded: Boolean): [Activity!]!
   avatarUrl: String
   bio: String
-  canEdit: Boolean!
   email: String!
   firstName: String!
   googleEvents(query: String): [GoogleEvent!]!

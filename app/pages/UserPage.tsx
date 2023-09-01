@@ -18,7 +18,7 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
     initials,
     bio,
     activities,
-    canEdit,
+    isViewer,
   } = user;
 
   return (
@@ -44,7 +44,7 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
           </Text>
         </Box>
       </Stack>
-      {(bio || canEdit) && <UserBio editable={canEdit} {...{ user }} />}
+      {(bio || isViewer) && <UserBio editable={isViewer} {...{ user }} />}
       <Stack spacing="xs">
         {!isEmpty(activities) ? (
           activities.map(activity => (
@@ -54,7 +54,7 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
           <EmptyCard itemLabel="activities" />
         )}
       </Stack>
-      {!canEdit && (
+      {!isViewer && (
         <>
           <Divider />
           <Stack spacing={4}>
