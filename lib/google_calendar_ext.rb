@@ -1,16 +1,9 @@
-# typed: strict
+# typed: true
 # frozen_string_literal: true
 
 module Google
   class Calendar
     extend T::Sig
-
-    # == Initializer
-    sig { params(params: T.untyped, connection: T.untyped).void }
-    def initialize(params = T.unsafe(nil), connection = T.unsafe(nil))
-      super
-      @connection = T.let(@connection, Connection)
-    end
 
     # == Methods
     sig { params(event: Event).returns(T.untyped) }

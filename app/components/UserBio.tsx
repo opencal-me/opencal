@@ -39,10 +39,6 @@ const UserBio: FC<UserBioProps> = ({
     setEditing(!bio);
   }, [bio]);
 
-  useEffect(() => {
-    console.log({ bio });
-  }, [bio]);
-
   // == Form
   const formRef = useRef<HTMLFormElement>(null);
   const initialValues = useMemo<{ bio: string }>(
@@ -111,6 +107,7 @@ const UserBio: FC<UserBioProps> = ({
           color="gray.7"
           lh={1.3}
           sx={{
+            textTransform: "none",
             whiteSpace: "pre-wrap",
           }}
         >
