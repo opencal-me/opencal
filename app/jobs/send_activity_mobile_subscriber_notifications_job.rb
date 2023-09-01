@@ -1,11 +1,11 @@
 # typed: strict
 # frozen_string_literal: true
 
-class NotifyActivityMobileSubscribersJob < ApplicationJob
+class SendActivityMobileSubscriberNotificationsJob < ApplicationJob
   # == Configuration
   good_job_control_concurrency_with(
     key: -> {
-      T.bind(self, NotifyActivityMobileSubscribersJob)
+      T.bind(self, SendActivityMobileSubscriberNotificationsJob)
       activity = T.let(arguments.first!, Activity)
       "#{self.class.name}(#{activity.to_gid})"
     },
@@ -15,6 +15,6 @@ class NotifyActivityMobileSubscribersJob < ApplicationJob
   # == Job
   sig { params(activity: Activity).void }
   def perform(activity)
-    activity.notify_mobile_subscribers
+    activity.send_mobile_subscriber_notifications
   end
 end

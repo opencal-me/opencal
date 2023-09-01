@@ -36,6 +36,8 @@
     "humanize-duration": "^3.29.0",
     "is-url": "^1.2.4",
     "js-cookie": "^3.0.5",
+    "linkify-react": "^4.1.1",
+    "linkifyjs": "^4.1.1",
     "lodash-es": "^4.17.21",
     "luxon": "^3.3.0",
     "mapbox-gl": "^2.15.0",

@@ -1,6 +1,8 @@
-import type { FC } from "react";
+import type { ComponentType, FC } from "react";
 import { Text } from "@mantine/core";
-import type { BoxProps } from "@mantine/core";
+import type { BoxProps, TextProps } from "@mantine/core";
+
+import Linkify from "linkify-react";
 
 import {
   UserBioQueryDocument,
@@ -104,46 +106,65 @@ const UserBio: FC<UserBioProps> = ({
           {...getInputProps("bio")}
         />
       ) : (
-        <Text
+        <Linkify<TextProps, ComponentType<TextProps>>
+          as={Text}
+          options={{
+            render: ({ attributes, content }) => (
+              <Anchor
+                {...attributes}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+              >
+                {content}
+              </Anchor>
+            ),
+          }}
           size="sm"
           color="gray.7"
           lh={1.3}
           sx={{ textTransform: "none", whiteSpace: "pre-wrap" }}
         >
           {bio}
-        </Text>
+        </Linkify>
       )}
       {editable && (
-        <Group spacing={8} fz="sm">
-          {editing && (
+        <Group align="start" position="apart" spacing={8} fz="sm">
+          <Group spacing={8} fz="sm">
+            {editing && (
+              <Anchor
+                component="button"
+                color="gray.6"
+                inherit
+                onClick={() => {
+                  setEditing(false);
+                  reset();
+                }}
+              >
+                Cancel
+              </Anchor>
+            )}
             <Anchor
               component="button"
-              color="gray.6"
               inherit
-              onClick={() => {
-                setEditing(false);
-                reset();
-              }}
+              disabled={updating}
+              {...(editing
+                ? {
+                    type: "submit",
+                  }
+                : {
+                    onClick: () => {
+                      setEditing(true);
+                    },
+                  })}
             >
-              Cancel
+              {editing ? (updating ? "Saving..." : "Save") : "Edit"}
             </Anchor>
+          </Group>
+          {editing && (
+            <Text size="xs" color="dimmed">
+              Try adding a link, it works!
+            </Text>
           )}
-          <Anchor
-            component="button"
-            inherit
-            disabled={updating}
-            {...(editing
-              ? {
-                  type: "submit",
-                }
-              : {
-                  onClick: () => {
-                    setEditing(true);
-                  },
-                })}
-          >
-            {editing ? (updating ? "Saving..." : "Save") : "Edit"}
-          </Anchor>
         </Group>
       )}
       <LoadingOverlay visible={loading} />

@@ -141,7 +141,7 @@ class Activity < ApplicationRecord
 
   # == Notifications
   sig { void }
-  def notify_mobile_subscribers
+  def send_mobile_subscriber_notifications
     owner = owner!
     owner.mobile_subscribers.find_each do |subscriber|
       message =
@@ -152,7 +152,7 @@ class Activity < ApplicationRecord
   end
 
   sig { void }
-  def notify_mobile_subscribers_later
+  def send_mobile_subscriber_notifications_later
     NotifyActivityMobileSubscribersJob.perform_later(self)
   end
 
@@ -175,7 +175,7 @@ class Activity < ApplicationRecord
       activity.save!
       if activity.previously_new_record? && title.tags.exclude?("silent")
         activity.send_created_email_later
-        activity.notify_mobile_subscribers_later
+        activity.send_mobile_subscriber_notifications_later
       end
     elsif (activity = find_by(google_event_id: event.id, owner:))
       activity.destroy!
