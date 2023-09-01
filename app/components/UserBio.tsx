@@ -15,12 +15,12 @@ export type UserBioProps = Omit<BoxProps, "children"> & {
 };
 
 const UserBio: FC<UserBioProps> = ({
-  user,
+  user: initialUser,
   editable,
   onUpdate,
   ...otherProps
 }) => {
-  const { id: userId } = user;
+  const { id: userId } = initialUser;
 
   // == Query
   const { coalescedData, loading } = usePreloadedQuery(UserBioQueryDocument, {
@@ -28,10 +28,11 @@ const UserBio: FC<UserBioProps> = ({
       userId,
     },
     initialData: {
-      user,
+      user: initialUser,
     },
   });
-  const { bio } = coalescedData?.user ?? {};
+  const { user } = coalescedData ?? {};
+  const { bio } = user ?? {};
 
   // == Editing
   const [editing, setEditing] = useState(!bio);
@@ -41,11 +42,11 @@ const UserBio: FC<UserBioProps> = ({
 
   // == Form
   const formRef = useRef<HTMLFormElement>(null);
-  const initialValues = useMemo<{ bio: string }>(
-    () => ({ bio: bio ?? "" }),
-    [bio],
-  );
-  const { getInputProps, onSubmit, setValues, setErrors } = useForm({
+  const initialValues = useMemo<{ bio: string }>(() => {
+    const { bio } = user ?? {};
+    return { bio: bio ?? "" };
+  }, [user]);
+  const { getInputProps, onSubmit, setValues, setErrors, reset } = useForm({
     initialValues,
   });
   useDidUpdate(() => {
@@ -99,6 +100,7 @@ const UserBio: FC<UserBioProps> = ({
           autosize
           minRows={2}
           maxRows={8}
+          mb={4}
           {...getInputProps("bio")}
         />
       ) : (
@@ -106,33 +108,43 @@ const UserBio: FC<UserBioProps> = ({
           size="sm"
           color="gray.7"
           lh={1.3}
-          sx={{
-            textTransform: "none",
-            whiteSpace: "pre-wrap",
-          }}
+          sx={{ textTransform: "none", whiteSpace: "pre-wrap" }}
         >
           {bio}
         </Text>
       )}
       {editable && (
-        <Anchor
-          component="button"
-          size="sm"
-          variant="outline"
-          lh={1.3}
-          disabled={updating}
-          {...(editing
-            ? {
-                type: "submit",
-              }
-            : {
-                onClick: () => {
-                  setEditing(true);
-                },
-              })}
-        >
-          {editing ? (updating ? "Saving..." : "Save") : "Edit"}
-        </Anchor>
+        <Group spacing={8} fz="sm" lh={1.3}>
+          {editing && (
+            <Anchor
+              component="button"
+              color="gray.6"
+              inherit
+              onClick={() => {
+                setEditing(false);
+                reset();
+              }}
+            >
+              Cancel
+            </Anchor>
+          )}
+          <Anchor
+            component="button"
+            inherit
+            disabled={updating}
+            {...(editing
+              ? {
+                  type: "submit",
+                }
+              : {
+                  onClick: () => {
+                    setEditing(true);
+                  },
+                })}
+          >
+            {editing ? (updating ? "Saving..." : "Save") : "Edit"}
+          </Anchor>
+        </Group>
       )}
       <LoadingOverlay visible={loading} />
     </Box>
