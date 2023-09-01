@@ -1,5 +1,5 @@
 # rubocop:disable Layout/LineLength
-# typed: true
+# typed: strict
 # frozen_string_literal: true
 
 require "./app/models/google"
