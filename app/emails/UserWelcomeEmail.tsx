@@ -25,7 +25,7 @@ const UserWelcomeEmail: PageComponent<UserWelcomeEmailProps> = ({
 };
 
 UserWelcomeEmail.layout = buildLayout<UserWelcomeEmailProps>(page => (
-  <EmailLayout header="Welcome to OpenCal!">{page}</EmailLayout>
+  <EmailLayout header="Welcome">{page}</EmailLayout>
 ));
 
 export default UserWelcomeEmail;

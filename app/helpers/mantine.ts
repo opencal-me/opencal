@@ -13,6 +13,9 @@ declare module "@mantine/core" {
   export interface MantineThemeColorsOverride {
     colors: Record<DefaultMantineColor | CustomColor, Tuple<string, 10>>;
   }
+  export interface MantineThemeOther {
+    emailTextStyle?: CSSObject;
+  }
 }
 
 export const APP_THEME: MantineThemeOverride = {
@@ -147,6 +150,7 @@ export const EMAIL_THEME: MantineThemeOverride = {
       margin: 8,
       fontSize: 14,
       backgroundColor: white,
+      textTransform: "lowercase",
     },
   }),
 };
