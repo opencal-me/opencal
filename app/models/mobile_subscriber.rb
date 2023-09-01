@@ -6,7 +6,7 @@
 # Table name: mobile_subscribers
 #
 #  id         :uuid             not null, primary key
-#  phone      :string
+#  phone      :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

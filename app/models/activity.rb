@@ -135,8 +135,25 @@ class Activity < ApplicationRecord
 
   # == Emails
   sig { void }
-  def send_created_email
+  def send_created_email_later
     ActivityMailer.created_email(self).deliver_later
+  end
+
+  # == Notifications
+  sig { void }
+  def notify_mobile_subscribers
+    owner = owner!
+    owner.mobile_subscribers.find_each do |subscriber|
+      message =
+        "new activity from #{owner.first_name}: #{name} (#{activity_url(self)})"
+      message.downcase!
+      Telnyx.send_message(message, to: subscriber.phone)
+    end
+  end
+
+  sig { void }
+  def notify_mobile_subscribers_later
+    NotifyActivityMobileSubscribersJob.perform_later(self)
   end
 
   # == Importing
@@ -157,7 +174,8 @@ class Activity < ApplicationRecord
       activity = _from_google_event(event, owner:, title:)
       activity.save!
       if activity.previously_new_record? && title.tags.exclude?("silent")
-        activity.send_created_email
+        activity.send_created_email_later
+        activity.notify_mobile_subscribers_later
       end
     elsif (activity = find_by(google_event_id: event.id, owner:))
       activity.destroy!

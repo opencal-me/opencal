@@ -60,11 +60,11 @@ class Reservation < ApplicationRecord
 
   # == Callbacks
   after_create_commit :update_google_event
-  after_create_commit :send_created_email
+  after_create_commit :send_created_email_later
 
   # == Emails
   sig { void }
-  def send_created_email
+  def send_created_email_later
     ReservationMailer.created_email(self).deliver_later
   end
 

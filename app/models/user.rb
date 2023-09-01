@@ -163,7 +163,7 @@ class User < ApplicationRecord
             allow_nil: true
 
   # == Callbacks
-  after_create_commit :send_welcome_email
+  after_create_commit :send_welcome_email_later
   after_create_commit :register_google_calendar_channel,
                       if: :google_calendar_ready?
 
@@ -190,7 +190,7 @@ class User < ApplicationRecord
 
   # == Emails
   sig { void }
-  def send_welcome_email
+  def send_welcome_email_later
     UserMailer.welcome_email(self).deliver_later
   end
 
