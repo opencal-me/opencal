@@ -34,7 +34,7 @@ const MobileSubscriptionForm: FC<MobileSubscriptionFormProps> = ({
         if (subscription) {
           reset();
           showNotice({
-            title: "You've subscribed to updates!",
+            title: "You're subscribed to updates!",
             message: "You'll receive texts when new activities are added.",
           });
         } else {

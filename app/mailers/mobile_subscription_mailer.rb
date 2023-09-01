@@ -10,7 +10,7 @@ class MobileSubscriptionMailer < ApplicationMailer
       inertia: "MobileSubscriptionCreatedEmail",
       props: {
         "data" => data,
-        "subscriberPhone" => subscription.subscriber!.phone
+        "subscriberPhone" => subscription.subscriber!.phone,
       },
       to: notifications_email,
       subject: "Mobile subscriber added",
