@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_01_002528) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_01_074953) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -169,6 +169,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_002528) do
     t.index ["token"], name: "index_google_calendar_channels_on_token", unique: true
   end
 
+  create_table "mobile_subscribers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["phone"], name: "index_mobile_subscribers_on_phone", unique: true
+  end
+
+  create_table "mobile_subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "subscriber_id", null: false
+    t.uuid "subject_id", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.index ["subject_id"], name: "index_mobile_subscriptions_on_subject_id"
+    t.index ["subscriber_id", "subject_id"], name: "index_mobile_subscriptions_uniqueness", unique: true
+    t.index ["subscriber_id"], name: "index_mobile_subscriptions_on_subscriber_id"
+  end
+
   create_table "reservations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "activity_id", null: false
     t.string "name", null: false
@@ -188,6 +204,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_002528) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["subject_id"], name: "index_subscriptions_on_subject_id"
+    t.index ["subscriber_id", "subject_id"], name: "index_subscriptions_uniqueness", unique: true
     t.index ["subscriber_id"], name: "index_subscriptions_on_subscriber_id"
   end
 
@@ -225,6 +242,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_002528) do
   add_foreign_key "activities", "users", column: "owner_id"
   add_foreign_key "addresses", "activities"
   add_foreign_key "google_calendar_channels", "users", column: "owner_id"
+  add_foreign_key "mobile_subscriptions", "mobile_subscribers", column: "subscriber_id"
+  add_foreign_key "mobile_subscriptions", "users", column: "subject_id"
   add_foreign_key "reservations", "activities"
   add_foreign_key "subscriptions", "users", column: "subject_id"
   add_foreign_key "subscriptions", "users", column: "subscriber_id"

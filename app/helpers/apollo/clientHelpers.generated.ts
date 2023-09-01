@@ -19,6 +19,13 @@ export type ActivityFieldPolicy = {
 	tags?: FieldPolicy<any> | FieldReadFunction<any>,
 	url?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type AddMobileSubscriberPayloadKeySpecifier = ('clientMutationId' | 'errors' | 'subscriber' | 'success' | AddMobileSubscriberPayloadKeySpecifier)[];
+export type AddMobileSubscriberPayloadFieldPolicy = {
+	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
+	errors?: FieldPolicy<any> | FieldReadFunction<any>,
+	subscriber?: FieldPolicy<any> | FieldReadFunction<any>,
+	success?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type CoordinatesKeySpecifier = ('latitude' | 'longitude' | CoordinatesKeySpecifier)[];
 export type CoordinatesFieldPolicy = {
 	latitude?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -36,12 +43,6 @@ export type CreateReservationPayloadFieldPolicy = {
 	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
 	errors?: FieldPolicy<any> | FieldReadFunction<any>,
 	reservation?: FieldPolicy<any> | FieldReadFunction<any>,
-	success?: FieldPolicy<any> | FieldReadFunction<any>
-};
-export type CreateSubscriptionPayloadKeySpecifier = ('clientMutationId' | 'subject' | 'success' | CreateSubscriptionPayloadKeySpecifier)[];
-export type CreateSubscriptionPayloadFieldPolicy = {
-	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
-	subject?: FieldPolicy<any> | FieldReadFunction<any>,
 	success?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type GoogleEventKeySpecifier = ('activity' | 'descriptionHtml' | 'durationSeconds' | 'end' | 'id' | 'isOrganizedByViewer' | 'isRecurring' | 'location' | 'start' | 'title' | GoogleEventKeySpecifier)[];
@@ -68,11 +69,16 @@ export type InputFieldErrorFieldPolicy = {
 	field?: FieldPolicy<any> | FieldReadFunction<any>,
 	message?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('createActivity' | 'createReservation' | 'createSubscription' | 'testMutation' | 'updateUser' | MutationKeySpecifier)[];
+export type MobileSubscriberKeySpecifier = ('id' | 'phone' | MobileSubscriberKeySpecifier)[];
+export type MobileSubscriberFieldPolicy = {
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	phone?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type MutationKeySpecifier = ('addMobileSubscriber' | 'createActivity' | 'createReservation' | 'testMutation' | 'updateUser' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
+	addMobileSubscriber?: FieldPolicy<any> | FieldReadFunction<any>,
 	createActivity?: FieldPolicy<any> | FieldReadFunction<any>,
 	createReservation?: FieldPolicy<any> | FieldReadFunction<any>,
-	createSubscription?: FieldPolicy<any> | FieldReadFunction<any>,
 	testMutation?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateUser?: FieldPolicy<any> | FieldReadFunction<any>
 };
@@ -153,6 +159,10 @@ export type StrictTypedTypePolicies = {
 		keyFields?: false | ActivityKeySpecifier | (() => undefined | ActivityKeySpecifier),
 		fields?: ActivityFieldPolicy,
 	},
+	AddMobileSubscriberPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | AddMobileSubscriberPayloadKeySpecifier | (() => undefined | AddMobileSubscriberPayloadKeySpecifier),
+		fields?: AddMobileSubscriberPayloadFieldPolicy,
+	},
 	Coordinates?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | CoordinatesKeySpecifier | (() => undefined | CoordinatesKeySpecifier),
 		fields?: CoordinatesFieldPolicy,
@@ -165,10 +175,6 @@ export type StrictTypedTypePolicies = {
 		keyFields?: false | CreateReservationPayloadKeySpecifier | (() => undefined | CreateReservationPayloadKeySpecifier),
 		fields?: CreateReservationPayloadFieldPolicy,
 	},
-	CreateSubscriptionPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
-		keyFields?: false | CreateSubscriptionPayloadKeySpecifier | (() => undefined | CreateSubscriptionPayloadKeySpecifier),
-		fields?: CreateSubscriptionPayloadFieldPolicy,
-	},
 	GoogleEvent?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | GoogleEventKeySpecifier | (() => undefined | GoogleEventKeySpecifier),
 		fields?: GoogleEventFieldPolicy,
@@ -180,6 +186,10 @@ export type StrictTypedTypePolicies = {
 	InputFieldError?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | InputFieldErrorKeySpecifier | (() => undefined | InputFieldErrorKeySpecifier),
 		fields?: InputFieldErrorFieldPolicy,
+	},
+	MobileSubscriber?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | MobileSubscriberKeySpecifier | (() => undefined | MobileSubscriberKeySpecifier),
+		fields?: MobileSubscriberFieldPolicy,
 	},
 	Mutation?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | MutationKeySpecifier | (() => undefined | MutationKeySpecifier),

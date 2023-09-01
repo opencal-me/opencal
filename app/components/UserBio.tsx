@@ -42,7 +42,7 @@ const UserBio: FC<UserBioProps> = ({
 
   // == Form
   const formRef = useRef<HTMLFormElement>(null);
-  const initialValues = useMemo<{ bio: string }>(() => {
+  const initialValues = useMemo<{ readonly bio: string }>(() => {
     const { bio } = user ?? {};
     return { bio: bio ?? "" };
   }, [user]);
@@ -114,7 +114,7 @@ const UserBio: FC<UserBioProps> = ({
         </Text>
       )}
       {editable && (
-        <Group spacing={8} fz="sm" lh={1.3}>
+        <Group spacing={8} fz="sm">
           {editing && (
             <Anchor
               component="button"

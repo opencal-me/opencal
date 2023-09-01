@@ -122,7 +122,17 @@ class User < ApplicationRecord
            inverse_of: :subscriber,
            foreign_key: :subscriber_id,
            dependent: :destroy
-  has_many :subscribes_to, through: :subscriptions_as_subscriber, source: :subject
+  has_many :subscribes_to,
+           through: :subscriptions_as_subscriber,
+           source: :subject
+
+  has_many :mobile_subscriptions,
+           inverse_of: :subject,
+           foreign_key: :subject_id,
+           dependent: :destroy
+  has_many :mobile_subscribers,
+           through: :mobile_subscriptions,
+           source: :subscriber
 
   sig { returns(Subscription::PrivateAssociationRelation) }
   def subscriptions

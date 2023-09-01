@@ -248,6 +248,34 @@ class User
     def google_calendar_channels=(value); end
 
     sig { returns(T::Array[T.untyped]) }
+    def mobile_subscriber_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def mobile_subscriber_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :mobile_subscribers, through: :mobile_subscriptions`.
+    # 🔗 [Rails guide for `has_many_through` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-through-association)
+    sig { returns(::MobileSubscriber::PrivateCollectionProxy) }
+    def mobile_subscribers; end
+
+    sig { params(value: T::Enumerable[::MobileSubscriber]).void }
+    def mobile_subscribers=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def mobile_subscription_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def mobile_subscription_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :mobile_subscriptions`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::MobileSubscription::PrivateCollectionProxy) }
+    def mobile_subscriptions; end
+
+    sig { params(value: T::Enumerable[::MobileSubscription]).void }
+    def mobile_subscriptions=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
     def subscriber_ids; end
 
     sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }

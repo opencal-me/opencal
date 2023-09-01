@@ -5,12 +5,21 @@ import type { UserPageQuery } from "~/helpers/graphql";
 
 import ActivityCard from "~/components/ActivityCard";
 import UserBio from "~/components/UserBio";
+import MobileSubscribeForm from "~/components/MobileSubscribeForm";
 
 export type UserPageProps = PagePropsWithData<UserPageQuery>;
 
 const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
   invariant(user, "Missing user");
-  const { firstName, avatarUrl, initials, bio, activities, canEdit } = user;
+  const {
+    id: userId,
+    firstName,
+    avatarUrl,
+    initials,
+    bio,
+    activities,
+    canEdit,
+  } = user;
 
   return (
     <Stack spacing="xl">
@@ -45,6 +54,17 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
           <EmptyCard itemLabel="activities" />
         )}
       </Stack>
+      {!canEdit && (
+        <>
+          <Divider />
+          <Stack spacing={4}>
+            <Text size="sm" color="gray.7">
+              Get notified when {firstName} is up to something!
+            </Text>
+            <MobileSubscribeForm subjectId={userId} />
+          </Stack>
+        </>
+      )}
     </Stack>
   );
 };

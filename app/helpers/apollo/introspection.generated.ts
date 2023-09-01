@@ -9,6 +9,7 @@
     "Node": [
       "Activity",
       "Image",
+      "MobileSubscriber",
       "Reservation",
       "User"
     ]

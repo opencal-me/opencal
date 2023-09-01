@@ -79,9 +79,8 @@ class Reservation < ApplicationRecord
   # == Normalization Handlers
   sig { void }
   def normalize_phone
-    if (phone_str = phone)
-      phone = Phonelib.parse(phone_str)
-      self.phone = phone.international if phone.possible?
+    if (phone = self.phone)
+      self.phone = Phonelib.parse(phone).to_s
     end
   end
 

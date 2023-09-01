@@ -16,6 +16,7 @@
 #
 #  index_subscriptions_on_subject_id     (subject_id)
 #  index_subscriptions_on_subscriber_id  (subscriber_id)
+#  index_subscriptions_uniqueness        (subscriber_id,subject_id) UNIQUE
 #
 # Foreign Keys
 #
@@ -29,4 +30,8 @@ class Subscription < ApplicationRecord
   # == Associations
   belongs_to :subscriber, class_name: "User"
   belongs_to :subject, class_name: "User"
+
+  # == Validations
+  validates :subscriber,
+            uniqueness: { scope: :subject, message: "already subscribed" }
 end
