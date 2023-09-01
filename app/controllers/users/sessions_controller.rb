@@ -24,25 +24,19 @@ module Users
       self.resource = warden.authenticate!(auth_options)
       sign_in(resource_name, resource)
       set_flash_message!(:notice, :signed_in)
-      inertia_location(after_sign_in_path_for(resource))
+      redirect_to(after_sign_in_path_for(resource))
     end
+
+    # == Helpers
+    # sig { override.params(resource_or_scope: T.untyped).returns(String) }
+    # def after_sign_out_path_for(resource_or_scope)
+    #   stored_location_for(resource_or_scope) || super
+    # end
 
     protected
 
     # == Helpers
     sig { override.returns(T.nilable(User)) }
     def resource = super
-
-    private
-
-    # == Helpers
-    def respond_to_on_destroy
-      respond_to do |format|
-        format.all { head(:no_content) }
-        format.any(*navigational_formats) do
-          inertia_location(after_sign_out_path_for(resource_name))
-        end
-      end
-    end
   end
 end
