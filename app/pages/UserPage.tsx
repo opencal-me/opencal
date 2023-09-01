@@ -10,15 +10,7 @@ export type UserPageProps = PagePropsWithData<UserPageQuery>;
 
 const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
   invariant(user, "Missing user");
-  const {
-    id: userId,
-    firstName,
-    avatarUrl,
-    initials,
-    bio,
-    activities,
-    canEdit,
-  } = user;
+  const { firstName, avatarUrl, initials, bio, activities, canEdit } = user;
 
   return (
     <Stack spacing="xl">
@@ -43,11 +35,7 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
           </Text>
         </Box>
       </Stack>
-      {(bio || canEdit) && (
-        <UserBio editable={canEdit} {...{ userId }}>
-          {bio}
-        </UserBio>
-      )}
+      {(bio || canEdit) && <UserBio editable={canEdit} {...{ user }} />}
       <Stack spacing="xs">
         {!isEmpty(activities) ? (
           activities.map(activity => (

@@ -6,39 +6,30 @@ import {
   UserBioQueryDocument,
   UpdateUserBioMutationDocument,
 } from "~/helpers/graphql";
-import type { Maybe } from "~/helpers/graphql";
-import type { UserBioQuery } from "~/helpers/graphql";
+import type { UserBioUserFragment } from "~/helpers/graphql";
 
 export type UserBioProps = Omit<BoxProps, "children"> & {
-  readonly userId: string;
-  readonly children: Maybe<string> | undefined;
+  readonly user: UserBioUserFragment;
   readonly editable?: boolean;
   readonly onUpdate?: () => void;
 };
 
 const UserBio: FC<UserBioProps> = ({
-  userId,
-  children: initialBio,
+  user,
   editable,
   onUpdate,
   ...otherProps
 }) => {
+  const { id: userId } = user;
+
   // == Query
-  const initialData = useMemo<UserBioQuery>(
-    () => ({
-      user: {
-        __typename: "User",
-        id: userId,
-        bio: initialBio,
-      },
-    }),
-    [userId, initialBio],
-  );
   const { coalescedData, loading } = usePreloadedQuery(UserBioQueryDocument, {
     variables: {
       userId,
     },
-    initialData,
+    initialData: {
+      user,
+    },
   });
   const { bio } = coalescedData?.user ?? {};
 
