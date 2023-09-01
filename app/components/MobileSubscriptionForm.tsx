@@ -1,6 +1,5 @@
 import type { FC } from "react";
 import type { BoxProps } from "@mantine/core";
-import SubscribeIcon from "~icons/heroicons/device-phone-mobile-20-solid";
 
 import { CreateMobileSubscriptionMutationDocument } from "~/helpers/graphql";
 
@@ -78,7 +77,7 @@ const MobileSubscriptionForm: FC<MobileSubscriptionFormProps> = ({
           })}
           {...getInputProps("subscriberPhone")}
         />
-        <Button type="submit" leftIcon={<SubscribeIcon />} loading={adding}>
+        <Button type="submit" leftIcon={<PhoneIcon />} loading={adding}>
           Subscribe
         </Button>
       </Group>

@@ -9,6 +9,12 @@ module Types
     # == Fields
     field :phone, String, null: false
 
+    # == Resolvers
+    sig { returns(String) }
+    def phone
+      Phonelib.parse(object.phone).international
+    end
+
     # == Helpers
     sig { override.returns(MobileSubscriber) }
     def object = super

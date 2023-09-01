@@ -8,6 +8,13 @@ query HomePageQuery {
     }
     ...AppViewerFragment
     id
+    mobileSubscriptions {
+      id
+      subscriber {
+        id
+        phone
+      }
+    }
     ...UserBioUserFragment
   }
 }

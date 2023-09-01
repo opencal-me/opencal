@@ -313,7 +313,6 @@ export type User = Node & {
   activities: Array<Activity>;
   avatarUrl?: Maybe<Scalars['String']['output']>;
   bio?: Maybe<Scalars['String']['output']>;
-  canEdit: Scalars['Boolean']['output'];
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
   googleEvents: Array<GoogleEvent>;
@@ -323,9 +322,8 @@ export type User = Node & {
   isAdmin: Scalars['Boolean']['output'];
   isViewer: Scalars['Boolean']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
+  mobileSubscriptions: Array<MobileSubscription>;
   name: Scalars['String']['output'];
-  subscribers: Array<User>;
-  subscribersPendingApproval: Array<User>;
   url: Scalars['String']['output'];
 };
 

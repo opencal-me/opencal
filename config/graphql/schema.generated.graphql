@@ -258,8 +258,7 @@ type User implements Node {
   isAdmin: Boolean!
   isViewer: Boolean!
   lastName: String
+  mobileSubscriptions: [MobileSubscription!]!
   name: String!
-  subscribers: [User!]!
-  subscribersPendingApproval: [User!]!
   url: String!
 }

@@ -22,13 +22,14 @@ module Types
     field :is_admin, Boolean, null: false, method: :admin?
     field :is_viewer, Boolean, null: false
     field :last_name, String
+    field :mobile_subscriptions, [MobileSubscriptionType], null: false
     field :name, String, null: false
-    field :subscribers, [UserType],
-          null: false,
-          authorize_field: { to: :manage? }
-    field :subscribers_pending_approval, [UserType],
-          null: false,
-          authorize_field: { to: :manage? }
+    # field :subscribers, [UserType],
+    #       null: false,
+    #       authorize_field: { to: :manage? }
+    # field :subscribers_pending_approval, [UserType],
+    #       null: false,
+    #       authorize_field: { to: :manage? }
     field :url, String, null: false
 
     # == Resolvers
@@ -58,17 +59,17 @@ module Types
       object == current_user
     end
 
-    sig { returns(T::Enumerable[User]) }
-    def subscribers
-      object.subscribers.references(:subscriptions)
-        .where(subscriptions: { status: :approved })
-    end
+    # sig { returns(T::Enumerable[User]) }
+    # def subscribers
+    #   object.subscribers.references(:subscriptions)
+    #     .where(subscriptions: { status: :approved })
+    # end
 
-    sig { returns(T::Enumerable[User]) }
-    def subscribers_pending_approval
-      object.subscribers.references(:subscriptions)
-        .where(subscriptions: { status: :requested })
-    end
+    # sig { returns(T::Enumerable[User]) }
+    # def subscribers_pending_approval
+    #   object.subscribers.references(:subscriptions)
+    #     .where(subscriptions: { status: :requested })
+    # end
 
     sig { returns(String) }
     def url

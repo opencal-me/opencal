@@ -39,6 +39,7 @@ declare global {
   const Menu: typeof import('@mantine/core')['Menu']
   const OpenExternalIcon: typeof import('~/components/icons')['OpenExternalIcon']
   const PageHeader: typeof import('~/components')['PageHeader']
+  const PhoneIcon: typeof import('~/components/icons')['PhoneIcon']
   const SaveIcon: typeof import('~/components/icons')['SaveIcon']
   const SearchIcon: typeof import('~/components/icons')['SearchIcon']
   const SettingsIcon: typeof import('~/components/icons')['SettingsIcon']

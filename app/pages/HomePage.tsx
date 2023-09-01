@@ -1,16 +1,16 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
+import { Text } from "@mantine/core";
 
 import type { HomePageQuery } from "~/helpers/graphql";
 
 import HomePageGoogleEvents from "~/components/HomePageGoogleEvents";
 import ActivityCard from "~/components/ActivityCard";
-import { Text } from "@mantine/core";
 
 export type HomePageProps = PagePropsWithData<HomePageQuery>;
 
 const HomePage: PageComponent<HomePageProps> = ({ data: { viewer } }) => {
   invariant(viewer, "Missing viewer");
-  const { activities, url } = viewer;
+  const { activities, url, mobileSubscriptions } = viewer;
   const urlLabel = useMemo(() => {
     const u = new URL(url);
     return `${u.host}${u.pathname}`;
@@ -72,6 +72,46 @@ const HomePage: PageComponent<HomePageProps> = ({ data: { viewer } }) => {
           router.visit(url);
         }}
       />
+      {!isEmpty(mobileSubscriptions) && (
+        <Stack spacing={8}>
+          <Box>
+            <Title order={2} size="h3">
+              Your Subscribers
+            </Title>
+            <Text size="sm" color="dimmed">
+              People that get notified when you create a new activity.
+            </Text>
+          </Box>
+          <Group>
+            {mobileSubscriptions.map(({ id, subscriber }) => (
+              <Anchor
+                key={id}
+                href={`sms:${encodeURIComponent(subscriber.phone)}`}
+              >
+                <Badge
+                  variant="outline"
+                  leftSection={
+                    <Center>
+                      <PhoneIcon />
+                    </Center>
+                  }
+                  color="gray"
+                  size="lg"
+                  radius="md"
+                  px={8}
+                  sx={{
+                    "&:hover": {
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  {subscriber.phone}
+                </Badge>
+              </Anchor>
+            ))}
+          </Group>
+        </Stack>
+      )}
     </Stack>
   );
 };
