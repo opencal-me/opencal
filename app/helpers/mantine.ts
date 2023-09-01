@@ -40,6 +40,9 @@ export const APP_THEME: MantineThemeOverride = {
         title: {
           textTransform: "lowercase",
         },
+        message: {
+          textTransform: "lowercase",
+        },
       },
     },
     Badge: {
