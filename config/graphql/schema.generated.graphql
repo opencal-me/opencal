@@ -172,6 +172,7 @@ type Query {
   bootedAt: DateTime!
   contactEmail: String!
   imageBySignedId(signedId: String!): Image
+  mobileSubscription(id: ID!): MobileSubscription
   passwordStrength(password: String!): Float!
   reservation(id: ID!): Reservation
   testEcho(text: String): String!

@@ -18,6 +18,7 @@ module Types
     field :password_strength, resolver: Queries::PasswordStrength
 
     field :activity, resolver: Queries::Activity
+    field :mobile_subscription, resolver: Queries::MobileSubscription
     field :reservation, resolver: Queries::Reservation
     field :user, resolver: Queries::User
     field :viewer, resolver: Queries::Viewer

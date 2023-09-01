@@ -114,6 +114,7 @@ class ActivitiesController < ApplicationController
     end
   end
 
+  sig { void }
   def import_activity
     activity = T.must(@activity)
     activity.import!

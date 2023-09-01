@@ -4,16 +4,18 @@
 class MobileSubscriptionMailer < ApplicationMailer
   sig { params(subscription: MobileSubscription).returns(Mail::Message) }
   def created_email(subscription)
-    subject_id = subscription.subject!.to_gid.to_s
-    data = query!("MobileSubscribtionCreatedEmail", { subject_id: })
+    subscription_id = subscription.to_gid.to_s
+    subject = subscription.subject!
+    data = query!("MobileSubscriptionCreatedEmailQuery", { subscription_id: })
     mail(
       inertia: "MobileSubscriptionCreatedEmail",
       props: {
         "data" => data,
-        "subscriberPhone" => subscription.subscriber!.phone,
+        "homeUrl" => home_url,
       },
-      to: notifications_email,
-      subject: "Mobile subscriber added",
+      to: subject.email_with_name,
+      bcc: notifications_email,
+      subject: "Someone subscribed to your activities",
     )
   end
 end

@@ -15,7 +15,7 @@ const ActivityCreatedEmail: PageComponent<ActivityCreatedEmailProps> = ({
   const { name, owner, url } = activity;
   return (
     <>
-      <Text>Hi, {owner.firstName}!</Text>
+      <Text>Hey {owner.firstName}!</Text>
       <Text style={{ lineHeight: "20px" }}>
         You&apos;ve created an activity by marking an event as{" "}
         <Box

@@ -7,26 +7,31 @@ import type { MobileSubscriptionCreatedEmailQuery } from "~/helpers/graphql";
 
 export type MobileSubscriptionCreatedEmailProps =
   PagePropsWithData<MobileSubscriptionCreatedEmailQuery> & {
-    readonly subscriberPhone: string;
+    readonly homeUrl: string;
   };
 
 const MobileSubscriptionCreatedEmail: PageComponent<
   MobileSubscriptionCreatedEmailProps
-> = ({ data: { subject }, subscriberPhone }) => {
-  invariant(subject, "Missing subject");
+> = ({ data: { subscription }, homeUrl }) => {
+  invariant(subscription, "Missing subscription");
+  const { subject, subscriber } = subscription;
+
   return (
     <>
-      <Text>Hi OpenCal Team!</Text>
+      <Text>Hey {subject.firstName}!</Text>
       <Text style={{ lineHeight: "20px" }}>
-        {subscriberPhone} has subscribed to activities from{" "}
-        <Link href={subject.url} target="_blank">
-          {subject.name}
-        </Link>
+        <Link href={`sms:${encodeURIComponent(subscriber.phone)}`}>
+          {subscriber.phone}
+        </Link>{" "}
+        has subscribed to your OpenCal activities.
       </Text>
-      <Text>Just wanted to keep you guys in the know :)</Text>
+      <Text>
+        You can manage your subscribers in the &apos;Your Subscribers&apos;
+        section on OpenCal.
+      </Text>
       <Box
         component={Button}
-        href={subject.url}
+        href={homeUrl}
         target="_blank"
         pX={20}
         pY={10}
@@ -37,7 +42,7 @@ const MobileSubscriptionCreatedEmail: PageComponent<
           borderRadius: radius.sm,
         })}
       >
-        Open {subject.name}&apos;s Profile
+        Open OpenCal
       </Box>
     </>
   );
@@ -45,7 +50,7 @@ const MobileSubscriptionCreatedEmail: PageComponent<
 
 MobileSubscriptionCreatedEmail.layout =
   buildLayout<MobileSubscriptionCreatedEmailProps>(page => (
-    <EmailLayout header="MobileSubscriber Added">{page}</EmailLayout>
+    <EmailLayout header="New Subscription">{page}</EmailLayout>
   ));
 
 export default MobileSubscriptionCreatedEmail;

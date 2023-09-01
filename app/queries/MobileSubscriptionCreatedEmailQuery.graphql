@@ -1,7 +1,13 @@
-query MobileSubscriptionCreatedEmailQuery($subjectId: ID!) {
-  subject: user(id: $subjectId) {
+query MobileSubscriptionCreatedEmailQuery($subscriptionId: ID!) {
+  subscription: mobileSubscription(id: $subscriptionId) {
     id
-    name
-    url
+    subject {
+      firstName
+      id
+    }
+    subscriber {
+      id
+      phone
+    }
   }
 }

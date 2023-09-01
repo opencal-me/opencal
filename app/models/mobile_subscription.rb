@@ -47,7 +47,12 @@ class MobileSubscription < ApplicationRecord
   validates :subscriber,
             uniqueness: { scope: :subject, message: "already subscribed" }
 
+  # == Callbacks
+  after_create_commit :send_created_email_later
+
   # == Emails
+  sig { void }
   def send_created_email_later
+    MobileSubscriptionMailer.created_email(self).deliver_later
   end
 end

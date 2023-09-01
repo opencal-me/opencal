@@ -92,7 +92,7 @@ export type NodeKeySpecifier = ('id' | NodeKeySpecifier)[];
 export type NodeFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('activity' | 'activityStatus' | 'announcement' | 'bootedAt' | 'contactEmail' | 'imageBySignedId' | 'passwordStrength' | 'reservation' | 'testEcho' | 'user' | 'viewer' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('activity' | 'activityStatus' | 'announcement' | 'bootedAt' | 'contactEmail' | 'imageBySignedId' | 'mobileSubscription' | 'passwordStrength' | 'reservation' | 'testEcho' | 'user' | 'viewer' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	activity?: FieldPolicy<any> | FieldReadFunction<any>,
 	activityStatus?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -100,6 +100,7 @@ export type QueryFieldPolicy = {
 	bootedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	contactEmail?: FieldPolicy<any> | FieldReadFunction<any>,
 	imageBySignedId?: FieldPolicy<any> | FieldReadFunction<any>,
+	mobileSubscription?: FieldPolicy<any> | FieldReadFunction<any>,
 	passwordStrength?: FieldPolicy<any> | FieldReadFunction<any>,
 	reservation?: FieldPolicy<any> | FieldReadFunction<any>,
 	testEcho?: FieldPolicy<any> | FieldReadFunction<any>,

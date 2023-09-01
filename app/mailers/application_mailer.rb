@@ -5,6 +5,7 @@ class ApplicationMailer < ActionMailer::Base
   extend T::Sig
   extend T::Helpers
   include GraphQL::Querying
+  include Routing
 
   # == Configuration
   default from: :default_sender, reply_to: ENV["RAILS_MAILER_REPLY_TO"]

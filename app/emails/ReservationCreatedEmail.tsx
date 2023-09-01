@@ -16,7 +16,7 @@ const ReservationCreatedEmail: PageComponent<ReservationCreatedEmailProps> = ({
   const { owner } = activity;
   return (
     <>
-      <Text>Hi, {owner.firstName}!</Text>
+      <Text>Hey {owner.firstName}!</Text>
       <Text style={{ lineHeight: "20px" }}>
         {reservation.name} (
         <Link

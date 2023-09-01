@@ -204,6 +204,7 @@ export type Query = {
   bootedAt: Scalars['DateTime']['output'];
   contactEmail: Scalars['String']['output'];
   imageBySignedId?: Maybe<Image>;
+  mobileSubscription?: Maybe<MobileSubscription>;
   passwordStrength: Scalars['Float']['output'];
   reservation?: Maybe<Reservation>;
   testEcho: Scalars['String']['output'];
@@ -219,6 +220,11 @@ export type QueryActivityArgs = {
 
 export type QueryImageBySignedIdArgs = {
   signedId: Scalars['String']['input'];
+};
+
+
+export type QueryMobileSubscriptionArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
