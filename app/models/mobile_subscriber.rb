@@ -44,7 +44,8 @@ class MobileSubscriber < ApplicationRecord
   sig { returns(String) }
   def welcome_notification_message
     "Hey, this is OpenCal. Save this #, we'll text you when your friends are " \
-      "doing something and would like you to join them."
+      "doing something and would like you to join them.\n\nReply STOP to " \
+      "unsubscribe."
   end
 
   sig { void }

@@ -49,7 +49,7 @@ module Telnyx
           },
           body: {
             type: "SMS",
-            text: message.downcase,
+            text: message,
             from: number!,
             to: Phonelib.parse(to).to_s,
           }.to_json,
