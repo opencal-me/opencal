@@ -475,10 +475,10 @@ class Activity
   end
 
   module GeneratedAttributeMethods
-    sig { returns(::Integer) }
+    sig { returns(T.nilable(::Integer)) }
     def capacity; end
 
-    sig { params(value: ::Integer).returns(::Integer) }
+    sig { params(value: T.nilable(::Integer)).returns(T.nilable(::Integer)) }
     def capacity=(value); end
 
     sig { returns(T::Boolean) }
@@ -493,10 +493,10 @@ class Activity
     sig { returns(T::Boolean) }
     def capacity_came_from_user?; end
 
-    sig { returns(T.nilable([::Integer, ::Integer])) }
+    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
     def capacity_change; end
 
-    sig { returns(T.nilable([::Integer, ::Integer])) }
+    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
     def capacity_change_to_be_saved; end
 
     sig { returns(T::Boolean) }
@@ -505,7 +505,7 @@ class Activity
     sig { returns(T.nilable(::Integer)) }
     def capacity_in_database; end
 
-    sig { returns(T.nilable([::Integer, ::Integer])) }
+    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
     def capacity_previous_change; end
 
     sig { returns(T::Boolean) }
@@ -1009,7 +1009,7 @@ class Activity
     sig { void }
     def restore_updated_at!; end
 
-    sig { returns(T.nilable([::Integer, ::Integer])) }
+    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
     def saved_change_to_capacity; end
 
     sig { returns(T::Boolean) }

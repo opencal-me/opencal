@@ -6,7 +6,7 @@
 # Table name: activities
 #
 #  id              :uuid             not null, primary key
-#  capacity        :integer          not null
+#  capacity        :integer
 #  coordinates     :geography        point, 4326
 #  description     :string
 #  during          :tstzrange        not null
@@ -43,9 +43,6 @@ class Activity < ApplicationRecord
   # == Attributes
   attribute :handle, :string, default: -> { generate_handle }
 
-  # TODO: Change this to reflect a default from the user's account settings.
-  attribute :capacity, :integer, default: 5
-
   sig { returns(Time) }
   def start = during.begin
 
@@ -55,6 +52,11 @@ class Activity < ApplicationRecord
   sig { returns(Integer) }
   def duration_seconds
     (self.end - start).to_i
+  end
+
+  sig { returns(Integer) }
+  def capacity_or_default
+    capacity || 5
   end
 
   sig { returns(T::Boolean) }
@@ -146,15 +148,15 @@ class Activity < ApplicationRecord
       end
       return unless owner_attendee && owner_attendee["organizer"]
     end
-    name, tags = if (title = event.title)
-      parse_google_event_title(title)
+    title = if (title = event.title)
+      GoogleEventTitle.parse(title)
     else
-      ["", []]
+      GoogleEventTitle.blank
     end
-    if google_event_is_activity?(event, tags:)
-      activity = _from_google_event(event, owner:, name:, tags:)
+    if google_event_is_activity?(event, title:)
+      activity = _from_google_event(event, owner:, title:)
       activity.save!
-      if activity.previously_new_record? && tags.exclude?("silent")
+      if activity.previously_new_record? && title.tags.exclude?("silent")
         activity.send_created_email
       end
     elsif (activity = find_by(google_event_id: event.id, owner:))
@@ -187,6 +189,14 @@ class Activity < ApplicationRecord
     ImportActivitiesJob.perform_later(max_users:)
   end
 
+  sig { void }
+  def import!
+    event = google_event!
+    title = GoogleEventTitle.parse(event.title)
+    _set_attributes_from_google_event(event, title:)
+    save!
+  end
+
   # == Google Event
   sig { returns(T::Boolean) }
   def google_event? = google_event_id?
@@ -201,61 +211,38 @@ class Activity < ApplicationRecord
     owner!.google_event!(google_event_id)
   end
 
-  sig { params(title: String).returns([String, T::Array[String]]) }
-  def self.parse_google_event_title(title)
-    scanner = StringScanner.new(title)
-    name_parts, tags = [], []
-    until scanner.eos?
-      name_bit = scanner.scan_until(/\[/)
-      if name_bit
-        name_parts << name_bit[0..-2]
-      else
-        name_parts << scanner.rest
-        break
-      end
-      tags_bit = scanner.scan_until(/\]/)
-      if tags_bit
-        tags.concat(tags_bit[0..-2].strip.split(" "))
-      else
-        name_parts << "[" + scanner.rest
-        break
-      end
-    end
-    name = name_parts.filter_map { |part| part.strip.presence }.join(" ")
-    [name, tags.uniq]
-  end
-
   sig { params(event: Google::Event, owner: User).returns(Activity) }
   def self.from_google_event(event, owner:)
-    name, tags = parse_google_event_title(event.title)
-    _from_google_event(event, owner:, name:, tags:)
+    title = GoogleEventTitle.parse(event.title)
+    _from_google_event(event, owner:, title:)
   end
 
   # == Google Event: Helpers
   sig do
-    params(event: Google::Event, tags: T::Array[String]).returns(T::Boolean)
+    params(event: Google::Event, title: GoogleEventTitle).void
   end
-  private_class_method def self.google_event_is_activity?(event, tags:)
+  def _set_attributes_from_google_event(event, title:)
+    self.name = title.name
+    self.tags = title.tags
+    self.description = event.description
+    self.during = event.start_time.to_time..event.end_time.to_time
+    self.location = event.location
+    self.capacity = title.capacity
+  end
+
+  private_class_method def self.google_event_is_activity?(event, title:)
     !!(event.status != "cancelled" &&
-        tags.include?("open") &&
+        title.open? &&
         event.recurring_event_id.nil?)
   end
 
   sig do
-    params(
-      event: Google::Event,
-      owner: User,
-      name: String,
-      tags: T::Array[String],
-    ).returns(Activity)
+    params(event: Google::Event, owner: User, title: GoogleEventTitle)
+      .returns(Activity)
   end
-  private_class_method def self._from_google_event(event, owner:, name:, tags:)
+  private_class_method def self._from_google_event(event, owner:, title:)
     activity = find_or_initialize_by(owner:, google_event_id: event.id)
-    activity.name = name
-    activity.tags = tags.excluding("open", "silent")
-    activity.description = event.description
-    activity.during = event.start_time.to_time..event.end_time.to_time
-    activity.location = event.location
+    activity._set_attributes_from_google_event(event, title:)
     activity
   end
 
@@ -277,7 +264,7 @@ class Activity < ApplicationRecord
 
   sig { returns(Integer) }
   def openings
-    capacity - reservations.count
+    capacity_or_default - reservations.count
   end
 
   sig { params(view_context: ActionView::Base).returns(T.nilable(String)) }
@@ -289,33 +276,40 @@ class Activity < ApplicationRecord
   private
 
   # == Helpers
-  sig { params(include_open: T::Boolean).returns(T.nilable(String)) }
-  def tags_for_google_event_title(include_open: true)
-    tags = self.tags.dup
-    tags.prepend("open") if include_open
-    "[#{tags.join(" ")}]" if tags.present?
-  end
-
   sig { params(include_open_tag: T::Boolean).returns(String) }
   def google_event_title(include_open_tag: true)
-    tags = tags_for_google_event_title(include_open: include_open_tag)
+    tags = self.tags.dup
+    tags.prepend("open") if include_open_tag
+    tags.append("/#{capacity}") if capacity.present?
+    tags = "[#{tags.join(" ")}]" if tags.present?
     [name, tags].compact_blank.join(" ")
+  end
+
+  sig { returns(T::Boolean) }
+  def google_event_attributes_previously_changed?
+    name_previously_changed? ||
+      tags_previously_changed? ||
+      capacity_previously_changed?
   end
 
   # == Callback Handlers
   sig { void }
   def update_google_event
     event = google_event or return
-    if previously_new_record?
+    if persisted? && google_event_attributes_previously_changed?
       event.title = google_event_title
       event.attachments = scoped do
         attachments = event.attachments || []
-        attachments << {
-          "title" => "OpenCal",
-          "fileUrl" => activity_url(self),
-          "mimeType" => "text/html",
-          "iconLink" => root_url + "logo.png",
-        }
+        opencal_attachments, other_attachments =
+          attachments.partition do |attachment|
+            attachment["title"] == "OpenCal"
+          end
+        opencal_attachment = opencal_attachments.first
+        opencal_attachment ||= { "title" => "OpenCal" }
+        opencal_attachment["fileUrl"] = activity_url(self)
+        opencal_attachment["mimeType"] = "text/html"
+        opencal_attachment["iconLink"] = root_url + "logo.png"
+        [opencal_attachment, *other_attachments]
       end
       event.save
     elsif destroyed?

@@ -4,6 +4,7 @@
 class ActivitiesController < ApplicationController
   # == Filters
   before_action :set_activity
+  before_action :import_activity if Rails.env.development?
 
   # == Actions
   def show
@@ -111,5 +112,10 @@ class ActivitiesController < ApplicationController
       id = params[:id].split("--").last
       Activity.friendly.find(id)
     end
+  end
+
+  def import_activity
+    activity = T.must(@activity)
+    activity.import!
   end
 end

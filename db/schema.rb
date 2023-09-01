@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_31_233309) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_31_233857) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -54,7 +54,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_31_233309) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "handle", null: false
-    t.integer "capacity", null: false
+    t.integer "capacity"
     t.string "name", default: "", null: false
     t.string "tags", default: [], null: false, array: true
     t.index ["coordinates"], name: "index_activities_on_coordinates", using: :gist
