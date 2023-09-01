@@ -43,14 +43,16 @@ class MobileSubscriber < ApplicationRecord
   # == Notifications
   sig { returns(String) }
   def welcome_notification_message
-    "Hey, this is OpenCal. Save this #, we'll text you when your friends are " \
-      "doing something and would like you to join them.\n\nReply STOP to " \
-      "unsubscribe."
+    message =
+      "Hey, this is OpenCal. Save this #, we'll text you when your friends " \
+        "are up to stuff."
+    disclaimer = "Reply HELP for help, STOP to cancel."
+    [message, disclaimer].join("\n\n")
   end
 
   sig { void }
   def send_welcome_notification
-    send_message(welcome_notification_message)
+    send_message(welcome_notification_message, lowercase: false)
   end
 
   sig { void }
@@ -59,8 +61,9 @@ class MobileSubscriber < ApplicationRecord
   end
 
   # == Methods
-  sig { params(message: String).void }
-  def send_message(message)
+  sig { params(message: String, lowercase: T::Boolean).void }
+  def send_message(message, lowercase: true)
+    message = message.downcase if lowercase
     Telnyx.send_message(message, to: phone)
   end
 
