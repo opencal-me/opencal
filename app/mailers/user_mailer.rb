@@ -10,6 +10,7 @@ class UserMailer < ApplicationMailer
       inertia: "UserWelcomeEmail",
       props: { data: },
       to: user.email_with_name,
+      bcc: notifications_email,
       subject: "Welcome to OpenCal!!",
     )
   end

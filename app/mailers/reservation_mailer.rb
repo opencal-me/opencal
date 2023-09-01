@@ -11,6 +11,7 @@ class ReservationMailer < ApplicationMailer
       inertia: "ReservationCreatedEmail",
       props: { data: },
       to: activity.owner!.email_with_name,
+      bcc: notifications_email,
       subject: "#{reservation.name} would like to come to #{activity.name}",
     )
   end

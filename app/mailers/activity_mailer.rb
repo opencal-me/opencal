@@ -10,6 +10,7 @@ class ActivityMailer < ApplicationMailer
       inertia: "ActivityCreatedEmail",
       props: { data: },
       to: activity.owner!.email_with_name,
+      bcc: notifications_email,
       subject: "Activity created from calendar",
     )
   end
