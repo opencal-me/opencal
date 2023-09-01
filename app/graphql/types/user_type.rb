@@ -12,6 +12,7 @@ module Types
       argument :show_recently_ended, Boolean, required: false
     end
     field :avatar_url, String
+    field :bio, String
     field :email, String, null: false
     field :first_name, String, null: false
     field :google_events, [GoogleEventType], null: false do
@@ -29,6 +30,9 @@ module Types
           null: false,
           authorize_field: { to: :manage? }
     field :url, String, null: false
+
+    # == Authorization Fields
+    expose_authorization_rules :edit?
 
     # == Resolvers
     sig do

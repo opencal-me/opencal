@@ -9,6 +9,7 @@
 #
 #  id                              :uuid             not null, primary key
 #  avatar_url                      :string
+#  bio                             :text
 #  current_sign_in_at              :datetime
 #  current_sign_in_ip              :string
 #  email                           :string           not null

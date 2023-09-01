@@ -1,0 +1,6 @@
+query UserBioQuery($userId: ID!) {
+  user(id: $userId) {
+    bio
+    id
+  }
+}

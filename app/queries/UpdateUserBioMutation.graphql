@@ -1,10 +1,11 @@
-mutation UpdateUserMutation($input: UpdateUserInput!) {
+mutation UpdateUserBioMutation($input: UpdateUserInput!) {
   payload: updateUser(input: $input) {
     errors {
       field
       message
     }
     user {
+      bio
       id
     }
   }

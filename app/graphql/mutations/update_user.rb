@@ -14,12 +14,13 @@ module Mutations
     field :user, Types::UserType
 
     # == Arguments
-    # argument :display_name, String
+    argument :bio, String, required: false
+    argument :user_id, ID, loads: Types::UserType
 
     # == Resolver
-    sig { override.params(attributes: T.untyped).returns(Payload) }
-    def resolve(**attributes)
-      user = current_user!
+    sig { override.params(user: User, attributes: T.untyped).returns(Payload) }
+    def resolve(user:, **attributes)
+      authorize!(user, to: :update?)
       if user.update_without_password(**attributes)
         Payload.new(user:)
       else

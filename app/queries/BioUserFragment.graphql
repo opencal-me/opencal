@@ -1,0 +1,4 @@
+fragment BioUserFragment on User {
+  bio
+  id
+}

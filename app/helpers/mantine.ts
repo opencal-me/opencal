@@ -112,6 +112,15 @@ export const APP_THEME: MantineThemeOverride = {
         },
       },
     },
+    Textarea: {
+      styles: {
+        input: {
+          "&::placeholder": {
+            textTransform: "lowercase",
+          },
+        },
+      },
+    },
     ThemeIcon: {
       defaultProps: {
         variant: "default",

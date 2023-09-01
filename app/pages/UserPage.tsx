@@ -1,15 +1,24 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
+import { Avatar, Text } from "@mantine/core";
 
 import type { UserPageQuery } from "~/helpers/graphql";
 
 import ActivityCard from "~/components/ActivityCard";
-import { Avatar, Text } from "@mantine/core";
+import UserBio from "~/components/UserBio";
 
 export type UserPageProps = PagePropsWithData<UserPageQuery>;
 
 const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
   invariant(user, "Missing user");
-  const { firstName, avatarUrl, initials, activities } = user;
+  const {
+    id: userId,
+    firstName,
+    avatarUrl,
+    initials,
+    bio,
+    activities,
+    canEdit,
+  } = user;
 
   return (
     <Stack spacing="xl">
@@ -34,6 +43,11 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
           </Text>
         </Box>
       </Stack>
+      {(bio || canEdit) && (
+        <UserBio editable={canEdit} {...{ userId }}>
+          {bio}
+        </UserBio>
+      )}
       <Stack spacing="xs">
         {!isEmpty(activities) ? (
           activities.map(activity => (

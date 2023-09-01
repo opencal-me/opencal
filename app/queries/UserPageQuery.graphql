@@ -7,6 +7,8 @@ query UserPageQuery($userId: ID!) {
       url
     }
     avatarUrl
+    bio
+    canEdit
     firstName
     id
     initials

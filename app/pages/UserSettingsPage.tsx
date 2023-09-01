@@ -17,33 +17,28 @@ const UserSettingsPage: PageComponent<UserSettingsPageProps> = ({
   return (
     <Stack>
       <Card withBorder>
-        <Stack>
-          <Title order={2} size="h4" lh={1} sx={{ alignSelf: "center" }}>
-            Your Profile
-          </Title>
-          <Stack spacing={8}>
-            <Group spacing={8}>
-              {!!avatarUrl && (
-                <Avatar
-                  src={avatarUrl}
-                  color="brand"
-                  radius="100%"
-                  size="md"
-                  sx={{ alignSelf: "center" }}
-                >
-                  {initials}
-                </Avatar>
-              )}
-              <Text color="dark" weight={500} size="sm">
-                {firstName}
-              </Text>
-            </Group>
-            <TextInput label="Email" value={email} readOnly />
-            <TextInput label="First Name" value={firstName} readOnly />
-            {!!lastName && (
-              <TextInput label="Last Name" value={lastName} readOnly />
+        <Stack spacing={8}>
+          <Stack align="center" spacing={4}>
+            {!!avatarUrl && (
+              <Avatar
+                src={avatarUrl}
+                color="brand"
+                radius="100%"
+                size="md"
+                sx={{ alignSelf: "center" }}
+              >
+                {initials}
+              </Avatar>
             )}
+            <Text color="dark" weight={500} size="sm">
+              {firstName}
+            </Text>
           </Stack>
+          <TextInput label="Email" value={email} readOnly />
+          <TextInput label="First Name" value={firstName} readOnly />
+          {!!lastName && (
+            <TextInput label="Last Name" value={lastName} readOnly />
+          )}
         </Stack>
       </Card>
     </Stack>

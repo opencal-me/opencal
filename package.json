@@ -6,7 +6,7 @@
     "property-information": "6.0.0"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.17",
+    "@apollo/client": "^3.8.1",
     "@emotion/react": "^11.11.1",
     "@emotion/server": "^11.11.0",
     "@fullstory/browser": "^1.7.1",

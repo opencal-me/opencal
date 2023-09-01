@@ -108,8 +108,8 @@ const ActivityStatusBadge: FC<ActivityStatusBadgeProps> = ({
                     component="a"
                     href="https://github.com/opencal-me/opencal"
                     target="_blank"
-                    size="xs"
                     compact
+                    size="xs"
                     leftIcon={<CodeIcon />}
                     h="unset"
                     py={4}
