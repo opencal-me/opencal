@@ -46,7 +46,8 @@ class MobileSubscriber < ApplicationRecord
     message =
       "Hey, this is OpenCal. Save this #, we'll text you when your friends " \
         "are up to stuff."
-    disclaimer = "Reply HELP for help, STOP to cancel."
+    disclaimer = "Msg and data rates may apply. Msg frequency varies. Reply " \
+      "HELP for help, STOP to cancel."
     [message, disclaimer].join("\n\n")
   end
 
