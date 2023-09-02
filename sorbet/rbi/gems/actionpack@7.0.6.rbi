@@ -4237,17 +4237,17 @@ ActionController::Live::SSE::PERMITTED_OPTIONS = T.let(T.unsafe(nil), Array)
 class ActionController::LiveTestResponse < ::ActionController::Live::Response
   # Was there a server-side error?
   #
-  # source://rack/2.2.7/lib/rack/response.rb#141
+  # source://rack/2.2.8/lib/rack/response.rb#141
   def error?; end
 
   # Was the URL not found?
   #
-  # source://rack/2.2.7/lib/rack/response.rb#151
+  # source://rack/2.2.8/lib/rack/response.rb#151
   def missing?; end
 
   # Was the response successful?
   #
-  # source://rack/2.2.7/lib/rack/response.rb#138
+  # source://rack/2.2.8/lib/rack/response.rb#138
   def success?; end
 end
 
@@ -7792,7 +7792,6 @@ class ActionController::TestCase < ::ActiveSupport::TestCase
   include ::ActionDispatch::Assertions::ResponseAssertions
   include ::ActionDispatch::Assertions::RoutingAssertions
   include ::Rails::Dom::Testing::Assertions::DomAssertions
-  include ::Rails::Dom::Testing::Assertions::SelectorAssertions::CountDescribable
   include ::Rails::Dom::Testing::Assertions::SelectorAssertions
   include ::Rails::Dom::Testing::Assertions
   include ::ActionController::TestCase::Behavior
@@ -7836,7 +7835,6 @@ module ActionController::TestCase::Behavior
   include ::ActionDispatch::TestProcess::FixtureFile
   include ::ActionDispatch::TestProcess
   include ::Rails::Dom::Testing::Assertions::DomAssertions
-  include ::Rails::Dom::Testing::Assertions::SelectorAssertions::CountDescribable
   include ::Rails::Dom::Testing::Assertions::SelectorAssertions
   include ::Rails::Dom::Testing::Assertions
   extend ::ActiveSupport::Concern
@@ -8344,7 +8342,6 @@ module ActionDispatch::Assertions
   include ::ActionDispatch::Assertions::ResponseAssertions
   include ::ActionDispatch::Assertions::RoutingAssertions
   include ::Rails::Dom::Testing::Assertions::DomAssertions
-  include ::Rails::Dom::Testing::Assertions::SelectorAssertions::CountDescribable
   include ::Rails::Dom::Testing::Assertions::SelectorAssertions
   include ::Rails::Dom::Testing::Assertions
 
@@ -11119,7 +11116,6 @@ module ActionDispatch::Integration::Runner
   include ::ActionDispatch::Assertions::ResponseAssertions
   include ::ActionDispatch::Assertions::RoutingAssertions
   include ::Rails::Dom::Testing::Assertions::DomAssertions
-  include ::Rails::Dom::Testing::Assertions::SelectorAssertions::CountDescribable
   include ::Rails::Dom::Testing::Assertions::SelectorAssertions
   include ::Rails::Dom::Testing::Assertions
   include ::ActionDispatch::Assertions
@@ -11246,7 +11242,6 @@ class ActionDispatch::Integration::Session
   include ::ActionDispatch::Assertions::ResponseAssertions
   include ::ActionDispatch::Assertions::RoutingAssertions
   include ::Rails::Dom::Testing::Assertions::DomAssertions
-  include ::Rails::Dom::Testing::Assertions::SelectorAssertions::CountDescribable
   include ::Rails::Dom::Testing::Assertions::SelectorAssertions
   include ::Rails::Dom::Testing::Assertions
   include ::ActionDispatch::Assertions
@@ -11658,7 +11653,6 @@ class ActionDispatch::IntegrationTest < ::ActiveSupport::TestCase
   include ::ActionDispatch::Assertions::ResponseAssertions
   include ::ActionDispatch::Assertions::RoutingAssertions
   include ::Rails::Dom::Testing::Assertions::DomAssertions
-  include ::Rails::Dom::Testing::Assertions::SelectorAssertions::CountDescribable
   include ::Rails::Dom::Testing::Assertions::SelectorAssertions
   include ::Rails::Dom::Testing::Assertions
   include ::ActionDispatch::Assertions
@@ -11684,7 +11678,6 @@ module ActionDispatch::IntegrationTest::Behavior
   include ::ActionDispatch::Assertions::ResponseAssertions
   include ::ActionDispatch::Assertions::RoutingAssertions
   include ::Rails::Dom::Testing::Assertions::DomAssertions
-  include ::Rails::Dom::Testing::Assertions::SelectorAssertions::CountDescribable
   include ::Rails::Dom::Testing::Assertions::SelectorAssertions
   include ::Rails::Dom::Testing::Assertions
   include ::ActionDispatch::Assertions
@@ -14108,7 +14101,7 @@ class ActionDispatch::Request
   # source://actionpack//lib/action_dispatch/http/request.rb#322
   def raw_post; end
 
-  # source://rack/2.2.7/lib/rack/request.rb#157
+  # source://rack/2.2.8/lib/rack/request.rb#157
   def raw_request_method; end
 
   # source://actionpack//lib/action_dispatch/http/request.rb#50
@@ -14837,10 +14830,10 @@ class ActionDispatch::Response
 
   # Aliasing these off because AD::Http::Cache::Response defines them.
   #
-  # source://rack/2.2.7/lib/rack/response.rb#229
+  # source://rack/2.2.8/lib/rack/response.rb#229
   def _cache_control; end
 
-  # source://rack/2.2.7/lib/rack/response.rb#233
+  # source://rack/2.2.8/lib/rack/response.rb#233
   def _cache_control=(v); end
 
   # source://actionpack//lib/action_dispatch/http/response.rb#370
@@ -14983,7 +14976,7 @@ class ActionDispatch::Response
 
   # The location header we'll be responding with.
   #
-  # source://rack/2.2.7/lib/rack/response.rb#204
+  # source://rack/2.2.8/lib/rack/response.rb#204
   def redirect_url; end
 
   # The request that the response is responding to.
@@ -20026,10 +20019,10 @@ Mime::Type::MIME_REGEXP = T.let(T.unsafe(nil), Regexp)
 # source://actionpack//lib/action_dispatch.rb#33
 module Rack
   class << self
-    # source://rack/2.2.7/lib/rack/version.rb#26
+    # source://rack/2.2.8/lib/rack/version.rb#26
     def release; end
 
-    # source://rack/2.2.7/lib/rack/version.rb#19
+    # source://rack/2.2.8/lib/rack/version.rb#19
     def version; end
   end
 end

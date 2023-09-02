@@ -592,6 +592,7 @@ class ActiveRecord::Base
   include ::ActiveModel::ForbiddenAttributesProtection
   include ::ActiveModel::AttributeAssignment
   include ::ActiveModel::Serialization
+  extend ::Geocoder::Model::Base
   extend ::Devise::Models
 end
 
@@ -1821,12 +1822,6 @@ module Devise::Controllers::UrlHelpers
   def cancel_registration_url(resource_or_scope, *args); end
 
   # source://devise//lib/devise/controllers/url_helpers.rb#49
-  def confirmation_path(resource_or_scope, *args); end
-
-  # source://devise//lib/devise/controllers/url_helpers.rb#49
-  def confirmation_url(resource_or_scope, *args); end
-
-  # source://devise//lib/devise/controllers/url_helpers.rb#49
   def destroy_session_path(resource_or_scope, *args); end
 
   # source://devise//lib/devise/controllers/url_helpers.rb#49
@@ -1843,12 +1838,6 @@ module Devise::Controllers::UrlHelpers
 
   # source://devise//lib/devise/controllers/url_helpers.rb#49
   def edit_registration_url(resource_or_scope, *args); end
-
-  # source://devise//lib/devise/controllers/url_helpers.rb#49
-  def new_confirmation_path(resource_or_scope, *args); end
-
-  # source://devise//lib/devise/controllers/url_helpers.rb#49
-  def new_confirmation_url(resource_or_scope, *args); end
 
   # source://devise//lib/devise/controllers/url_helpers.rb#49
   def new_password_path(resource_or_scope, *args); end
@@ -2017,6 +2006,7 @@ class Devise::FailureApp < ::ActionController::Metal
   # source://devise//lib/devise/failure_app.rb#195
   def http_auth_header?; end
 
+  sig { params(default: T.nilable(T.any(::String, ::Symbol))).returns(::String) }
   def i18n_message(default = T.unsafe(nil)); end
 
   # source://devise//lib/devise/failure_app.rb#96

@@ -2152,7 +2152,6 @@ class ActionMailer::TestCase < ::ActiveSupport::TestCase
   include ::ActiveSupport::Testing::ConstantLookup
   include ::ActiveJob::TestHelper
   include ::ActionMailer::TestHelper
-  include ::Rails::Dom::Testing::Assertions::SelectorAssertions::CountDescribable
   include ::Rails::Dom::Testing::Assertions::SelectorAssertions
   include ::Rails::Dom::Testing::Assertions::DomAssertions
   include ::ActionMailer::TestCase::Behavior
@@ -2188,7 +2187,6 @@ module ActionMailer::TestCase::Behavior
   include ::ActiveSupport::Testing::Assertions
   include ::ActiveJob::TestHelper
   include ::ActionMailer::TestHelper
-  include ::Rails::Dom::Testing::Assertions::SelectorAssertions::CountDescribable
   include ::Rails::Dom::Testing::Assertions::SelectorAssertions
   include ::Rails::Dom::Testing::Assertions::DomAssertions
   extend ::ActiveSupport::Concern

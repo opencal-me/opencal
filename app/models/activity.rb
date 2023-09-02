@@ -40,6 +40,9 @@ class Activity < ApplicationRecord
   URL_REGEXP = T.let(URI::DEFAULT_PARSER.regexp[:ABS_URI], Regexp)
   COODINATES_REGEXP = /^-?[0-9]+(\.[0-9]+)?, ?-?[0-9]+(\.[0-9]+)?$/
 
+  # == Configuration
+  class_attribute :notifications_delay, default: 10.seconds
+
   # == Attributes
   attribute :handle, :string, default: -> { generate_handle }
 
@@ -136,7 +139,9 @@ class Activity < ApplicationRecord
   # == Emails
   sig { void }
   def send_created_email_later
-    ActivityMailer.created_email(self).deliver_later
+    ActivityMailer
+      .created_email(self)
+      .deliver_later(wait: notifications_delay)
   end
 
   # == Notifications
@@ -154,7 +159,9 @@ class Activity < ApplicationRecord
 
   sig { void }
   def send_mobile_subscriber_notifications_later
-    SendActivityMobileSubscriberNotificationsJob.perform_later(self)
+    SendActivityMobileSubscriberNotificationsJob
+      .set(wait: notifications_delay)
+      .perform_later(self)
   end
 
   # == Importing
@@ -192,7 +199,7 @@ class Activity < ApplicationRecord
 
   sig { params(user: User).void }
   def self.import_for_user_later(user)
-    ImportActivitiesForUserJob.set(wait: 10.seconds).perform_later(user)
+    ImportActivitiesForUserJob.perform_later(user)
   end
 
   sig { params(max_users: Integer).void }

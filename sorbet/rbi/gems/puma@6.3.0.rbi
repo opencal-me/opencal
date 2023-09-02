@@ -3791,7 +3791,7 @@ class Puma::Server
 
   # A fallback rack response if +@app+ raises as exception.
   #
-  # source://sentry-ruby/5.9.0/lib/sentry/puma.rb#6
+  # source://sentry-ruby/5.10.0/lib/sentry/puma.rb#6
   def lowlevel_error(e, env, status = T.unsafe(nil)); end
 
   # for #stats

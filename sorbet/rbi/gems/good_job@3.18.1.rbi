@@ -120,7 +120,7 @@ module GoodJob
     # @param timeout [nil, Numeric]
     # @return [void]
     #
-    # source://good_job//lib/good_job.rb#162
+    # source://good_job//lib/good_job.rb#164
     def _shutdown_all(executables, method_name = T.unsafe(nil), timeout: T.unsafe(nil)); end
 
     # The ActiveRecord parent class inherited by +GoodJob::Execution+ (default: +ActiveRecord::Base+).
@@ -168,7 +168,7 @@ module GoodJob
     # @param older_than [nil, Numeric, ActiveSupport::Duration] Jobs older than this will be destroyed (default: +86400+).
     # @return [Integer] Number of job execution records and batches that were destroyed.
     #
-    # source://good_job//lib/good_job.rb#182
+    # source://good_job//lib/good_job.rb#184
     def cleanup_preserved_jobs(older_than: T.unsafe(nil), in_batches_of: T.unsafe(nil)); end
 
     # Global configuration object for GoodJob.
@@ -201,7 +201,7 @@ module GoodJob
     #
     # @return [ActiveSupport::Deprecation]
     #
-    # source://good_job//lib/good_job.rb#245
+    # source://good_job//lib/good_job.rb#247
     def deprecator; end
 
     # The logger used by GoodJob (default: +Rails.logger+).
@@ -229,7 +229,7 @@ module GoodJob
     #
     # @return [Boolean]
     #
-    # source://good_job//lib/good_job.rb#258
+    # source://good_job//lib/good_job.rb#260
     def migrated?; end
 
     # This callable will be called when an exception reaches GoodJob (default: +nil+).
@@ -261,7 +261,7 @@ module GoodJob
     # @param queue_string [String] Queues to execute jobs from
     # @return [void]
     #
-    # source://good_job//lib/good_job.rb#234
+    # source://good_job//lib/good_job.rb#236
     def perform_inline(queue_string = T.unsafe(nil)); end
 
     # Whether to preserve job records in the database after they have finished (default: +true+).
@@ -583,16 +583,9 @@ class GoodJob::Adapter
 
   private
 
-  # Whether running in a web server process.
-  #
-  # @return [Boolean, nil]
-  #
-  # source://good_job//lib/good_job/adapter.rb#224
-  def in_server_process?; end
-
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/adapter.rb#237
+  # source://good_job//lib/good_job/adapter.rb#222
   def send_notify?(active_job); end
 
   class << self
@@ -847,6 +840,7 @@ class GoodJob::BaseRecord < ::ActiveRecord::Base
 
     def migrated?; end
     def migration_pending_warning!; end
+    def with_logger_silenced(&block); end
   end
 end
 
@@ -1521,15 +1515,15 @@ class GoodJob::Configuration
   #
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/configuration.rb#228
+  # source://good_job//lib/good_job/configuration.rb#233
   def cleanup_discarded_jobs?; end
 
   # Number of jobs a {Scheduler} will execute before automatically cleaning up preserved jobs.
   # Positive values will clean up after that many jobs have run, false or 0 will disable, and -1 will clean up after every job.
   #
-  # @return [Integer, nil]
+  # @return [Integer, Boolean, nil]
   #
-  # source://good_job//lib/good_job/configuration.rb#249
+  # source://good_job//lib/good_job/configuration.rb#254
   def cleanup_interval_jobs; end
 
   # Number of seconds a {Scheduler} will wait before automatically cleaning up preserved jobs.
@@ -1537,47 +1531,47 @@ class GoodJob::Configuration
   #
   # @return [Integer, nil]
   #
-  # source://good_job//lib/good_job/configuration.rb#283
+  # source://good_job//lib/good_job/configuration.rb#288
   def cleanup_interval_seconds; end
 
   # Number of seconds to preserve jobs before automatic destruction.
   #
   # @return [Integer]
   #
-  # source://good_job//lib/good_job/configuration.rb#237
+  # source://good_job//lib/good_job/configuration.rb#242
   def cleanup_preserved_jobs_before_seconds_ago; end
 
-  # source://good_job//lib/good_job/configuration.rb#200
+  # source://good_job//lib/good_job/configuration.rb#205
   def cron; end
 
-  # source://good_job//lib/good_job/configuration.rb#209
+  # source://good_job//lib/good_job/configuration.rb#214
   def cron_entries; end
 
   # Tests whether to daemonize the process.
   #
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/configuration.rb#317
+  # source://good_job//lib/good_job/configuration.rb#322
   def daemonize?; end
 
-  # source://good_job//lib/good_job/configuration.rb#348
+  # source://good_job//lib/good_job/configuration.rb#353
   def dashboard_default_locale; end
 
   # Whether to run cron
   #
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/configuration.rb#188
+  # source://good_job//lib/good_job/configuration.rb#193
   def enable_cron; end
 
   # Whether to run cron
   #
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/configuration.rb#188
+  # source://good_job//lib/good_job/configuration.rb#193
   def enable_cron?; end
 
-  # source://good_job//lib/good_job/configuration.rb#336
+  # source://good_job//lib/good_job/configuration.rb#341
   def enable_listen_notify; end
 
   # The environment from which to read GoodJob's environment variables. By
@@ -1594,12 +1588,19 @@ class GoodJob::Configuration
   #
   # @return [Symbol]
   #
-  # source://good_job//lib/good_job/configuration.rb#91
+  # source://good_job//lib/good_job/configuration.rb#93
   def execution_mode; end
+
+  # Whether running in a web server process.
+  #
+  # @return [Boolean, nil]
+  #
+  # source://good_job//lib/good_job/configuration.rb#359
+  def in_webserver?; end
 
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/configuration.rb#157
+  # source://good_job//lib/good_job/configuration.rb#162
   def inline_execution_respects_schedule?; end
 
   # The maximum number of future-scheduled jobs to store in memory.
@@ -1608,7 +1609,7 @@ class GoodJob::Configuration
   #
   # @return [Integer]
   #
-  # source://good_job//lib/good_job/configuration.rb#165
+  # source://good_job//lib/good_job/configuration.rb#170
   def max_cache; end
 
   # Indicates the number of threads to use per {Scheduler}. Note that
@@ -1617,7 +1618,7 @@ class GoodJob::Configuration
   #
   # @return [Integer]
   #
-  # source://good_job//lib/good_job/configuration.rb#115
+  # source://good_job//lib/good_job/configuration.rb#120
   def max_threads; end
 
   # The options that were explicitly set when initializing +Configuration+.
@@ -1632,7 +1633,7 @@ class GoodJob::Configuration
   #
   # @return [Pathname, String]
   #
-  # source://good_job//lib/good_job/configuration.rb#323
+  # source://good_job//lib/good_job/configuration.rb#328
   def pidfile; end
 
   # The number of seconds between polls for jobs. GoodJob will execute jobs
@@ -1641,14 +1642,14 @@ class GoodJob::Configuration
   #
   # @return [Integer]
   #
-  # source://good_job//lib/good_job/configuration.rb#141
+  # source://good_job//lib/good_job/configuration.rb#146
   def poll_interval; end
 
   # Port of the probe server
   #
   # @return [nil, Integer]
   #
-  # source://good_job//lib/good_job/configuration.rb#331
+  # source://good_job//lib/good_job/configuration.rb#336
   def probe_port; end
 
   # The number of queued jobs to select when polling for a job to run.
@@ -1658,7 +1659,7 @@ class GoodJob::Configuration
   #
   # @return [Integer, nil]
   #
-  # source://good_job//lib/good_job/configuration.rb#218
+  # source://good_job//lib/good_job/configuration.rb#223
   def queue_select_limit; end
 
   # Describes which queues to execute jobs from and how those queues should
@@ -1668,26 +1669,26 @@ class GoodJob::Configuration
   #
   # @return [String]
   #
-  # source://good_job//lib/good_job/configuration.rb#130
+  # source://good_job//lib/good_job/configuration.rb#135
   def queue_string; end
 
   # The number of seconds to wait for jobs to finish when shutting down
   # before stopping the thread. +-1+ is forever.
   #
-  # @return [Numeric]
+  # @return [Float]
   #
-  # source://good_job//lib/good_job/configuration.rb#177
+  # source://good_job//lib/good_job/configuration.rb#182
   def shutdown_timeout; end
 
-  # source://good_job//lib/good_job/configuration.rb#344
+  # source://good_job//lib/good_job/configuration.rb#349
   def smaller_number_is_higher_priority; end
 
-  # source://good_job//lib/good_job/configuration.rb#84
+  # source://good_job//lib/good_job/configuration.rb#86
   def validate!; end
 
   private
 
-  # source://good_job//lib/good_job/configuration.rb#354
+  # source://good_job//lib/good_job/configuration.rb#373
   def rails_config; end
 
   class << self
@@ -1834,14 +1835,12 @@ class GoodJob::CronEntry
   def _validators?; end
 
   def args; end
-  def cron; end
   def description; end
   def disable; end
   def display_properties; end
   def enable; end
   def enabled?; end
   def enqueue(cron_at = T.unsafe(nil)); end
-  def fugit; end
   def id; end
   def job_class; end
   def jobs; end
@@ -1853,7 +1852,7 @@ class GoodJob::CronEntry
   # source://activemodel/7.0.6/lib/active_model/naming.rb#244
   def model_name(*_arg0, **_arg1, &_arg2); end
 
-  def next_at; end
+  def next_at(previously_at: T.unsafe(nil)); end
   def params; end
   def schedule; end
   def set; end
@@ -1865,7 +1864,10 @@ class GoodJob::CronEntry
   private
 
   def args_value; end
+  def cron; end
+  def cron_proc?; end
   def display_property(value); end
+  def fugit; end
   def kwargs_value; end
   def set_value; end
 
@@ -1916,9 +1918,10 @@ class GoodJob::CronManager
   # Enqueues a scheduled task
   #
   # @param cron_entry [CronEntry] the CronEntry object to schedule
+  # @param previously_at [Date, Time, ActiveSupport::TimeWithZone, nil] the last, +in-memory+, scheduled time the cron task was intended to run
   #
-  # source://good_job//lib/good_job/cron_manager.rb#85
-  def create_task(cron_entry); end
+  # source://good_job//lib/good_job/cron_manager.rb#86
+  def create_task(cron_entry, previously_at: T.unsafe(nil)); end
 
   # Execution configuration to be scheduled
   #
@@ -2733,10 +2736,10 @@ class GoodJob::HttpServer
   # source://good_job//lib/good_job/http_server.rb#43
   def handle_connections; end
 
-  # source://good_job//lib/good_job/http_server.rb#62
+  # source://good_job//lib/good_job/http_server.rb#64
   def parse_request(request); end
 
-  # source://good_job//lib/good_job/http_server.rb#68
+  # source://good_job//lib/good_job/http_server.rb#70
   def respond(client, status, headers, body); end
 
   # source://good_job//lib/good_job/http_server.rb#36
