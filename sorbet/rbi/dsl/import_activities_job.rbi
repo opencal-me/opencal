@@ -6,10 +6,10 @@
 
 class ImportActivitiesJob
   class << self
-    sig { params(max_users: T.nilable(::Integer)).returns(T.any(ImportActivitiesJob, FalseClass)) }
-    def perform_later(max_users: T.unsafe(nil)); end
+    sig { params(options: T.untyped).returns(T.any(ImportActivitiesJob, FalseClass)) }
+    def perform_later(**options); end
 
-    sig { params(max_users: T.nilable(::Integer)).void }
-    def perform_now(max_users: T.unsafe(nil)); end
+    sig { params(options: T.untyped).void }
+    def perform_now(**options); end
   end
 end

@@ -144,22 +144,22 @@ class Activity < ApplicationRecord
       .deliver_later(wait: notifications_delay)
   end
 
-  # == Notifications
+  # == Texts
   sig { returns(String) }
-  def mobile_subscriber_notification_message
+  def mobile_subscriber_text_message
     "New activity from #{owner!.first_name}: #{name} (#{activity_url(self)})"
   end
 
   sig { void }
-  def send_mobile_subscriber_notifications
+  def send_mobile_subscriber_texts
     owner!.mobile_subscribers.find_each do |subscriber|
-      subscriber.send_message(mobile_subscriber_notification_message)
+      subscriber.send_text(mobile_subscriber_text_message)
     end
   end
 
   sig { void }
-  def send_mobile_subscriber_notifications_later
-    SendActivityMobileSubscriberNotificationsJob
+  def send_mobile_subscriber_texts_later
+    SendActivityMobileSubscriberTextsJob
       .set(wait: notifications_delay)
       .perform_later(self)
   end
@@ -177,7 +177,7 @@ class Activity < ApplicationRecord
       activity.save!
       if activity.previously_new_record? && title.tags.exclude?("silent")
         activity.send_created_email_later
-        activity.send_mobile_subscriber_notifications_later
+        activity.send_mobile_subscriber_texts_later
       end
     elsif (activity = find_by(google_event_id: event.id, owner:))
       activity.destroy!

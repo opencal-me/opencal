@@ -32,7 +32,7 @@ class MobileSubscriber < ApplicationRecord
   validates :phone, presence: true, phone: { possible: true }
 
   # == Callbacks
-  after_create_commit :send_welcome_notification_later
+  after_create_commit :send_welcome_text_later
 
   # == Finders
   sig { params(phone: String).returns(MobileSubscriber) }
@@ -42,7 +42,7 @@ class MobileSubscriber < ApplicationRecord
 
   # == Notifications
   sig { returns(String) }
-  def welcome_notification_message
+  def welcome_text_message
     message =
       "Hey, this is OpenCal. Save this #, we'll text you when your friends " \
         "are up to stuff."
@@ -51,25 +51,25 @@ class MobileSubscriber < ApplicationRecord
   end
 
   sig { void }
-  def send_welcome_notification
-    send_message(welcome_notification_message, lowercase: false)
+  def send_welcome_text
+    send_text(welcome_text_message, lowercase: false)
   end
 
   sig { void }
-  def send_welcome_notification_later
-    send_message_later(welcome_notification_message)
+  def send_welcome_text_later
+    send_text_later(welcome_text_message, lowercase: false)
   end
 
   # == Methods
   sig { params(message: String, lowercase: T::Boolean).void }
-  def send_message(message, lowercase: true)
+  def send_text(message, lowercase: true)
     message = message.downcase if lowercase
     Telnyx.send_message(message, to: phone)
   end
 
-  sig { params(message: String).void }
-  def send_message_later(message)
-    SendMobileSubscriberMessageJob.perform_later(self, message)
+  sig { params(message: String, lowercase: T::Boolean).void }
+  def send_text_later(message, lowercase: true)
+    SendMobileSubscriberTextJob.perform_later(self, message, lowercase:)
   end
 
   private

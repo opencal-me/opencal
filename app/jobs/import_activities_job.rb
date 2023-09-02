@@ -6,9 +6,8 @@ class ImportActivitiesJob < ApplicationJob
   good_job_control_concurrency_with total_limit: 1
 
   # == Job
-  sig { params(max_users: T.nilable(Integer)).void }
-  def perform(max_users: nil)
-    options = { max_users: }
+  sig { params(options: T.untyped).void }
+  def perform(**options)
     Activity.import(**options.compact)
   end
 end

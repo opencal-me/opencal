@@ -24,29 +24,30 @@ module Mutations
     def resolve(subject:, subscriber_phone:)
       subscriber = MobileSubscriber
         .find_or_initialize_by_phone(subscriber_phone)
-      unless subscriber.save
-        errors = InputFieldErrors.new
-        subscriber.errors.group_by_attribute[:phone]&.each do |error|
-          next unless error.attribute == :phone
-          errors << InputFieldError.new(
-            field: "subscriberPhone",
-            message: error.full_message,
-          )
+      subscriber.transaction do
+        unless subscriber.save
+          errors = InputFieldErrors.new
+          subscriber.errors.group_by_attribute[:phone]&.each do |error|
+            errors << InputFieldError.new(
+              field: "subscriberPhone",
+              message: error.message,
+            )
+          end
+          next Payload.new(errors:)
         end
-        return Payload.new(errors:)
-      end
-      subscription = subject.mobile_subscriptions.build(subscriber:)
-      if subscription.save
-        Payload.new(subscription:)
-      else
-        errors = InputFieldErrors.new
-        subscription.errors.group_by_attribute[:subscriber]&.each do |error|
-          errors << InputFieldError.new(
-            field: "subscriberPhone",
-            message: error.message,
-          )
+        subscription = subject.mobile_subscriptions.build(subscriber:)
+        if subscription.save
+          Payload.new(subscription:)
+        else
+          errors = InputFieldErrors.new
+          subscription.errors.group_by_attribute[:subscriber]&.each do |error|
+            errors << InputFieldError.new(
+              field: "subscriberPhone",
+              message: error.message,
+            )
+          end
+          Payload.new(errors:)
         end
-        Payload.new(errors:)
       end
     end
   end
