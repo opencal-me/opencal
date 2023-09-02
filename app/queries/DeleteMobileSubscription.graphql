@@ -1,0 +1,9 @@
+mutation DeleteMobileSubscriptionMutation(
+  $input: DeleteMobileSubscriptionInput!
+) {
+  payload: deleteMobileSubscription(input: $input) {
+    subject {
+      id
+    }
+  }
+}

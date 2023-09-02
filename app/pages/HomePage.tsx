@@ -5,6 +5,7 @@ import type { HomePageQuery } from "~/helpers/graphql";
 
 import HomePageGoogleEvents from "~/components/HomePageGoogleEvents";
 import ActivityCard from "~/components/ActivityCard";
+import MobileSubscriptionBadge from "~/components/MobileSubscriptionBadge";
 
 export type HomePageProps = PagePropsWithData<HomePageQuery>;
 
@@ -83,31 +84,14 @@ const HomePage: PageComponent<HomePageProps> = ({ data: { viewer } }) => {
             </Text>
           </Box>
           <Group>
-            {mobileSubscriptions.map(({ id, subscriber }) => (
-              <Anchor
-                key={id}
-                href={`sms:${encodeURIComponent(subscriber.phone)}`}
-              >
-                <Badge
-                  variant="outline"
-                  leftSection={
-                    <Center>
-                      <PhoneIcon />
-                    </Center>
-                  }
-                  color="gray"
-                  size="lg"
-                  radius="md"
-                  px={8}
-                  sx={{
-                    "&:hover": {
-                      textDecoration: "underline",
-                    },
-                  }}
-                >
-                  {subscriber.phone}
-                </Badge>
-              </Anchor>
+            {mobileSubscriptions.map(subscription => (
+              <MobileSubscriptionBadge
+                key={subscription.id}
+                onDelete={() => {
+                  router.reload({ preserveScroll: true });
+                }}
+                {...{ subscription }}
+              />
             ))}
           </Group>
         </Stack>

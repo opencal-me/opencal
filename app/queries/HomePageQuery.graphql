@@ -10,10 +10,7 @@ query HomePageQuery {
     id
     mobileSubscriptions {
       id
-      subscriber {
-        id
-        phone
-      }
+      ...MobileSubscriptionBadgeSubscriptionFragment
     }
     ...UserBioUserFragment
   }

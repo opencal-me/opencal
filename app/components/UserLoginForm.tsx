@@ -24,7 +24,7 @@ const UserLoginForm: FC<UserLoginFormProps> = ({ children, ...otherProps }) => (
               <Group position="right">
                 <form action="/user/auth/google" method="post">
                   <FormAuthenticityField />
-                  <Button type="submit">Continue to Google</Button>
+                  <Button type="submit">Ok, got it!</Button>
                 </form>
               </Group>
             </Stack>

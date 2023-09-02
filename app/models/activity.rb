@@ -255,7 +255,7 @@ class Activity < ApplicationRecord
   end
   def _set_attributes_from_google_event(event, title:)
     self.name = title.name
-    self.tags = title.tags
+    self.tags = title.tags.excluding("silent")
     self.description = event.description
     self.during = event.start_time.to_time..event.end_time.to_time
     self.location = event.location
@@ -337,30 +337,15 @@ class Activity < ApplicationRecord
   sig { void }
   def update_google_event
     event = google_event or return
+    activity_url = activity_url(self)
     if persisted? && google_event_attributes_previously_changed?
       event.title = google_event_title
-      event.attachments = scoped do
-        attachments = event.attachments || []
-        opencal_attachments, other_attachments =
-          attachments.partition do |attachment|
-            attachment["title"] == "OpenCal"
-          end
-        opencal_attachment = opencal_attachments.first
-        opencal_attachment ||= { "title" => "OpenCal" }
-        opencal_attachment["fileUrl"] = activity_url(self)
-        opencal_attachment["mimeType"] = "text/html"
-        opencal_attachment["iconLink"] = root_url + "logo.png"
-        [opencal_attachment, *other_attachments]
-      end
+      event.attachments = [{ "fileUrl" => activity_url }]
       event.save
     elsif destroyed?
       if event.status != "cancelled"
         event.title = google_event_title(include_open_tag: false)
-        if (attachments = event.attachments)
-          attachments.delete_if do |attachment|
-            attachment["title"] == "OpenCal"
-          end
-        end
+        event.attachments = []
         event.save
       end
     end

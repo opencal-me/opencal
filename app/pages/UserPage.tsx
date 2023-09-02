@@ -45,6 +45,16 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
         </Box>
       </Stack>
       {(bio || isViewer) && <UserBio editable={isViewer} {...{ user }} />}
+      {!isViewer && (
+        <Card withBorder bg="gray.0">
+          <Stack spacing={4}>
+            <Text size="sm" color="gray.7" weight={500}>
+              Get notified when {firstName} is up to something!
+            </Text>
+            <UserMobileSubscribeForm subjectId={userId} />
+          </Stack>
+        </Card>
+      )}
       <Stack spacing="xs">
         {!isEmpty(activities) ? (
           activities.map(activity => (
@@ -54,17 +64,6 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
           <EmptyCard itemLabel="activities" />
         )}
       </Stack>
-      {!isViewer && (
-        <>
-          <Divider />
-          <Stack spacing={4}>
-            <Text size="sm" color="gray.7">
-              Get notified when {firstName} is up to something!
-            </Text>
-            <UserMobileSubscribeForm subjectId={userId} />
-          </Stack>
-        </>
-      )}
     </Stack>
   );
 };

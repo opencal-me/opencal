@@ -35,6 +35,16 @@ class MobileSubscriber < ApplicationRecord
   after_create_commit :send_welcome_text_later
 
   # == Finders
+  sig { params(phone: String).returns(T.nilable(MobileSubscriber)) }
+  def self.find_by_phone(phone)
+    find_by(phone: normalize_phone(phone))
+  end
+
+  sig { params(phone: String).returns(MobileSubscriber) }
+  def self.find_by_phone!(phone)
+    find_by!(phone: normalize_phone(phone))
+  end
+
   sig { params(phone: String).returns(MobileSubscriber) }
   def self.find_or_initialize_by_phone(phone)
     find_or_initialize_by(phone: Phonelib.parse(phone).to_s)
@@ -73,13 +83,19 @@ class MobileSubscriber < ApplicationRecord
     SendMobileSubscriberTextJob.perform_later(self, message, lowercase:)
   end
 
+  # == Phone
+  sig { params(phone: String).returns(String) }
+  def self.normalize_phone(phone)
+    Phonelib.parse(phone).to_s
+  end
+
   private
 
   # == Normalization Handlers
   sig { void }
   def normalize_phone
     if (phone = self.phone)
-      self.phone = Phonelib.parse(phone).to_s
+      self.phone = self.class.normalize_phone(phone)
     end
   end
 end

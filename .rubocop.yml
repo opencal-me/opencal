@@ -99,6 +99,8 @@ Sorbet/ValidSigil:
 
 Rails/Delegate:
   Enabled: false
+Rails/DynamicFindBy:
+  Enabled: false
 Rails/LexicallyScopedActionFilter:
   Enabled: false
 Rails/HasAndBelongsToMany:

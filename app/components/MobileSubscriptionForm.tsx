@@ -64,15 +64,13 @@ const MobileSubscriptionForm: FC<MobileSubscriptionFormProps> = ({
     >
       <Group align="start" spacing={8} noWrap>
         <TextInput
-          variant="filled"
           placeholder="+1 (555) 555-5555"
-          styles={({ fontSizes, colors }) => ({
+          styles={({ fontSizes }) => ({
             root: {
               flexGrow: 1,
             },
             input: {
               fontSize: fontSizes.md,
-              border: `${rem(1)} solid ${colors.gray[3]}`,
             },
           })}
           {...getInputProps("subscriberPhone")}

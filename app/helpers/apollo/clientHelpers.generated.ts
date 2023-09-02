@@ -45,6 +45,12 @@ export type CreateReservationPayloadFieldPolicy = {
 	reservation?: FieldPolicy<any> | FieldReadFunction<any>,
 	success?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type DeleteMobileSubscriptionPayloadKeySpecifier = ('clientMutationId' | 'subject' | 'success' | DeleteMobileSubscriptionPayloadKeySpecifier)[];
+export type DeleteMobileSubscriptionPayloadFieldPolicy = {
+	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
+	subject?: FieldPolicy<any> | FieldReadFunction<any>,
+	success?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type GoogleEventKeySpecifier = ('activity' | 'descriptionHtml' | 'durationSeconds' | 'end' | 'id' | 'isOrganizedByViewer' | 'isRecurring' | 'location' | 'start' | 'title' | GoogleEventKeySpecifier)[];
 export type GoogleEventFieldPolicy = {
 	activity?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -80,11 +86,12 @@ export type MobileSubscriptionFieldPolicy = {
 	subject?: FieldPolicy<any> | FieldReadFunction<any>,
 	subscriber?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('createActivity' | 'createMobileSubscription' | 'createReservation' | 'testMutation' | 'updateUser' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('createActivity' | 'createMobileSubscription' | 'createReservation' | 'deleteMobileSubscription' | 'testMutation' | 'updateUser' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	createActivity?: FieldPolicy<any> | FieldReadFunction<any>,
 	createMobileSubscription?: FieldPolicy<any> | FieldReadFunction<any>,
 	createReservation?: FieldPolicy<any> | FieldReadFunction<any>,
+	deleteMobileSubscription?: FieldPolicy<any> | FieldReadFunction<any>,
 	testMutation?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateUser?: FieldPolicy<any> | FieldReadFunction<any>
 };
@@ -179,6 +186,10 @@ export type StrictTypedTypePolicies = {
 	CreateReservationPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | CreateReservationPayloadKeySpecifier | (() => undefined | CreateReservationPayloadKeySpecifier),
 		fields?: CreateReservationPayloadFieldPolicy,
+	},
+	DeleteMobileSubscriptionPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | DeleteMobileSubscriptionPayloadKeySpecifier | (() => undefined | DeleteMobileSubscriptionPayloadKeySpecifier),
+		fields?: DeleteMobileSubscriptionPayloadFieldPolicy,
 	},
 	GoogleEvent?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | GoogleEventKeySpecifier | (() => undefined | GoogleEventKeySpecifier),

@@ -1,0 +1,7 @@
+fragment MobileSubscriptionBadgeSubscriptionFragment on MobileSubscription {
+  id
+  subscriber {
+    id
+    phone
+  }
+}
