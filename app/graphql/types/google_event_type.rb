@@ -37,12 +37,7 @@ module Types
 
     sig { returns(T::Boolean) }
     def is_organized_by_viewer # rubocop:disable Naming/PredicateName
-      attendees = object.attendees or return true
-      viewer = current_user!
-      viewer_attendee = attendees.find do |attendee|
-        attendee["email"] == viewer.email
-      end
-      !!(viewer_attendee && viewer_attendee["organizer"])
+      Activity.google_event_organized_by_user?(object, current_user!)
     end
 
     sig { returns(T::Boolean) }

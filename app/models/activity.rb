@@ -167,18 +167,12 @@ class Activity < ApplicationRecord
   # == Importing
   sig { params(event: Google::Event, owner: User).void }
   def self.import_event!(event, owner:)
-    if (attendees = event.attendees)
-      owner_attendee = attendees.find do |attendee|
-        attendee["email"] == owner.email
-      end
-      return unless owner_attendee && owner_attendee["organizer"]
-    end
     title = if (title = event.title)
       GoogleEventTitle.parse(title)
     else
       GoogleEventTitle.blank
     end
-    if google_event_is_activity?(event, title:)
+    if _google_event_is_activity?(event, owner:, title:)
       activity = _from_google_event(event, owner:, title:)
       activity.save!
       if activity.previously_new_record? && title.tags.exclude?("silent")
@@ -237,6 +231,18 @@ class Activity < ApplicationRecord
     owner!.google_event!(google_event_id)
   end
 
+  sig { params(event: Google::Event, user: User).returns(T::Boolean) }
+  def self.google_event_organized_by_user?(event, user)
+    if (attendees = event.attendees)
+      owner_attendee = attendees.find do |attendee|
+        attendee["email"] == user.email
+      end
+      !!(owner_attendee && owner_attendee["organizer"])
+    else
+      true
+    end
+  end
+
   sig { params(event: Google::Event, owner: User).returns(Activity) }
   def self.from_google_event(event, owner:)
     title = GoogleEventTitle.parse(event.title)
@@ -256,10 +262,19 @@ class Activity < ApplicationRecord
     self.capacity = title.capacity
   end
 
-  private_class_method def self.google_event_is_activity?(event, title:)
-    !!(event.status != "cancelled" &&
-        title.open? &&
-        event.recurring_event_id.nil?)
+  sig do
+    params(event: Google::Event, owner: User, title: GoogleEventTitle)
+      .returns(T::Boolean)
+  end
+  private_class_method def self._google_event_is_activity?(
+    event,
+    owner:,
+    title:
+  )
+    !!(title.open? &&
+        event.status != "cancelled" &&
+        event.recurring_event_id.nil? &&
+        google_event_organized_by_user?(event, owner))
   end
 
   sig do

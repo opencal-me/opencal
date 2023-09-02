@@ -8,7 +8,7 @@ class ApplicationMailer < ActionMailer::Base
   include Routing
 
   # == Configuration
-  default from: :default_sender, reply_to: ENV["RAILS_MAILER_REPLY_TO"]
+  default from: :default_sender, reply_to: :default_reply_to
   layout "mailer"
 
   # == Querying
@@ -28,8 +28,13 @@ class ApplicationMailer < ActionMailer::Base
     ENV["RAILS_MAILER_FROM"] or raise "Missing default from address"
   end
 
-  sig { returns(String) }
+  sig { returns(T.nilable(String)) }
+  def default_reply_to
+    ENV["RAILS_MAILER_REPLY_TO"]
+  end
+
+  sig { returns(T.nilable(String)) }
   def notifications_email
-    Notifications.email!
+    Notifications.email
   end
 end
