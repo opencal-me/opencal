@@ -98,7 +98,7 @@ const UserBio: FC<UserBioProps> = ({
     >
       {editing ? (
         <Textarea
-          placeholder="Write a lil' bio about yourself."
+          placeholder="Tell us a lil' bit about yourself!"
           autosize
           minRows={2}
           maxRows={8}
@@ -157,7 +157,7 @@ const UserBio: FC<UserBioProps> = ({
                     },
                   })}
             >
-              {editing ? (updating ? "Saving..." : "Save") : "Edit"}
+              {editing ? (updating ? "Saving..." : "Save") : "Edit bio"}
             </Anchor>
           </Group>
           {editing && (
