@@ -65,7 +65,7 @@ class MobileSubscriber < ApplicationRecord
   sig { params(message: String, lowercase: T::Boolean).void }
   def send_text(message, lowercase: true)
     message = message.downcase if lowercase
-    TwilioText.send(message, to: phone)
+    TwilioClient.current.send_message(message, to: phone)
   end
 
   sig { params(message: String, lowercase: T::Boolean).void }
