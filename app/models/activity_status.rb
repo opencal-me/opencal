@@ -1,11 +1,11 @@
 # typed: strict
 # frozen_string_literal: true
 
-class ActivityStatus
+module ActivityStatus
   class << self
     extend T::Sig
 
-    # == Methods
+    # == Current
     sig { returns(T.nilable(String)) }
     def current
       Rails.cache.read(value_key)

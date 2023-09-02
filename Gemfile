@@ -168,8 +168,11 @@ gem "selenium-webdriver", "~> 4.11"
 # Detect what OS we are running on
 gem "os", "~> 1.1"
 
-# Show static pages
+# Show static pages with High Voltage
 gem "high_voltage", "~> 3.1"
+
+# Send texts with Twilio
+gem "twilio-ruby", "~> 6.5"
 
 group :development, :test do
   # Auto-detect and warn about N+1 queries
