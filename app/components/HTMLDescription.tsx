@@ -42,7 +42,7 @@ const HTMLDescription: FC<HTMLDescriptionProps> = ({
           color: colors.dark[3],
           fontSize: fontSizes.sm,
           p: {
-            marginBottom: 0,
+            marginBottom: rem(2),
           },
         })}
       >

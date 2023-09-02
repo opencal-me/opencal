@@ -105,8 +105,12 @@ const ActivityCard: FC<ActivityCardProps> = ({
         {!!descriptionHtml && (
           <HTMLDescription mah={120}>{descriptionHtml}</HTMLDescription>
         )}
-        <Space h={6} />
-        <Button component={Link} href={url} leftIcon={<RightArrowIcon />}>
+        <Button
+          component={Link}
+          href={url}
+          leftIcon={<RightArrowIcon />}
+          mt={6}
+        >
           Go To Activity
         </Button>
       </Card>
