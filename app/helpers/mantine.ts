@@ -39,6 +39,9 @@ export const APP_THEME: MantineThemeOverride = {
   },
   components: {
     Alert: {
+      defaultProps: {
+        radius: "md",
+      },
       styles: {
         title: {
           textTransform: "lowercase",

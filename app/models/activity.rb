@@ -108,6 +108,7 @@ class Activity < ApplicationRecord
       result.latitude,
     )
     activity.build_address(
+      place_name: result.data["title"],
       full_address: result.address,
       street_address: [result.street_number, result.route].compact.join(" "),
       neighbourhood: district,

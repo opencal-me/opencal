@@ -10,6 +10,7 @@
 #  country        :string           not null
 #  full_address   :string           not null
 #  neighbourhood  :string
+#  place_name     :string
 #  postal_code    :string
 #  province       :string           not null
 #  street_address :string

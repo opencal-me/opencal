@@ -741,6 +741,51 @@ class Address
     def neighbourhood_will_change!; end
 
     sig { returns(T.nilable(::String)) }
+    def place_name; end
+
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    def place_name=(value); end
+
+    sig { returns(T::Boolean) }
+    def place_name?; end
+
+    sig { returns(T.nilable(::String)) }
+    def place_name_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def place_name_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def place_name_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def place_name_change; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def place_name_change_to_be_saved; end
+
+    sig { returns(T::Boolean) }
+    def place_name_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def place_name_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def place_name_previous_change; end
+
+    sig { returns(T::Boolean) }
+    def place_name_previously_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def place_name_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def place_name_was; end
+
+    sig { void }
+    def place_name_will_change!; end
+
+    sig { returns(T.nilable(::String)) }
     def postal_code; end
 
     sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
@@ -852,6 +897,9 @@ class Address
     def restore_neighbourhood!; end
 
     sig { void }
+    def restore_place_name!; end
+
+    sig { void }
     def restore_postal_code!; end
 
     sig { void }
@@ -901,6 +949,12 @@ class Address
 
     sig { returns(T::Boolean) }
     def saved_change_to_neighbourhood?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_place_name; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_place_name?; end
 
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def saved_change_to_postal_code; end
@@ -985,6 +1039,9 @@ class Address
 
     sig { returns(T::Boolean) }
     def will_save_change_to_neighbourhood?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_place_name?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_postal_code?; end

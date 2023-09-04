@@ -31,7 +31,12 @@ module Types
     sig { returns(T.nilable(String)) }
     def address
       address = object.address or return
-      address.values_at(:street_address, :city, :country).compact.join(", ")
+      address.values_at(
+        :place_name,
+        :street_address,
+        :city,
+        :country,
+      ).compact.join(", ")
     end
 
     sig { returns(T.nilable(String)) }
