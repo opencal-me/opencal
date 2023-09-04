@@ -57,8 +57,8 @@ Rails.application.routes.draw do
     post "/", action: :execute, as: :graphql
   end
 
-  # == Home
-  resource :home, only: :show
+  # == Homepage
+  resource :homepages, path: "/home", only: :show
 
   # == Activities
   resources :activities, path: "/join", only: :show do
@@ -82,7 +82,7 @@ Rails.application.routes.draw do
   end
 
   # == Pages
-  root "landings#show"
+  root "landingpages#show"
   get "/privacy" => "high_voltage/pages#show", id: "privacy_policy"
   get "/tos" => "high_voltage/pages#show", id: "terms_of_service"
   get "/src" => redirect("https://github.com/opencal-me/opencal", status: 302)

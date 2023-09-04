@@ -1,7 +1,7 @@
 # typed: true
 # frozen_string_literal: true
 
-class LandingsController < ApplicationController
+class LandingpagesController < ApplicationController
   # == Actions
   def show
     render(inertia: "LandingPage")
