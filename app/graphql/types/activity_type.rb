@@ -21,7 +21,7 @@ module Types
     field :name, String, null: false
     field :openings, Integer, null: false
     field :owner, UserType, null: false
-    field :reservations, [ReservationType], null: false
+    field :reservations, [ReservationType], null: false, authorized_scope: true
     field :start, DateTimeType, null: false
     field :story_image_url, String, null: false
     field :tags, [String], null: false
@@ -46,11 +46,7 @@ module Types
 
     sig { returns(T::Enumerable[Reservation]) }
     def reservations
-      if allowed_to?(:manage?, object)
-        object.reservations
-      else
-        []
-      end
+      object.reservations.chronological
     end
 
     sig { returns(Time) }

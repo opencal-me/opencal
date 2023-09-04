@@ -13,4 +13,13 @@ class ReservationPolicy < ApplicationPolicy
     reservation = T.cast(record, Reservation)
     reservation.activity!.owner! == user
   end
+
+  # == Scopes
+  relation_scope do |relation|
+    if (user = active_user)
+      relation.where(activity: user.activities)
+    else
+      relation.none
+    end
+  end
 end

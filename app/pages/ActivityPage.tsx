@@ -73,12 +73,13 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
               <Anchor
                 component={Link}
                 href={owner.url}
+                color="dark"
                 weight={600}
                 sx={({ transitionTimingFunction, fn }) => ({
                   textDecoration: "underline",
                   transition: `color 150ms ${transitionTimingFunction}`,
                   "&:hover": {
-                    color: fn.darken(fn.primaryColor(), 0.25),
+                    color: fn.primaryColor(),
                   },
                 })}
               >
@@ -87,16 +88,16 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
               wants you to join them
             </Text>
           </Group>
-          <Text color="red" size="sm">
-            {startDateLabel} at{" "}
-            <Time format={{ hour: "numeric", minute: "numeric" }}>
-              {startDateTime}
-            </Time>
-          </Text>
           <Box>
             <Title size="h3" lh={1.3}>
               {name}
             </Title>
+            <Text color="brand" size="sm">
+              {startDateLabel} at{" "}
+              <Time format={{ hour: "numeric", minute: "numeric" }}>
+                {startDateTime}
+              </Time>
+            </Text>
             {!isEmpty(tags) && (
               <Group spacing={4} mt={4}>
                 {tags.map(tag => (

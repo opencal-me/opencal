@@ -22,50 +22,55 @@ const ActivityReservations: FC<ActivityReservationsProps> = ({
           Who&apos;s coming?
         </Title>
         {!isEmpty(reservations) ? (
-          reservations.map(
-            ({ id: reservationId, name, email, phone, note }) => {
-              return (
-                <Card key={reservationId} withBorder py="xs" px="sm">
-                  <Stack spacing={4}>
-                    <Text weight={600} lh={1.3}>
-                      {name}
-                    </Text>
-                    <Group spacing="lg" sx={{ rowGap: 0 }}>
-                      <Group spacing={4} noWrap>
-                        <Box component={EmailIcon} fz="xs" color="dark" />
-                        <Anchor
-                          href={`mailto:${encodeURIComponent(
-                            name,
-                          )}%20<${email}>`}
-                          size="sm"
-                          lh={1.3}
-                        >
-                          {email}
-                        </Anchor>
-                      </Group>
-                      {!!phone && (
+          <>
+            {reservations.map(
+              ({ id: reservationId, name, email, phone, note }) => {
+                return (
+                  <Card key={reservationId} withBorder py="xs" px="sm">
+                    <Stack spacing={4}>
+                      <Text weight={600} lh={1.3}>
+                        {name}
+                      </Text>
+                      <Group spacing="lg" sx={{ rowGap: 0 }}>
                         <Group spacing={4} noWrap>
-                          <Box component={PhoneIcon} fz="xs" color="dark" />
+                          <Box component={EmailIcon} fz="xs" color="dark" />
                           <Anchor
-                            href={`sms:${encodeURIComponent(phone)}`}
+                            href={`mailto:${encodeURIComponent(
+                              name,
+                            )}%20<${email}>`}
                             size="sm"
                             lh={1.3}
                           >
-                            {phone}
+                            {email}
                           </Anchor>
                         </Group>
+                        {!!phone && (
+                          <Group spacing={4} noWrap>
+                            <Box component={PhoneIcon} fz="xs" color="dark" />
+                            <Anchor
+                              href={`sms:${encodeURIComponent(phone)}`}
+                              size="sm"
+                              lh={1.3}
+                            >
+                              {phone}
+                            </Anchor>
+                          </Group>
+                        )}
+                      </Group>
+                      {!!note && (
+                        <Text size="sm" color="dimmed" lh={1.3}>
+                          {note}
+                        </Text>
                       )}
-                    </Group>
-                    {!!note && (
-                      <Text size="sm" color="dimmed" lh={1.3}>
-                        {note}
-                      </Text>
-                    )}
-                  </Stack>
-                </Card>
-              );
-            },
-          )
+                    </Stack>
+                  </Card>
+                );
+              },
+            )}
+            <Text size="xs" color="dimmed" lh={1.3}>
+              Guests can be removed using your calendar app.
+            </Text>
+          </>
         ) : (
           <EmptyCard itemLabel="reservations" />
         )}

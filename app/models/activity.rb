@@ -121,7 +121,7 @@ class Activity < ApplicationRecord
 
   # == Callbacks
   after_validation :geocode, if: %i[location_changed? location_is_address?]
-  after_commit :update_google_event, on: %i[create destroy]
+  after_commit :update_google_event
 
   # == Scopes
   scope :hidden, -> {
@@ -260,8 +260,9 @@ class Activity < ApplicationRecord
     self.during = event.start_time.to_time..event.end_time.to_time
     self.location = event.location
     self.capacity = title.capacity
-    attendee_emails = event.attendees.pluck("email")
-    reservations.where.not(email: attendee_emails).destroy_all
+    if (attendees = event.attendees.presence)
+      reservations.where.not(email: attendees.pluck("email")).destroy_all
+    end
   end
 
   sig do
