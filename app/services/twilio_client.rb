@@ -11,10 +11,6 @@ class TwilioClient
     @client = T.let(Twilio::REST::Client.new, Twilio::REST::Client)
   end
 
-  # == Current
-  sig { returns(TwilioClient) }
-  def self.current = instance
-
   # == Methods
   sig { params(message: String, to: String).void }
   def send_message(message, to:)
@@ -23,5 +19,10 @@ class TwilioClient
       to: Phonelib.parse(to).to_s,
       body: message,
     )
+  end
+
+  sig { params(message: String, to: String).void }
+  def self.send_message(message, to:)
+    instance.send_message(message, to: to)
   end
 end

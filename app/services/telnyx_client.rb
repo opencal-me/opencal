@@ -11,14 +11,10 @@ class TelnyxClient
   headers "Content-Type" => "application/json",
           "Authorization" => lambda { "Bearer #{Telnyx.api_key!}" }
 
-  # == Current
-  sig { returns(TelnyxClient) }
-  def self.current = instance
-
   # == Methods
   sig { params(message: String, to: String).void }
   def send_message(message, to:)
-    response = HTTParty.post("/messages", {
+    response = self.class.post("/messages", {
       body: {
         type: "SMS",
         text: message,
@@ -27,6 +23,11 @@ class TelnyxClient
       }.to_json,
     })
     raise_response_errors(response)
+  end
+
+  sig { params(message: String, to: String).void }
+  def self.send_message(message, to:)
+    instance.send_message(message, to: to)
   end
 
   private
