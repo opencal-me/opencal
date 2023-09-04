@@ -1,0 +1,3 @@
+fragment MobileSubscriptionFormViewerFragment on User {
+  id
+}

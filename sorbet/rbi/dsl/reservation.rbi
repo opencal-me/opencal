@@ -704,6 +704,51 @@ class Reservation
     def name_will_change!; end
 
     sig { returns(T.nilable(::String)) }
+    def note; end
+
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    def note=(value); end
+
+    sig { returns(T::Boolean) }
+    def note?; end
+
+    sig { returns(T.nilable(::String)) }
+    def note_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def note_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def note_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def note_change; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def note_change_to_be_saved; end
+
+    sig { returns(T::Boolean) }
+    def note_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def note_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def note_previous_change; end
+
+    sig { returns(T::Boolean) }
+    def note_previously_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def note_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def note_was; end
+
+    sig { void }
+    def note_will_change!; end
+
+    sig { returns(T.nilable(::String)) }
     def phone; end
 
     sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
@@ -764,6 +809,9 @@ class Reservation
     def restore_name!; end
 
     sig { void }
+    def restore_note!; end
+
+    sig { void }
     def restore_phone!; end
 
     sig { void }
@@ -801,6 +849,12 @@ class Reservation
 
     sig { returns(T::Boolean) }
     def saved_change_to_name?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_note; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_note?; end
 
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def saved_change_to_phone; end
@@ -924,6 +978,9 @@ class Reservation
 
     sig { returns(T::Boolean) }
     def will_save_change_to_name?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_note?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_phone?; end

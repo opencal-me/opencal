@@ -114,13 +114,14 @@ export type QueryFieldPolicy = {
 	user?: FieldPolicy<any> | FieldReadFunction<any>,
 	viewer?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type ReservationKeySpecifier = ('activity' | 'createdAt' | 'email' | 'id' | 'name' | 'phone' | 'status' | ReservationKeySpecifier)[];
+export type ReservationKeySpecifier = ('activity' | 'createdAt' | 'email' | 'id' | 'name' | 'note' | 'phone' | 'status' | ReservationKeySpecifier)[];
 export type ReservationFieldPolicy = {
 	activity?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	email?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	name?: FieldPolicy<any> | FieldReadFunction<any>,
+	note?: FieldPolicy<any> | FieldReadFunction<any>,
 	phone?: FieldPolicy<any> | FieldReadFunction<any>,
 	status?: FieldPolicy<any> | FieldReadFunction<any>
 };

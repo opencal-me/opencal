@@ -14,6 +14,7 @@ type ReservationCreateFormValues = {
   readonly name: string;
   readonly email: string;
   readonly phone: string;
+  readonly note: string;
 };
 
 export type ReservationCreateFormSubmission = ReservationCreateFormValues;
@@ -32,11 +33,13 @@ export const ReservationCreateForm: FC<ReservationCreateFormProps> = ({
       name: "",
       email: "",
       phone: "",
+      note: "",
     },
-    transformValues: ({ name, email, phone }) => ({
+    transformValues: ({ name, email, phone, note }) => ({
       name: name.trim(),
       email: email.trim(),
       phone: phone.trim(),
+      note: note.trim(),
     }),
   });
 
@@ -64,7 +67,9 @@ export const ReservationCreateForm: FC<ReservationCreateFormProps> = ({
     },
   );
 
-  // == Markup
+  // == Note
+  const [showNoteField, setShowNoteField] = useState(false);
+
   return (
     <Box
       component="form"
@@ -109,6 +114,27 @@ export const ReservationCreateForm: FC<ReservationCreateFormProps> = ({
             size="md"
             {...getInputProps("phone")}
           />
+          <Box>
+            {showNoteField && (
+              <Textarea
+                label="Note"
+                description="A little note for the organizer."
+                size="md"
+                autosize
+                minRows={2}
+                {...getInputProps("note")}
+              />
+            )}
+            <Anchor
+              component="button"
+              size="sm"
+              onClick={() => {
+                setShowNoteField(showNoteField => !showNoteField);
+              }}
+            >
+              {showNoteField ? "Hide note field" : "Add a note"}
+            </Anchor>
+          </Box>
         </Stack>
         <Group position="right" spacing="xs">
           <Button

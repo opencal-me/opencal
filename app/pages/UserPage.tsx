@@ -9,7 +9,7 @@ import UserMobileSubscribeForm from "~/components/MobileSubscriptionForm";
 
 export type UserPageProps = PagePropsWithData<UserPageQuery>;
 
-const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
+const UserPage: PageComponent<UserPageProps> = ({ data: { user, viewer } }) => {
   invariant(user, "Missing user");
   const {
     id: userId,
@@ -22,7 +22,7 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
   } = user;
 
   return (
-    <Stack spacing="xl">
+    <Stack>
       <Stack align="center" spacing={8}>
         {!!avatarUrl && (
           <Avatar
@@ -45,16 +45,14 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user } }) => {
         </Box>
       </Stack>
       {(bio || isViewer) && <UserBio editable={isViewer} {...{ user }} />}
-      {!isViewer && (
-        <Card withBorder bg="gray.0">
-          <Stack spacing={4}>
-            <Text size="sm" color="gray.7" weight={500}>
-              Get notified when {firstName} is up to something!
-            </Text>
-            <UserMobileSubscribeForm subjectId={userId} />
-          </Stack>
-        </Card>
-      )}
+      <Card withBorder bg="gray.0">
+        <Stack spacing={4}>
+          <Text size="sm" color="gray.7" weight={500}>
+            Get notified when {firstName} is up to something!
+          </Text>
+          <UserMobileSubscribeForm subjectId={userId} {...{ viewer }} />
+        </Stack>
+      </Card>
       <Stack spacing="xs">
         {!isEmpty(activities) ? (
           activities.map(activity => (

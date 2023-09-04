@@ -48,10 +48,7 @@ const ReservationCreatedEmail: PageComponent<ReservationCreatedEmailProps> = ({
         pY={10}
         bg="brand"
         fw={600}
-        sx={({ white, radius }) => ({
-          color: white,
-          borderRadius: radius.sm,
-        })}
+        sx={({ white, radius }) => ({ color: white, borderRadius: radius.sm })}
       >
         Open Activity
       </Box>
@@ -60,7 +57,7 @@ const ReservationCreatedEmail: PageComponent<ReservationCreatedEmailProps> = ({
 };
 
 ReservationCreatedEmail.layout = buildLayout<ReservationCreatedEmailProps>(
-  page => <EmailLayout header="Reservation Created">{page}</EmailLayout>,
+  page => <EmailLayout header="New Reservation">{page}</EmailLayout>,
 );
 
 export default ReservationCreatedEmail;

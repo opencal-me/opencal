@@ -8,6 +8,7 @@
 #  id          :uuid             not null, primary key
 #  email       :string           not null
 #  name        :string           not null
+#  note        :text
 #  phone       :string
 #  status      :string           not null
 #  created_at  :datetime         not null
@@ -29,6 +30,22 @@ class Reservation < ApplicationRecord
   # == Attributes
   enumerize :status, in: %i[requested approved rejected], default: :approved
 
+  sig { returns(T.nilable(String)) }
+  def formatted_phone
+    if (phone = self.phone)
+      Phonelib.parse(phone).international
+    end
+  end
+
+  sig { returns(String) }
+  def name_with_phone
+    if phone?
+      "#{name} (#{formatted_phone})"
+    else
+      name
+    end
+  end
+
   # == Associations
   belongs_to :activity
 
@@ -37,13 +54,8 @@ class Reservation < ApplicationRecord
     activity or raise ActiveRecord::RecordNotFound, "Missing activity"
   end
 
-  sig { returns(Google::Event) }
-  def google_event!
-    activity!.google_event!
-  end
-
   # == Normalizations
-  removes_blank :phone
+  removes_blank :phone, :note
   before_validation :normalize_phone
 
   # == Validations
@@ -71,7 +83,11 @@ class Reservation < ApplicationRecord
   # == Methods
   sig { returns(T::Hash[String, T.untyped]) }
   def as_attendee_json
-    { "email" => email, "responseStatus" => "needsAction" }
+    {
+      "email" => email,
+      "displayName" => name_with_phone,
+      "responseStatus" => "needsAction",
+    }.compact
   end
 
   private
@@ -87,8 +103,15 @@ class Reservation < ApplicationRecord
   # == Callback Handlers
   sig { void }
   def update_google_event
-    event = google_event!
-    event.attendees ||= []
+    activity = activity!
+    owner = activity.owner!
+    event = activity.google_event!
+    event.attendees ||= [{
+      "email" => owner.email,
+      "displayName" => owner.name,
+      "organizer" => true,
+      "responseStatus" => "accepted",
+    }]
     unless event.attendees.any? { |attendee| attendee["email"] == email }
       event.attendees << as_attendee_json
       event.send_notifications = true

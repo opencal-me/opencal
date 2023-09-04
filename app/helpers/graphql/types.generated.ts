@@ -88,6 +88,7 @@ export type CreateReservationInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
   name: Scalars['String']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
   phone?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -277,6 +278,7 @@ export type Reservation = Node & {
   /** ID of the object. */
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  note?: Maybe<Scalars['String']['output']>;
   phone?: Maybe<Scalars['String']['output']>;
   status: ReservationStatus;
 };

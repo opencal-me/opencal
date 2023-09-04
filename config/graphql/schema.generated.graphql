@@ -72,6 +72,7 @@ input CreateReservationInput {
   clientMutationId: String
   email: String!
   name: String!
+  note: String
   phone: String
 }
 
@@ -207,6 +208,7 @@ type Reservation implements Node {
   """ID of the object."""
   id: ID!
   name: String!
+  note: String
   phone: String
   status: ReservationStatus!
 }

@@ -95,7 +95,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
               </Group>
             )}
           </Box>
-          {!!descriptionHtml && (
+          {descriptionHtml ? (
             <Spoiler
               maxHeight={200}
               showLabel={
@@ -118,6 +118,24 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
             >
               <HTMLDescription>{descriptionHtml}</HTMLDescription>
             </Spoiler>
+          ) : (
+            <Card withBorder py="lg">
+              <Stack align="center" spacing={4}>
+                <Text
+                  span
+                  color="gray.7"
+                  weight={600}
+                  sx={({ fontFamilyMonospace }) => ({
+                    fontFamily: fontFamilyMonospace,
+                  })}
+                >
+                  ¯\_(ツ)_/¯
+                </Text>
+                <Text size="sm" color="dimmed">
+                  This activity has no description
+                </Text>
+              </Stack>
+            </Card>
           )}
           {coordinates && (
             <Stack spacing="xs">

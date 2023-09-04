@@ -22,6 +22,9 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
   const { openings, owner, url, storyImageUrl } = activity;
   const hasOpenings = openings > 0;
 
+  // == Routing
+  const router = useRouter();
+
   // == Copy Story Image
   const { copy, copied } = useClipboard();
   useEffect(() => {
@@ -91,7 +94,11 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
                 px="xl"
                 fz="md"
                 fw={800}
-                sx={{ boxShadow: "2px 2px 10px #00388b80" }}
+                sx={{
+                  "&:not(:disabled)": {
+                    boxShadow: "2px 2px 10px #00388b80",
+                  },
+                }}
                 disabled={!hasOpenings}
                 onClick={() => {
                   openModal({
@@ -107,6 +114,7 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
                       <ReservationCreateForm
                         onReserve={() => {
                           closeAllModals();
+                          router.reload({ preserveScroll: true });
                         }}
                         {...{ activity }}
                       />

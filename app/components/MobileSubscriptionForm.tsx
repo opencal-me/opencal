@@ -2,9 +2,12 @@ import type { FC } from "react";
 import type { BoxProps } from "@mantine/core";
 
 import { CreateMobileSubscriptionMutationDocument } from "~/helpers/graphql";
+import type { Maybe } from "~/helpers/graphql";
+import type { MobileSubscriptionFormViewerFragment } from "~/helpers/graphql";
 
 export type MobileSubscriptionFormProps = Omit<BoxProps, "children"> & {
   readonly subjectId: string;
+  readonly viewer: Maybe<MobileSubscriptionFormViewerFragment> | undefined;
 };
 
 type MobileSubscriptionFormValues = {
@@ -13,6 +16,7 @@ type MobileSubscriptionFormValues = {
 
 const MobileSubscriptionForm: FC<MobileSubscriptionFormProps> = ({
   subjectId,
+  viewer,
   ...otherProps
 }) => {
   const { getInputProps, setErrors, onSubmit, reset } =
@@ -65,6 +69,17 @@ const MobileSubscriptionForm: FC<MobileSubscriptionFormProps> = ({
       <Group align="start" spacing={8} noWrap>
         <TextInput
           placeholder="+1 (555) 555-5555"
+          inputContainer={children => (
+            <Tooltip
+              label="You... want to get a text about your own events?"
+              position="bottom"
+              withinPortal
+              withArrow
+              disabled={viewer?.id !== subjectId}
+            >
+              {children}
+            </Tooltip>
+          )}
           styles={({ fontSizes }) => ({
             root: {
               flexGrow: 1,

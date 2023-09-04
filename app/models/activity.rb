@@ -260,6 +260,8 @@ class Activity < ApplicationRecord
     self.during = event.start_time.to_time..event.end_time.to_time
     self.location = event.location
     self.capacity = title.capacity
+    attendee_emails = event.attendees.pluck("email")
+    reservations.where.not(email: attendee_emails).destroy_all
   end
 
   sig do
