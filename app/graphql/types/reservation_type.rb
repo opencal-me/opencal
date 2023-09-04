@@ -12,7 +12,7 @@ module Types
     field :email, String, null: false
     field :name, String, null: false
     field :note, String
-    field :phone, String
+    field :phone, String, method: :formatted_phone
     field :status, ReservationStatusType, null: false
 
     # == Resolvers

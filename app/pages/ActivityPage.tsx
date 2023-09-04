@@ -14,6 +14,7 @@ import ReservationFooter from "~/components/ReservationFooter";
 import Map from "~/components/Map";
 import PageContainer from "~/components/PageContainer";
 import HTMLDescription from "~/components/HTMLDescription";
+import ActivityReservations from "~/components/ActivityReservations";
 
 export type ActivityPageProps = PagePropsWithData<ActivityPageQuery>;
 
@@ -21,8 +22,16 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
   data: { activity },
 }) => {
   invariant(activity, "Missing activity");
-  const { owner, start, name, descriptionHtml, coordinates, address, tags } =
-    activity;
+  const {
+    owner,
+    start,
+    name,
+    descriptionHtml,
+    coordinates,
+    address,
+    tags,
+    reservations,
+  } = activity;
 
   // == Start
   const startDateTime = useMemo(() => DateTime.fromISO(start), [start]);
@@ -46,6 +55,9 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
     <>
       <PageContainer size="xs" withGutter sx={{ flexGrow: 1 }}>
         <Stack>
+          {!isEmpty(reservations) && (
+            <ActivityReservations mb="md" {...{ activity }} />
+          )}
           <Group spacing="xs">
             {resolve(() => {
               const { avatarUrl, initials } = owner;

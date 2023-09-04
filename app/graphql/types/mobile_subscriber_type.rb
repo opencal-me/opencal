@@ -7,13 +7,7 @@ module Types
     implements NodeType
 
     # == Fields
-    field :phone, String, null: false
-
-    # == Resolvers
-    sig { returns(String) }
-    def phone
-      Phonelib.parse(object.phone).international
-    end
+    field :phone, String, null: false, method: :formatted_phone
 
     # == Helpers
     sig { override.returns(MobileSubscriber) }

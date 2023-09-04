@@ -17,6 +17,12 @@
 class MobileSubscriber < ApplicationRecord
   include Identifiable
 
+  # == Attributes
+  sig { returns(String) }
+  def formatted_phone
+    Phonelib.parse(phone).international
+  end
+
   # == Associations
   has_many :subscriptions,
            class_name: "MobileSubscription",

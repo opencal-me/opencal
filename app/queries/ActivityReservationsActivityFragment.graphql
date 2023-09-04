@@ -1,0 +1,10 @@
+fragment ActivityReservationsActivityFragment on Activity {
+  reservations {
+    createdAt
+    email
+    id
+    name
+    note
+    phone
+  }
+}

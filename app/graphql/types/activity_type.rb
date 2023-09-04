@@ -44,6 +44,15 @@ module Types
       object.owner == current_user
     end
 
+    sig { returns(T::Enumerable[Reservation]) }
+    def reservations
+      if allowed_to?(:manage?, object)
+        object.reservations
+      else
+        []
+      end
+    end
+
     sig { returns(Time) }
     def resolve_end = object.end
 
