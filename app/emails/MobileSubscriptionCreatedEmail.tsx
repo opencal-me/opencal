@@ -7,12 +7,12 @@ import type { MobileSubscriptionCreatedEmailQuery } from "~/helpers/graphql";
 
 export type MobileSubscriptionCreatedEmailProps =
   PagePropsWithData<MobileSubscriptionCreatedEmailQuery> & {
-    readonly homeUrl: string;
+    readonly homepageUrl: string;
   };
 
 const MobileSubscriptionCreatedEmail: PageComponent<
   MobileSubscriptionCreatedEmailProps
-> = ({ data: { subscription }, homeUrl }) => {
+> = ({ data: { subscription }, homepageUrl }) => {
   invariant(subscription, "Missing subscription");
   const { subject, subscriber } = subscription;
 
@@ -31,7 +31,7 @@ const MobileSubscriptionCreatedEmail: PageComponent<
       </Text>
       <Box
         component={Button}
-        href={homeUrl}
+        href={homepageUrl}
         target="_blank"
         pX={20}
         pY={10}

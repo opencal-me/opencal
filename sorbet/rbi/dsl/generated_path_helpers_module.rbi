@@ -33,7 +33,7 @@ module GeneratedPathHelpersModule
   def graphql_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def home_path(*args); end
+  def homepages_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def kai_path(*args); end
