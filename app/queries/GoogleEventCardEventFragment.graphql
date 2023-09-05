@@ -1,7 +1,7 @@
 fragment GoogleEventCardEventFragment on GoogleEvent {
   activity {
+    ...GoogleEventCardActivityFragment
     id
-    url
   }
   descriptionHtml
   durationSeconds

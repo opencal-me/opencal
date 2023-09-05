@@ -18,11 +18,13 @@ module Types
     field :google_event_id, String, null: false
     # field :handle, String, null: false, method: :to_param
     field :is_owned_by_viewer, Boolean, null: false
+    field :join_url, String, null: false
     field :location, String
     field :name, String, null: false
     field :openings, Integer, null: false
     field :owner, UserType, null: false
     field :reservations, [ReservationType], null: false, authorized_scope: true
+    field :share_url, String, null: false
     field :start, DateTimeType, null: false
     field :story_image_url, String, null: false
     field :tags, [String], null: false
@@ -50,6 +52,11 @@ module Types
       object.owner == current_user
     end
 
+    sig { returns(T.untyped) }
+    def join_url
+      join_activity_url(object)
+    end
+
     sig { returns(T::Enumerable[Reservation]) }
     def reservations
       object.reservations.chronological
@@ -61,6 +68,11 @@ module Types
     sig { returns(String) }
     def story_image_url
       story_activity_url(object, format: :png)
+    end
+
+    sig { returns(String) }
+    def share_url
+      share_activity_url(object)
     end
 
     sig { returns(String) }

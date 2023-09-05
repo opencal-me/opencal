@@ -36,6 +36,9 @@ module GeneratedPathHelpersModule
   def homepages_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def join_activity_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def kai_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -136,6 +139,9 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def scott_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def share_activity_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def src_path(*args); end

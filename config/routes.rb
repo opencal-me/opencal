@@ -61,9 +61,15 @@ Rails.application.routes.draw do
   resource :homepages, path: "/home", only: :show
 
   # == Activities
-  resources :activities, path: "/join", only: :show do
+  resources :activities, only: :show do
     member do
       get :story
+      get :share
+    end
+  end
+  resources :activities, path: "/join", only: [] do
+    member do
+      get :join, path: "/"
     end
   end
 

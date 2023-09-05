@@ -23,7 +23,7 @@ const ActivityCreatedEmail: PageComponent<ActivityCreatedEmailProps> = ({
           sx={({ fontFamilyMonospace, white, colors }) => ({
             fontFamily: fontFamilyMonospace,
             color: white,
-            backgroundColor: colors.dark[4],
+            backgroundColor: colors.dark[3],
           })}
         >
           [open]

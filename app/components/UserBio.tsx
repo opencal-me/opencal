@@ -37,10 +37,7 @@ const UserBio: FC<UserBioProps> = ({
   const { bio } = user ?? {};
 
   // == Editing
-  const [editing, setEditing] = useState(!bio);
-  useDidUpdate(() => {
-    setEditing(!bio);
-  }, [bio]);
+  const [editing, setEditing] = useState(false);
 
   // == Form
   const formRef = useRef<HTMLFormElement>(null);
@@ -62,6 +59,7 @@ const UserBio: FC<UserBioProps> = ({
     {
       onCompleted: ({ payload: { user, errors } }) => {
         if (user) {
+          setEditing(false);
           showNotice({ message: "Bio updated successfully." });
           if (onUpdate) {
             onUpdate();
@@ -157,7 +155,13 @@ const UserBio: FC<UserBioProps> = ({
                     },
                   })}
             >
-              {editing ? (updating ? "Saving..." : "Save") : "Edit bio"}
+              {editing
+                ? updating
+                  ? "Saving..."
+                  : "Save"
+                : bio
+                ? "Edit bio"
+                : "Add a bio"}
             </Anchor>
           </Group>
           {editing && (

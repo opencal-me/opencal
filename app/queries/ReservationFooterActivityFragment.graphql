@@ -6,6 +6,6 @@ fragment ReservationFooterActivityFragment on Activity {
     id
   }
   ...ReservationCreateFormActivityFragment
-  storyImageUrl
-  url
+  # storyImageUrl
+  # url
 }

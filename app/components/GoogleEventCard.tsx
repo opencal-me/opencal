@@ -7,6 +7,7 @@ import type { BoxProps } from "@mantine/core";
 
 import type {
   ActivityCreateButtonActivityFragment,
+  GoogleEventCardActivityFragment,
   GoogleEventCardEventFragment,
 } from "~/helpers/graphql";
 
@@ -16,6 +17,7 @@ import GoogleEventConvertButton from "./GoogleEventConvertButton";
 export type GoogleEventCardProps = Omit<BoxProps, "children"> & {
   readonly event: GoogleEventCardEventFragment;
   readonly onConvert: (activity: ActivityCreateButtonActivityFragment) => void;
+  readonly onVisit: (activity: GoogleEventCardActivityFragment) => void;
 };
 
 const durationHumanizer = humanizeDuration.humanizer({
@@ -37,7 +39,13 @@ const durationHumanizer = humanizeDuration.humanizer({
 });
 
 const GoogleEventCard: FC<GoogleEventCardProps> = ({
-  event: {
+  event,
+  onConvert,
+  onVisit,
+  sx,
+  ...otherProps
+}) => {
+  const {
     id: eventId,
     title,
     descriptionHtml,
@@ -46,11 +54,7 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
     activity,
     isOrganizedByViewer,
     isRecurring,
-  },
-  onConvert,
-  sx,
-  ...otherProps
-}) => {
+  } = event;
   const isEligibleForActivity = isOrganizedByViewer && !isRecurring;
   return (
     <Card
@@ -117,6 +121,9 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
           component={Link}
           href={activity.url}
           leftIcon={<RightArrowIcon />}
+          onClick={() => {
+            onVisit(activity);
+          }}
         >
           Go To Activity
         </Button>

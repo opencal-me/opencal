@@ -22,38 +22,45 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user, viewer } }) => {
   } = user;
 
   return (
-    <Stack>
-      <Stack align="center" spacing={8}>
-        {!!avatarUrl && (
-          <Avatar
-            src={avatarUrl}
-            color="brand"
-            radius="100%"
-            size="md"
-            sx={{ alignSelf: "center" }}
-          >
-            {initials}
-          </Avatar>
-        )}
-        <Box sx={{ textAlign: "center" }}>
-          <Title order={1} size="h3">
-            {firstName}&apos;s activities
+    <Stack spacing="xl">
+      <Stack>
+        <Stack align="center" spacing={8}>
+          {!!avatarUrl && (
+            <Avatar
+              src={avatarUrl}
+              color="brand"
+              radius="100%"
+              size="md"
+              sx={{ alignSelf: "center" }}
+            >
+              {initials}
+            </Avatar>
+          )}
+          <Box sx={{ textAlign: "center" }}>
+            <Title order={1} size="h2">
+              {firstName}&apos;s OpenCal
+            </Title>
+          </Box>
+        </Stack>
+        {(bio || isViewer) && <UserBio editable={isViewer} {...{ user }} />}
+        <Card withBorder bg="gray.0">
+          <Stack spacing={4}>
+            <Text size="sm" color="gray.7" weight={500}>
+              Get notified when {firstName} is up to something!
+            </Text>
+            <UserMobileSubscribeForm subjectId={userId} {...{ viewer }} />
+          </Stack>
+        </Card>
+      </Stack>
+      <Stack spacing="xs">
+        <Box>
+          <Title order={2} size="h3">
+            Upcoming activities
           </Title>
           <Text size="sm" color="dimmed">
             Join an activity, and get involved with {firstName}&apos;s life :)
           </Text>
         </Box>
-      </Stack>
-      {(bio || isViewer) && <UserBio editable={isViewer} {...{ user }} />}
-      <Card withBorder bg="gray.0">
-        <Stack spacing={4}>
-          <Text size="sm" color="gray.7" weight={500}>
-            Get notified when {firstName} is up to something!
-          </Text>
-          <UserMobileSubscribeForm subjectId={userId} {...{ viewer }} />
-        </Stack>
-      </Card>
-      <Stack spacing="xs">
         {!isEmpty(activities) ? (
           activities.map(activity => (
             <ActivityCard key={activity.id} {...{ activity }} />

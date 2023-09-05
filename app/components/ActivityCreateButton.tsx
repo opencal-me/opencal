@@ -1,5 +1,7 @@
 import type { FC } from "react";
+import { Text } from "@mantine/core";
 import type { ButtonProps } from "@mantine/core";
+
 import ConvertIcon from "~icons/heroicons/arrows-right-left-20-solid";
 import ChevronIcon from "~icons/heroicons/chevron-down-20-solid";
 
@@ -39,12 +41,23 @@ const ActivityCreateButton: FC<ActivityCreateButtonProps> = ({
         icon={<ConvertIcon />}
         onClick={() => {
           openModal({
-            title: "Convert event into activity",
+            title: (
+              <>
+                <Text span>Convert event into activity</Text>
+                <Text size="sm" weight={400} color="dimmed" lh={1.3}>
+                  Select an event from your calendar to convert into an
+                  activity.
+                </Text>
+              </>
+            ),
             children: (
               <GoogleEvents
                 onConvert={activity => {
                   closeAllModals();
                   onCreate(activity);
+                }}
+                onVisit={() => {
+                  closeAllModals();
                 }}
               />
             ),

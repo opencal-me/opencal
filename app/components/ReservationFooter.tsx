@@ -1,9 +1,8 @@
 import type { FC } from "react";
-import ShareIcon from "~icons/lucide/share";
-import { currentTimezone } from "~/helpers/luxon";
+// import ShareIcon from "~icons/lucide/share";
 
-import { ActionIcon, Text } from "@mantine/core";
-import { useClipboard } from "@mantine/hooks";
+import { /* ActionIcon, */ Text } from "@mantine/core";
+// import { useClipboard } from "@mantine/hooks";
 import type { BoxProps } from "@mantine/core";
 
 import type { ReservationFooterActivityFragment } from "~/helpers/graphql";
@@ -19,21 +18,21 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
   sx,
   ...otherProps
 }) => {
-  const { openings, owner, url, storyImageUrl } = activity;
+  const { openings, owner /* url, storyImageUrl */ } = activity;
   const hasOpenings = openings > 0;
 
   // == Routing
   const router = useRouter();
 
   // == Copy Story Image
+  /*
   const { copy, copied } = useClipboard();
   useEffect(() => {
     if (copied) {
-      const url = new URL(storyImageUrl);
-      url.searchParams.set("timezone", currentTimezone());
-      open(url.toString(), "_blank");
+      open(storyImageUrl, "_blank");
     }
   }, [copied]);
+  */
 
   return (
     <Box
@@ -67,7 +66,7 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
             </Text>
           </Box>
           <Group spacing={8}>
-            <Tooltip
+            {/* <Tooltip
               label="Copy the activity URL, and open promo image"
               withArrow
             >
@@ -82,7 +81,7 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
               >
                 <Text component={ShareIcon} />
               </ActionIcon>
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip
               label="Sorry, this event is full!"
               withArrow

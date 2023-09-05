@@ -25,6 +25,7 @@
 #  last_sign_in_at                 :datetime
 #  last_sign_in_ip                 :string
 #  remember_created_at             :datetime
+#  requires_relogin                :boolean
 #  reset_password_sent_at          :datetime
 #  reset_password_token            :string
 #  sign_in_count                   :integer          default(0), not null
@@ -219,6 +220,7 @@ class User < ApplicationRecord
     if (refresh_token = auth.dig("credentials", "refresh_token"))
       user.google_refresh_token = refresh_token
     end
+    user.requires_relogin = false
     user.save!
     user
   end
@@ -236,13 +238,16 @@ class User < ApplicationRecord
 
   sig { override.returns(T::Boolean) }
   def active_for_authentication?
-    google_refresh_token? && super
+    google_refresh_token? && !requires_relogin? && super
   end
 
   sig { override.returns(T.any(Symbol, String)) }
   def inactive_message
     unless google_refresh_token?
       return "Missing or invalid Google refresh token"
+    end
+    unless requires_relogin?
+      return "New permissions required"
     end
     super
   end
@@ -389,6 +394,13 @@ class User < ApplicationRecord
   sig { returns(T::Boolean) }
   def admin?
     Admin.emails.include?(email) || Admin.email_domains.include?(email_domain)
+  end
+
+  sig { returns(ActiveSupport::TimeZone) }
+  def time_zone
+    calendar = google_calendar!
+    calendar.retrieve_calendar if calendar.time_zone.nil?
+    ActiveSupport::TimeZone.new(calendar.time_zone)
   end
 
   # protected

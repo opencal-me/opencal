@@ -1,0 +1,14 @@
+query ActivitySharePageQuery($activityId: ID!) {
+  activity(id: $activityId) {
+    id
+    joinUrl
+    name
+    shareUrl
+    storyImageUrl
+    url
+  }
+  viewer {
+    ...AppViewerFragment
+    id
+  }
+}

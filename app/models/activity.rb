@@ -5,19 +5,20 @@
 #
 # Table name: activities
 #
-#  id              :uuid             not null, primary key
-#  capacity        :integer
-#  coordinates     :geography        point, 4326
-#  description     :string
-#  during          :tstzrange        not null
-#  handle          :string           not null
-#  location        :string
-#  name            :string           default(""), not null
-#  tags            :string           default([]), not null, is an Array
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  google_event_id :string           not null
-#  owner_id        :uuid             not null
+#  id                 :uuid             not null, primary key
+#  capacity           :integer
+#  coordinates        :geography        point, 4326
+#  description        :string
+#  during             :tstzrange        not null
+#  handle             :string           not null
+#  location           :string
+#  name               :string           default(""), not null
+#  tags               :string           default([]), not null, is an Array
+#  time_zone_override :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  google_event_id    :string           not null
+#  owner_id           :uuid             not null
 #
 # Indexes
 #
@@ -264,6 +265,7 @@ class Activity < ApplicationRecord
     self.during = event.start_time.to_time..event.end_time.to_time
     self.location = event.location
     self.capacity = title.capacity
+    self.time_zone_override = event.time_zone
     if (attendees = event.attendees.presence)
       reservations.where.not(email: attendees.pluck("email")).destroy_all
     end
@@ -319,6 +321,15 @@ class Activity < ApplicationRecord
   def description_html(view_context:)
     description = self.description or return
     self.class.parse_description_as_html(description, view_context:)
+  end
+
+  sig { returns(ActiveSupport::TimeZone) }
+  def time_zone
+    if (time_zone = time_zone_override)
+      ActiveSupport::TimeZone.new(time_zone)
+    else
+      owner!.time_zone
+    end
   end
 
   private

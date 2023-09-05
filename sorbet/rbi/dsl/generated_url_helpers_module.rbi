@@ -36,6 +36,9 @@ module GeneratedUrlHelpersModule
   def homepages_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def join_activity_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def kai_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -136,6 +139,9 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def scott_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def share_activity_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def src_url(*args); end

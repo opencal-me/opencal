@@ -12,7 +12,7 @@ query HomePageQuery {
       id
       ...MobileSubscriptionBadgeSubscriptionFragment
     }
+    url
     ...UserBioUserFragment
-    ...UserShareProfileAlertUserFragment
   }
 }

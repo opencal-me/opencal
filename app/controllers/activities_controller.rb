@@ -3,20 +3,40 @@
 
 class ActivitiesController < ApplicationController
   # == Filters
+  before_action :authenticate_user!, only: :show
   before_action :set_activity
   before_action :import_activity if Rails.env.development?
 
   # == Actions
   def show
     activity = T.must(@activity)
+    authorize!(activity, to: :manage?)
+    data = query!("ActivityPageQuery", { activity_id: activity.to_gid.to_s })
+    render(inertia: "ActivityPage", props: { data: })
+  end
+
+  def join
+    activity = T.must(@activity)
     if params[:id] == activity.to_param
       authorize!(activity, to: :show?)
-      data = query!("ActivityPageQuery",
-                    { activity_id: activity.to_gid.to_s })
-      render(inertia: "ActivityPage", props: { data: })
+      data = query!(
+        "ActivityJoinPageQuery",
+        { activity_id: activity.to_gid.to_s },
+      )
+      render(inertia: "ActivityJoinPage", props: { data: })
     else
       redirect_to(activity_path(activity))
     end
+  end
+
+  def share
+    activity = T.must(@activity)
+    authorize!(activity, to: :show?)
+    data = query!(
+      "ActivitySharePageQuery",
+      { activity_id: activity.to_gid.to_s },
+    )
+    render(inertia: "ActivitySharePage", props: { data: })
   end
 
   def story
@@ -29,9 +49,7 @@ class ActivitiesController < ApplicationController
         render(inertia: "ActivityStoryPage", props: { data: })
       end
       format.png do
-        timezone = params.fetch(:timezone) or raise "Missing timezone param"
-        timezone = ActiveSupport::TimeZone.new(timezone)
-        data = activity_story_image(activity, timezone:)
+        data = activity_story_image(activity)
         send_data(
           data,
           filename: "#{activity.to_param}.png",
@@ -79,18 +97,13 @@ class ActivitiesController < ApplicationController
     )
   end
 
-  sig do
-    params(
-      activity: Activity,
-      timezone: ActiveSupport::TimeZone,
-    ).returns(T.untyped)
-  end
-  def activity_story_image(activity, timezone:)
+  sig { params(activity: Activity).returns(T.untyped) }
+  def activity_story_image(activity)
     self.class.activity_story_image_semaphore.synchronize do
       driver = webdriver
       driver.execute_cdp(
         "Emulation.setTimezoneOverride",
-        "timezoneId" => timezone.name,
+        "timezoneId" => activity.time_zone.name,
       )
       driver.get(story_activity_url(activity))
       Selenium::WebDriver::Wait.new.until do

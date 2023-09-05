@@ -7,9 +7,13 @@ import GoogleEventCard from "./GoogleEventCard";
 import type { GoogleEventCardProps } from "./GoogleEventCard";
 
 export type GoogleEventsProps = Omit<BoxProps, "children"> &
-  Pick<GoogleEventCardProps, "onConvert">;
+  Pick<GoogleEventCardProps, "onConvert" | "onVisit">;
 
-const GoogleEvents: FC<GoogleEventsProps> = ({ onConvert, ...otherProps }) => {
+const GoogleEvents: FC<GoogleEventsProps> = ({
+  onConvert,
+  onVisit,
+  ...otherProps
+}) => {
   // == Search
   const [search, setSearch] = useState("");
   const [debouncedSearch] = useDebouncedValue(search, 200);
@@ -37,7 +41,10 @@ const GoogleEvents: FC<GoogleEventsProps> = ({ onConvert, ...otherProps }) => {
       {events ? (
         !isEmpty(events) ? (
           events.map(event => (
-            <GoogleEventCard key={event.id} {...{ event, onConvert }} />
+            <GoogleEventCard
+              key={event.id}
+              {...{ event, onConvert, onVisit }}
+            />
           ))
         ) : (
           <EmptyCard itemLabel="events" />

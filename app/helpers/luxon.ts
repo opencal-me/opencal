@@ -13,5 +13,3 @@ export const setupLuxon = () => {
 
 export const useParseDateTime = (text: string): DateTime =>
   useMemo(() => DateTime.fromISO(text), [text]);
-
-export const currentTimezone = (): string => DateTime.local().zoneName;

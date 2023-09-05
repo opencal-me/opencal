@@ -1007,6 +1007,9 @@ class Activity
     def restore_tags!; end
 
     sig { void }
+    def restore_time_zone_override!; end
+
+    sig { void }
     def restore_updated_at!; end
 
     sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
@@ -1081,6 +1084,12 @@ class Activity
     sig { returns(T::Boolean) }
     def saved_change_to_tags?; end
 
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_time_zone_override; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_time_zone_override?; end
+
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def saved_change_to_updated_at; end
 
@@ -1131,6 +1140,51 @@ class Activity
 
     sig { void }
     def tags_will_change!; end
+
+    sig { returns(T.nilable(::String)) }
+    def time_zone_override; end
+
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    def time_zone_override=(value); end
+
+    sig { returns(T::Boolean) }
+    def time_zone_override?; end
+
+    sig { returns(T.nilable(::String)) }
+    def time_zone_override_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def time_zone_override_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def time_zone_override_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def time_zone_override_change; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def time_zone_override_change_to_be_saved; end
+
+    sig { returns(T::Boolean) }
+    def time_zone_override_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def time_zone_override_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def time_zone_override_previous_change; end
+
+    sig { returns(T::Boolean) }
+    def time_zone_override_previously_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def time_zone_override_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def time_zone_override_was; end
+
+    sig { void }
+    def time_zone_override_will_change!; end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def updated_at; end
@@ -1212,6 +1266,9 @@ class Activity
 
     sig { returns(T::Boolean) }
     def will_save_change_to_tags?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_time_zone_override?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_updated_at?; end

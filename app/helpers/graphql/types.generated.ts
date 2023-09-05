@@ -30,11 +30,13 @@ export type Activity = Node & {
   /** ID of the object. */
   id: Scalars['ID']['output'];
   isOwnedByViewer: Scalars['Boolean']['output'];
+  joinUrl: Scalars['String']['output'];
   location?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   openings: Scalars['Int']['output'];
   owner: User;
   reservations: Array<Reservation>;
+  shareUrl: Scalars['String']['output'];
   start: Scalars['DateTime']['output'];
   storyImageUrl: Scalars['String']['output'];
   tags: Array<Scalars['String']['output']>;

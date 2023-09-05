@@ -1,6 +1,5 @@
-query ActivityPageQuery($activityId: ID!) {
+query ActivityJoinPageQuery($activityId: ID!) {
   activity(id: $activityId) {
-    ...ActivityReservationsActivityFragment
     address
     addressPlaceName
     coordinates {
@@ -10,13 +9,17 @@ query ActivityPageQuery($activityId: ID!) {
     descriptionHtml
     end
     id
+    isOwnedByViewer
     joinUrl
     name
     owner {
+      avatarUrl
       id
+      initials
+      name
       url
     }
-    shareUrl
+    ...ReservationFooterActivityFragment
     start
     tags
     url

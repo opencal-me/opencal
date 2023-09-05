@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_04_222201) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_05_055502) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -57,6 +57,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_222201) do
     t.integer "capacity"
     t.string "name", default: "", null: false
     t.string "tags", default: [], null: false, array: true
+    t.string "time_zone_override"
     t.index ["coordinates"], name: "index_activities_on_coordinates", using: :gist
     t.index ["google_event_id"], name: "index_activities_on_google_event_id", unique: true
     t.index ["handle"], name: "index_activities_on_handle", unique: true
@@ -233,6 +234,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_222201) do
     t.string "google_calendar_next_sync_token"
     t.string "google_calendar_next_page_token"
     t.text "bio"
+    t.boolean "requires_relogin"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["google_calendar_last_synced_at"], name: "index_users_on_google_calendar_last_synced_at"
     t.index ["handle"], name: "index_users_on_handle", unique: true

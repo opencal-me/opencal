@@ -13,7 +13,7 @@ const LandingPage: PageComponent<LandingPageProps> = ({ data: { viewer } }) => {
   const mounted = useMounted();
 
   return (
-    <Stack spacing="xl">
+    <Stack spacing={36}>
       <Text lh={1.3}>
         Hi! This is{" "}
         <Text span weight={600}>

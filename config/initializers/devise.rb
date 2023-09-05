@@ -284,7 +284,7 @@ Devise.setup do |config|
     scope: %w[
       profile
       email
-      https://www.googleapis.com/auth/calendar.settings.readonly
+      https://www.googleapis.com/auth/calendar.readonly
       https://www.googleapis.com/auth/calendar.events
     ].join(","),
   )

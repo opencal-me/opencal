@@ -56,6 +56,9 @@ module Google
     sig { returns(T.nilable(T::Array[T::Hash[String, T.untyped]])) }
     attr_accessor :attachments
 
+    sig { returns(T.nilable(String)) }
+    attr_accessor :time_zone
+
     # == Initializer
     sig { params(params: T::Hash[Symbol, T.untyped]).void }
     def initialize(params = {})
@@ -63,6 +66,7 @@ module Google
          attendees description reminders recurrence start_time end_time color_id
          extended_properties guests_can_invite_others
          guests_can_see_other_guests send_notifications
+         time_zone
          attachments recurring_event_id].each do |attribute|
            instance_variable_set("@#{attribute}", params[attribute])
          end
@@ -93,6 +97,7 @@ module Google
       params[:html_link] = e["htmlLink"]
       params[:start_time] = Event.parse_json_time(e["start"])
       params[:end_time] = Event.parse_json_time(e["end"])
+      params[:time_zone] = e.dig("start", "timeZone")
       params[:recurrence] = Event.parse_recurrence_rule(e["recurrence"])
 
       Event.new(params)

@@ -15,11 +15,13 @@ type Activity implements Node {
   """ID of the object."""
   id: ID!
   isOwnedByViewer: Boolean!
+  joinUrl: String!
   location: String
   name: String!
   openings: Int!
   owner: User!
   reservations: [Reservation!]!
+  shareUrl: String!
   start: DateTime!
   storyImageUrl: String!
   tags: [String!]!

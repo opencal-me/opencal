@@ -133,6 +133,10 @@ const ActivityCreateForm: FC<ActivityCreateFormProps> = ({
             size="md"
             firstDayOfWeek={0}
             valueFormat="LLL"
+            popoverProps={{
+              withArrow: true,
+              withinPortal: true,
+            }}
             {...getInputProps("start")}
           />
           <Select
