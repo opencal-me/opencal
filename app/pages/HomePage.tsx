@@ -7,54 +7,20 @@ import type { HomePageQuery } from "~/helpers/graphql";
 import ActivityCard from "~/components/ActivityCard";
 import MobileSubscriptionBadge from "~/components/MobileSubscriptionBadge";
 import ActivityCreateButton from "~/components/ActivityCreateButton";
+import UserShareProfileAlert from "~/components/UserShareProfileAlert";
 
 export type HomePageProps = PagePropsWithData<HomePageQuery>;
 
 const HomePage: PageComponent<HomePageProps> = ({ data: { viewer } }) => {
   invariant(viewer, "Missing viewer");
-  const { activities, url, mobileSubscriptions } = viewer;
-  const urlLabel = useMemo(() => {
-    const u = new URL(url);
-    return `${u.host}${u.pathname}`;
-  }, [url]);
+  const { activities, mobileSubscriptions } = viewer;
 
   // == Routing
   const router = useRouter();
 
   return (
     <Stack spacing="xl">
-      {!isEmpty(activities) && (
-        <Alert
-          variant="filled"
-          title={
-            <Text span lineClamp={1}>
-              Your profile is live:{" "}
-              <Anchor
-                component={Link}
-                href={url}
-                sx={({ white }) => ({
-                  color: white,
-                  textDecoration: "underline",
-                  wordBreak: "break-all",
-                })}
-              >
-                {urlLabel}
-              </Anchor>
-            </Text>
-          }
-          styles={({ colors, fontSizes }) => ({
-            title: {
-              fontSize: fontSizes.lg,
-              marginBottom: 0,
-            },
-            message: {
-              color: colors.brand[0],
-            },
-          })}
-        >
-          Share this link with the people you want to hang out with more :)
-        </Alert>
-      )}
+      {!isEmpty(activities) && <UserShareProfileAlert user={viewer} />}
       <Stack spacing={4}>
         <Title order={2} size="h3">
           Your Activities

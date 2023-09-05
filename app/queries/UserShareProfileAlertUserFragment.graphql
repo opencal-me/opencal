@@ -1,0 +1,3 @@
+fragment UserShareProfileAlertUserFragment on User {
+  url
+}

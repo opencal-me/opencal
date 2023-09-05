@@ -15,6 +15,7 @@ import Map from "~/components/Map";
 import PageContainer from "~/components/PageContainer";
 import HTMLDescription from "~/components/HTMLDescription";
 import ActivityReservations from "~/components/ActivityReservations";
+import UserShareProfileAlert from "~/components/UserShareProfileAlert";
 
 export type ActivityPageProps = PagePropsWithData<ActivityPageQuery>;
 
@@ -32,6 +33,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
     addressPlaceName,
     tags,
     reservations,
+    isOwnedByViewer,
   } = activity;
 
   // == Start
@@ -55,134 +57,142 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
   return (
     <>
       <PageContainer size="xs" withGutter sx={{ flexGrow: 1 }}>
-        <Stack>
-          {!isEmpty(reservations) && (
-            <ActivityReservations mb="md" {...{ activity }} />
+        <Stack spacing={32}>
+          {isOwnedByViewer && (
+            <>
+              {!isEmpty(reservations) ? (
+                <ActivityReservations {...{ activity }} />
+              ) : (
+                <UserShareProfileAlert user={owner} />
+              )}
+            </>
           )}
-          <Group spacing="xs">
-            {resolve(() => {
-              const { avatarUrl, initials } = owner;
-              return (
-                !!avatarUrl && (
-                  <Avatar src={avatarUrl} size="sm" color="brand" radius="xl">
-                    {initials}
-                  </Avatar>
-                )
-              );
-            })}
-            <Text size="sm">
-              <Anchor
-                component={Link}
-                href={owner.url}
-                color="dark"
-                weight={600}
-                sx={({ transitionTimingFunction, fn }) => ({
-                  textDecoration: "underline",
-                  transition: `color 150ms ${transitionTimingFunction}`,
-                  "&:hover": {
-                    color: fn.primaryColor(),
+          <Stack>
+            <Group spacing="xs">
+              {resolve(() => {
+                const { avatarUrl, initials } = owner;
+                return (
+                  !!avatarUrl && (
+                    <Avatar src={avatarUrl} size="sm" color="brand" radius="xl">
+                      {initials}
+                    </Avatar>
+                  )
+                );
+              })}
+              <Text size="sm">
+                <Anchor
+                  component={Link}
+                  href={owner.url}
+                  color="dark"
+                  weight={600}
+                  sx={({ transitionTimingFunction, fn }) => ({
+                    textDecoration: "underline",
+                    transition: `color 150ms ${transitionTimingFunction}`,
+                    "&:hover": {
+                      color: fn.primaryColor(),
+                    },
+                  })}
+                >
+                  {owner.name}
+                </Anchor>{" "}
+                wants you to join them
+              </Text>
+            </Group>
+            <Box>
+              <Title size="h3" lh={1.3}>
+                {name}
+              </Title>
+              <Text color="brand" size="sm">
+                {startDateLabel} at{" "}
+                <Time format={{ hour: "numeric", minute: "numeric" }}>
+                  {startDateTime}
+                </Time>
+              </Text>
+              {!isEmpty(tags) && (
+                <Group spacing={4} mt={4}>
+                  {tags.map(tag => (
+                    <Badge key={tag} color="gray" radius="sm">
+                      {tag}
+                    </Badge>
+                  ))}
+                </Group>
+              )}
+            </Box>
+            {descriptionHtml ? (
+              <Spoiler
+                maxHeight={200}
+                showLabel={
+                  <Group spacing={4}>
+                    <Text component={ShowMoreIcon} />
+                    <Text span>Show more</Text>
+                  </Group>
+                }
+                hideLabel={
+                  <Group spacing={4}>
+                    <Text component={HideIcon} />
+                    <Text span>Hide</Text>
+                  </Group>
+                }
+                styles={({ fontSizes }) => ({
+                  control: {
+                    fontSize: fontSizes.sm,
                   },
                 })}
               >
-                {owner.name}
-              </Anchor>{" "}
-              wants you to join them
-            </Text>
-          </Group>
-          <Box>
-            <Title size="h3" lh={1.3}>
-              {name}
-            </Title>
-            <Text color="brand" size="sm">
-              {startDateLabel} at{" "}
-              <Time format={{ hour: "numeric", minute: "numeric" }}>
-                {startDateTime}
-              </Time>
-            </Text>
-            {!isEmpty(tags) && (
-              <Group spacing={4} mt={4}>
-                {tags.map(tag => (
-                  <Badge key={tag} color="gray" radius="sm">
-                    {tag}
-                  </Badge>
-                ))}
-              </Group>
+                <HTMLDescription>{descriptionHtml}</HTMLDescription>
+              </Spoiler>
+            ) : (
+              <Card withBorder py="lg">
+                <Stack align="center" spacing={4}>
+                  <Text
+                    span
+                    color="gray.7"
+                    weight={600}
+                    sx={({ fontFamilyMonospace }) => ({
+                      fontFamily: fontFamilyMonospace,
+                    })}
+                  >
+                    ¯\_(ツ)_/¯
+                  </Text>
+                  <Text size="sm" color="dimmed">
+                    This activity has no description
+                  </Text>
+                </Stack>
+              </Card>
             )}
-          </Box>
-          {descriptionHtml ? (
-            <Spoiler
-              maxHeight={200}
-              showLabel={
-                <Group spacing={4}>
-                  <Text component={ShowMoreIcon} />
-                  <Text span>Show more</Text>
-                </Group>
-              }
-              hideLabel={
-                <Group spacing={4}>
-                  <Text component={HideIcon} />
-                  <Text span>Hide</Text>
-                </Group>
-              }
-              styles={({ fontSizes }) => ({
-                control: {
-                  fontSize: fontSizes.sm,
-                },
-              })}
-            >
-              <HTMLDescription>{descriptionHtml}</HTMLDescription>
-            </Spoiler>
-          ) : (
-            <Card withBorder py="lg">
-              <Stack align="center" spacing={4}>
-                <Text
-                  span
-                  color="gray.7"
-                  weight={600}
-                  sx={({ fontFamilyMonospace }) => ({
-                    fontFamily: fontFamilyMonospace,
+            {coordinates && (
+              <Stack spacing="xs">
+                <Box
+                  w="100%"
+                  h={275}
+                  sx={({ radius, colors }) => ({
+                    borderRadius: radius.md,
+                    overflow: "hidden",
+                    border: `${rem(1)} solid ${colors.gray[3]}`,
                   })}
                 >
-                  ¯\_(ツ)_/¯
-                </Text>
-                <Text size="sm" color="dimmed">
-                  This activity has no description
-                </Text>
-              </Stack>
-            </Card>
-          )}
-          {coordinates && (
-            <Stack spacing="xs">
-              <Box
-                w="100%"
-                h={275}
-                sx={({ radius, colors }) => ({
-                  borderRadius: radius.md,
-                  overflow: "hidden",
-                  border: `${rem(1)} solid ${colors.gray[3]}`,
-                })}
-              >
-                <Map initialViewState={{ ...coordinates, zoom: 11 }}>
-                  <Marker {...coordinates} />
-                </Map>
-              </Box>
-              {!!address && (
-                <Group align="start" spacing={6}>
-                  <Text component={LocationIcon} color="brand" mt={1} />
-                  <Box>
-                    <Text size="sm" weight={500} color="dark" lh={1.3}>
-                      {addressPlaceName ?? address}
-                    </Text>
-                    {!!addressPlaceName && (
-                      <Text size="xs" color="dimmed" lh={1.3}>
-                        {address}
+                  <Map initialViewState={{ ...coordinates, zoom: 11 }}>
+                    <Marker {...coordinates} />
+                  </Map>
+                </Box>
+                {!!address && (
+                  <Group align="start" spacing={6}>
+                    <Text component={LocationIcon} color="brand" mt={1} />
+                    <Box>
+                      <Text size="sm" weight={500} color="dark" lh={1.3}>
+                        {addressPlaceName ?? address}
                       </Text>
-                    )}
-                  </Box>
-                </Group>
-              )}
-            </Stack>
-          )}
+                      {!!addressPlaceName && (
+                        <Text size="xs" color="dimmed" lh={1.3}>
+                          {address}
+                        </Text>
+                      )}
+                    </Box>
+                  </Group>
+                )}
+              </Stack>
+            )}
+          </Stack>
         </Stack>
       </PageContainer>
       <Box ref={footerRef} pt="md">

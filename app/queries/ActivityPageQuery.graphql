@@ -18,6 +18,7 @@ query ActivityPageQuery($activityId: ID!) {
       initials
       name
       url
+      ...UserShareProfileAlertUserFragment
     }
     ...ReservationFooterActivityFragment
     start

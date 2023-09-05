@@ -13,5 +13,6 @@ query HomePageQuery {
       ...MobileSubscriptionBadgeSubscriptionFragment
     }
     ...UserBioUserFragment
+    ...UserShareProfileAlertUserFragment
   }
 }

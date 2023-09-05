@@ -167,7 +167,7 @@ class Activity < ApplicationRecord
   end
 
   # == Importing
-  sig { params(event: Google::Event, owner: User).void }
+  sig { params(event: Google::Event, owner: User).returns(T.nilable(Activity)) }
   def self.import_event!(event, owner:)
     title = if (title = event.title)
       GoogleEventTitle.parse(title)
@@ -181,8 +181,10 @@ class Activity < ApplicationRecord
         activity.send_created_email_later
         activity.send_mobile_subscriber_texts_later
       end
+      activity
     elsif (activity = find_by(google_event_id: event.id, owner:))
       activity.destroy!
+      activity
     end
   end
 

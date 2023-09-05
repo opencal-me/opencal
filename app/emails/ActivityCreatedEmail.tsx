@@ -33,9 +33,7 @@ const ActivityCreatedEmail: PageComponent<ActivityCreatedEmailProps> = ({
           {name}
         </Link>
       </Text>
-      <Text>
-        Feel free to share this link with anyone you&apos;d like to invite :)
-      </Text>
+      <Text>Share this link with anyone you&apos;d like to invite :)</Text>
       <Box
         component={Button}
         href={url}
