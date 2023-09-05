@@ -126,9 +126,14 @@ class Activity < ApplicationRecord
   after_commit :update_google_event
 
   # == Scopes
+  scope :publicly_visible, -> {
+    T.bind(self, PrivateRelation)
+    where("? = ANY(tags)", "public")
+  }
+
   scope :hidden, -> {
     T.bind(self, PrivateRelation)
-    where.contains(tags: ["hidden"])
+    where("? = ANY(tags)", "hidden")
   }
 
   # == Routing

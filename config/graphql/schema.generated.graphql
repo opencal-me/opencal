@@ -211,6 +211,7 @@ interface Node {
 }
 
 type Query {
+  activities: [Activity!]!
   activity(id: ID!): Activity
   activityStatus: String
   announcement: String

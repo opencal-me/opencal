@@ -114,7 +114,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
                     },
                   })}
                 >
-                  {owner.name}
+                  {owner.firstName}
                 </Anchor>{" "}
                 wants you to join them at...
               </Text>

@@ -1,4 +1,15 @@
 query HomePageQuery {
+  activities {
+    ...ActivityCardActivityFragment
+    id
+    owner {
+      avatarUrl
+      firstName
+      id
+      initials
+      url
+    }
+  }
   announcement
   viewer {
     activities(showHidden: true, showRecentlyEnded: true) {

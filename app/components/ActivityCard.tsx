@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 import humanizeDuration from "humanize-duration";
 
 import { Text } from "@mantine/core";
@@ -10,6 +10,7 @@ import HTMLDescription from "./HTMLDescription";
 
 export type ActivityCardProps = Omit<BoxProps, "children"> & {
   readonly activity: ActivityCardActivityFragment;
+  readonly topSection?: ReactNode;
 };
 
 const durationHumanizer = humanizeDuration.humanizer({
@@ -31,7 +32,18 @@ const durationHumanizer = humanizeDuration.humanizer({
 });
 
 const ActivityCard: FC<ActivityCardProps> = ({
-  activity: { name, tags, descriptionHtml, start, end, durationSeconds, url },
+  activity: {
+    name,
+    tags,
+    descriptionHtml,
+    start,
+    end,
+    durationSeconds,
+    url,
+    joinUrl,
+    isOwnedByViewer,
+  },
+  topSection,
   ...otherProps
 }) => {
   const isOver = useMemo(() => {
@@ -42,7 +54,7 @@ const ActivityCard: FC<ActivityCardProps> = ({
   return (
     <AnchorContainer
       component={Link}
-      href={url}
+      href={isOwnedByViewer ? url : joinUrl}
       pos="relative"
       {...(isOver && { mt: 6 })}
       {...otherProps}
@@ -58,6 +70,7 @@ const ActivityCard: FC<ActivityCardProps> = ({
           }),
         })}
       >
+        {topSection}
         <Group align="start" noWrap>
           <Text weight={500} lh={1.2} sx={{ flexGrow: 1 }}>
             {name}

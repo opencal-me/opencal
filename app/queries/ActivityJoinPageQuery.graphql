@@ -14,9 +14,9 @@ query ActivityJoinPageQuery($activityId: ID!) {
     name
     owner {
       avatarUrl
+      firstName
       id
       initials
-      name
       url
     }
     ...ReservationFooterActivityFragment

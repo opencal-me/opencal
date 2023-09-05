@@ -249,6 +249,7 @@ export type Node = {
 
 export type Query = {
   __typename?: 'Query';
+  activities: Array<Activity>;
   activity?: Maybe<Activity>;
   activityStatus?: Maybe<Scalars['String']['output']>;
   announcement?: Maybe<Scalars['String']['output']>;

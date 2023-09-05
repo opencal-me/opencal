@@ -1,5 +1,5 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
-import { Code, Image, Text } from "@mantine/core";
+import { Avatar, Code, Image, Text } from "@mantine/core";
 
 import type { HomePageQuery } from "~/helpers/graphql";
 
@@ -12,7 +12,9 @@ import createFromCalendarImageSrc from "~/assets/images/create-from-calendar.gif
 
 export type HomePageProps = PagePropsWithData<HomePageQuery>;
 
-const HomePage: PageComponent<HomePageProps> = ({ data: { viewer } }) => {
+const HomePage: PageComponent<HomePageProps> = ({
+  data: { viewer, activities: publicActivities },
+}) => {
   invariant(viewer, "Missing viewer");
   const { activities, mobileSubscriptions, url } = viewer;
   const urlLabel = useMemo(() => {
@@ -24,7 +26,7 @@ const HomePage: PageComponent<HomePageProps> = ({ data: { viewer } }) => {
   const router = useRouter();
 
   return (
-    <Stack spacing="xl">
+    <Stack spacing={28}>
       {!isEmpty(activities) && (
         <Alert
           variant="filled"
@@ -63,17 +65,8 @@ const HomePage: PageComponent<HomePageProps> = ({ data: { viewer } }) => {
             Your Activities
           </Title>
           <Text size="sm" color="dimmed" lh={1.3}>
-            Any Google calendar event with{" "}
-            <Code
-              color="dark"
-              sx={({ white, colors }) => ({
-                color: white,
-                backgroundColor: colors.dark[3],
-              })}
-            >
-              open
-            </Code>{" "}
-            in the title, will automatically become an OpenCal activity.
+            Any Google calendar event with <Code>[open]</Code> in the title,
+            will automatically become an OpenCal activity.
           </Text>
         </Box>
         <Stack spacing="xs">
@@ -111,11 +104,42 @@ const HomePage: PageComponent<HomePageProps> = ({ data: { viewer } }) => {
           </Box>
         </Stack>
       </Stack>
-      {/* <GoogleEvents
-        onCreateActivity={({ url }) => {
-          router.visit(url);
-        }}
-      /> */}
+      {!isEmpty(publicActivities) && (
+        <Stack spacing="xs">
+          <Box>
+            <Title order={2} size="h3">
+              Community activities
+            </Title>
+            <Text size="sm" color="dimmed" lh={1.4}>
+              Activities that users on OpenCal have shared to the world (by
+              tagging them as <Code>[open public]</Code> in their calendar).
+            </Text>
+          </Box>
+          <Stack spacing="xs">
+            {publicActivities.map(activity => {
+              const { id: activityId, owner } = activity;
+              return (
+                <ActivityCard
+                  key={activityId}
+                  topSection={
+                    <Card.Section inheritPadding>
+                      <Group spacing={8} py={8}>
+                        <Avatar src={owner.avatarUrl} size="xs" radius="xl">
+                          {owner.initials}
+                        </Avatar>
+                        <Text size="sm" color="gray.6">
+                          {owner.firstName} wants you to join them at...
+                        </Text>
+                      </Group>
+                    </Card.Section>
+                  }
+                  {...{ activity }}
+                />
+              );
+            })}
+          </Stack>
+        </Stack>
+      )}
       {!isEmpty(mobileSubscriptions) && (
         <Stack spacing={8}>
           <Box>
