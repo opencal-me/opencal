@@ -1,0 +1,12 @@
+mutation ConvertGoogleEventMutation($input: ConvertGoogleEventInput!) {
+  payload: convertGoogleEvent(input: $input) {
+    activity {
+      ...GoogleEventConvertButtonActivityFragment
+      id
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

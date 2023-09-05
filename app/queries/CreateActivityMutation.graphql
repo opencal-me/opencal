@@ -1,12 +1,8 @@
 mutation CreateActivityMutation($input: CreateActivityInput!) {
   payload: createActivity(input: $input) {
     activity {
-      ...ActivityCreateButtonActivityFragment
+      ...ActivityCreateFormActivityFragment
       id
-    }
-    errors {
-      field
-      message
     }
   }
 }

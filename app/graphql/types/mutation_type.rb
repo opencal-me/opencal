@@ -18,6 +18,7 @@ module Types
     field :delete_mobile_subscription,
           mutation: Mutations::DeleteMobileSubscription
 
+    field :convert_google_event, mutation: Mutations::ConvertGoogleEvent
     field :create_activity, mutation: Mutations::CreateActivity
     field :create_reservation, mutation: Mutations::CreateReservation
   end

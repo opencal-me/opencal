@@ -29,6 +29,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
     descriptionHtml,
     coordinates,
     address,
+    addressPlaceName,
     tags,
     reservations,
   } = activity;
@@ -166,11 +167,18 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
                 </Map>
               </Box>
               {!!address && (
-                <Group align="center" spacing={6}>
-                  <Text component={LocationIcon} color="brand" />
-                  <Text size="sm" weight={500}>
-                    {address}
-                  </Text>
+                <Group align="start" spacing={6}>
+                  <Text component={LocationIcon} color="brand" mt={1} />
+                  <Box>
+                    <Text size="sm" weight={500} color="dark" lh={1.3}>
+                      {addressPlaceName ?? address}
+                    </Text>
+                    {!!addressPlaceName && (
+                      <Text size="xs" color="dimmed" lh={1.3}>
+                        {address}
+                      </Text>
+                    )}
+                  </Box>
                 </Group>
               )}
             </Stack>

@@ -7,6 +7,7 @@ import type { PageComponent, SharedPageProps } from "~/helpers/inertia";
 
 import { setupActiveStorage } from "~/helpers/activestorage";
 import { setupLuxon } from "~/helpers/luxon";
+import { setupDayjs } from "~/helpers/dayjs";
 
 // == Polyfills
 import "requestidlecallback-polyfill";
@@ -14,6 +15,7 @@ import "requestidlecallback-polyfill";
 // == Setup
 setupActiveStorage();
 setupLuxon();
+setupDayjs();
 
 // == Pages
 const pages = resolve(() => {

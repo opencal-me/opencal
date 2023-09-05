@@ -5,28 +5,51 @@ module Mutations
   class CreateActivity < BaseMutation
     # == Payload
     class Payload < T::Struct
-      const :activity, T.nilable(Activity)
-      const :errors, T.nilable(InputFieldErrors)
+      const :activity, Activity
     end
 
     # == Fields
-    field :activity, Types::ActivityType
-    field :errors, [Types::InputFieldErrorType]
+    field :activity, Types::ActivityType, null: false
 
     # == Arguments
-    argument :google_event_id, String
+    argument :description, String, required: false
+    argument :duration_seconds, Integer
+    argument :location, String, required: false
+    argument :name, String
+    argument :start, Types::DateTimeType
 
     # == Resolver
-    sig { override.params(google_event_id: String).returns(Payload) }
-    def resolve(google_event_id:)
+    sig do
+      override.params(
+        name: String,
+        start: Time,
+        duration_seconds: Integer,
+        location: T.nilable(String),
+        description: T.nilable(String),
+      ).returns(Payload)
+    end
+    def resolve(
+      name:,
+      start:,
+      duration_seconds:,
+      location: nil,
+      description: nil
+    )
       owner = current_user!
-      event = owner.google_event!(google_event_id)
-      activity = Activity.from_google_event(event, owner:)
-      if activity.save
-        Payload.new(activity:)
-      else
-        Payload.new(errors: activity.input_field_errors)
+      google_event = owner.create_google_event!(
+        title: [name, "[open]"].join(" "),
+        during: start..(start + duration_seconds),
+        location: location.presence,
+        description: description.presence,
+      )
+      activity = Activity.from_google_event(google_event, owner:)
+      begin
+        activity.save!
+      rescue
+        google_event.delete
+        raise
       end
+      Payload.new(activity:)
     end
   end
 end

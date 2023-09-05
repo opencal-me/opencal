@@ -86,7 +86,7 @@ export const ReservationCreateForm: FC<ReservationCreateFormProps> = ({
       {...otherProps}
     >
       <Stack spacing="lg">
-        <Stack>
+        <Stack spacing="sm">
           <TextInput
             label="Name"
             placeholder="Scott Langille"

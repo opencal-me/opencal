@@ -2,6 +2,7 @@ query ActivityPageQuery($activityId: ID!) {
   activity(id: $activityId) {
     ...ActivityReservationsActivityFragment
     address
+    addressPlaceName
     coordinates {
       latitude
       longitude

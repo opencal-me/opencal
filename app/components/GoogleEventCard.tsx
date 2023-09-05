@@ -10,14 +10,12 @@ import type {
   GoogleEventCardEventFragment,
 } from "~/helpers/graphql";
 
-import ActivityCreateButton from "./ActivityCreateButton";
 import HTMLDescription from "./HTMLDescription";
+import GoogleEventConvertButton from "./GoogleEventConvertButton";
 
 export type GoogleEventCardProps = Omit<BoxProps, "children"> & {
   readonly event: GoogleEventCardEventFragment;
-  readonly onCreateActivity: (
-    activity: ActivityCreateButtonActivityFragment,
-  ) => void;
+  readonly onConvert: (activity: ActivityCreateButtonActivityFragment) => void;
 };
 
 const durationHumanizer = humanizeDuration.humanizer({
@@ -49,7 +47,7 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
     isOrganizedByViewer,
     isRecurring,
   },
-  onCreateActivity,
+  onConvert,
   sx,
   ...otherProps
 }) => {
@@ -136,11 +134,11 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
           disabled={isEligibleForActivity}
         >
           <Box display="inline-block">
-            <ActivityCreateButton
+            <GoogleEventConvertButton
               googleEventId={eventId}
-              onCreate={onCreateActivity}
               variant="light"
               disabled={!isEligibleForActivity}
+              {...{ onConvert }}
             />
           </Box>
         </Tooltip>

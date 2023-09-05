@@ -300,14 +300,14 @@ class User < ApplicationRecord
   def google_events!(query: nil)
     options = { query: query.presence }
     options.compact!
-    with_google_calendar do |calendar|
+    with_google_calendar! do |calendar|
       calendar.find_future_events(options)
     end
   end
 
   sig { params(id: String).returns(Google::Event) }
   def google_event!(id)
-    with_google_calendar do |calendar|
+    with_google_calendar! do |calendar|
       calendar.find_event_by_id(id).first
     end
   end
@@ -318,10 +318,31 @@ class User < ApplicationRecord
   end
 
   sig do
+    params(
+      title: String,
+      during: T::Range[Time],
+      location: T.nilable(String),
+      description: T.nilable(String),
+    ).returns(Google::Event)
+  end
+  def create_google_event!(title:, during:, location:, description:)
+    with_google_calendar! do |calendar|
+      calendar.create_event do |event|
+        event = T.let(event, Google::Event)
+        event.title = title
+        event.start_time = during.first
+        event.end_time = during.last
+        event.location = location
+        event.description = description
+      end
+    end
+  end
+
+  sig do
     params(block: T.proc.params(event: Google::Event).void).void
   end
   def sync_google_calendar(&block)
-    with_google_calendar do |calendar|
+    with_google_calendar! do |calendar|
       loop do
         sync_next_google_calendar_page(calendar:, &block)
         break unless google_calendar_next_page_token?
@@ -400,7 +421,7 @@ class User < ApplicationRecord
       )
       .returns(T.type_parameter(:U))
   end
-  def with_google_calendar(&block)
+  def with_google_calendar!(&block)
     calendar = google_calendar!
     begin
       yield calendar

@@ -60,7 +60,7 @@ class MobileSubscriber < ApplicationRecord
   sig { returns(String) }
   def welcome_text_message
     message =
-      "Hey, this is OpenCal. Save this #, we'll text you when your friends " \
+      "hey, this is openCal. save this #, we'll text you when your friends " \
         "are up to stuff."
     disclaimer = "Msg and data rates may apply. Msg frequency varies. Reply " \
       "HELP for help, STOP to cancel."
@@ -69,18 +69,17 @@ class MobileSubscriber < ApplicationRecord
 
   sig { void }
   def send_welcome_text
-    send_text(welcome_text_message, lowercase: false)
+    send_text(welcome_text_message)
   end
 
   sig { void }
   def send_welcome_text_later
-    send_text_later(welcome_text_message, lowercase: false)
+    send_text_later(welcome_text_message)
   end
 
   # == Methods
-  sig { params(message: String, lowercase: T::Boolean).void }
-  def send_text(message, lowercase: true)
-    message = message.downcase if lowercase
+  sig { params(message: String).void }
+  def send_text(message)
     TwilioClient.send_message(message, to: phone)
   end
 

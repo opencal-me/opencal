@@ -3,9 +3,10 @@ import { Text } from "@mantine/core";
 
 import type { HomePageQuery } from "~/helpers/graphql";
 
-import HomePageGoogleEvents from "~/components/HomePageGoogleEvents";
+// import GoogleEvents from "~/components/GoogleEvents";
 import ActivityCard from "~/components/ActivityCard";
 import MobileSubscriptionBadge from "~/components/MobileSubscriptionBadge";
+import ActivityCreateButton from "~/components/ActivityCreateButton";
 
 export type HomePageProps = PagePropsWithData<HomePageQuery>;
 
@@ -66,13 +67,20 @@ const HomePage: PageComponent<HomePageProps> = ({ data: { viewer } }) => {
           ) : (
             <EmptyCard itemLabel="activities" />
           )}
+          <Box>
+            <ActivityCreateButton
+              onCreate={({ url }) => {
+                router.visit(url);
+              }}
+            />
+          </Box>
         </Stack>
       </Stack>
-      <HomePageGoogleEvents
+      {/* <GoogleEvents
         onCreateActivity={({ url }) => {
           router.visit(url);
         }}
-      />
+      /> */}
       {!isEmpty(mobileSubscriptions) && (
         <Stack spacing={8}>
           <Box>

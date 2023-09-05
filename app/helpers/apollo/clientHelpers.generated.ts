@@ -1,7 +1,8 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
-export type ActivityKeySpecifier = ('address' | 'coordinates' | 'descriptionHtml' | 'durationSeconds' | 'end' | 'googleEventId' | 'id' | 'isOwnedByViewer' | 'location' | 'name' | 'openings' | 'owner' | 'reservations' | 'start' | 'storyImageUrl' | 'tags' | 'url' | ActivityKeySpecifier)[];
+export type ActivityKeySpecifier = ('address' | 'addressPlaceName' | 'coordinates' | 'descriptionHtml' | 'durationSeconds' | 'end' | 'googleEventId' | 'id' | 'isOwnedByViewer' | 'location' | 'name' | 'openings' | 'owner' | 'reservations' | 'start' | 'storyImageUrl' | 'tags' | 'url' | ActivityKeySpecifier)[];
 export type ActivityFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,
+	addressPlaceName?: FieldPolicy<any> | FieldReadFunction<any>,
 	coordinates?: FieldPolicy<any> | FieldReadFunction<any>,
 	descriptionHtml?: FieldPolicy<any> | FieldReadFunction<any>,
 	durationSeconds?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -19,16 +20,22 @@ export type ActivityFieldPolicy = {
 	tags?: FieldPolicy<any> | FieldReadFunction<any>,
 	url?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type ConvertGoogleEventPayloadKeySpecifier = ('activity' | 'clientMutationId' | 'errors' | 'success' | ConvertGoogleEventPayloadKeySpecifier)[];
+export type ConvertGoogleEventPayloadFieldPolicy = {
+	activity?: FieldPolicy<any> | FieldReadFunction<any>,
+	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
+	errors?: FieldPolicy<any> | FieldReadFunction<any>,
+	success?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type CoordinatesKeySpecifier = ('latitude' | 'longitude' | CoordinatesKeySpecifier)[];
 export type CoordinatesFieldPolicy = {
 	latitude?: FieldPolicy<any> | FieldReadFunction<any>,
 	longitude?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type CreateActivityPayloadKeySpecifier = ('activity' | 'clientMutationId' | 'errors' | 'success' | CreateActivityPayloadKeySpecifier)[];
+export type CreateActivityPayloadKeySpecifier = ('activity' | 'clientMutationId' | 'success' | CreateActivityPayloadKeySpecifier)[];
 export type CreateActivityPayloadFieldPolicy = {
 	activity?: FieldPolicy<any> | FieldReadFunction<any>,
 	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
-	errors?: FieldPolicy<any> | FieldReadFunction<any>,
 	success?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type CreateMobileSubscriptionPayloadKeySpecifier = ('clientMutationId' | 'errors' | 'subscription' | 'success' | CreateMobileSubscriptionPayloadKeySpecifier)[];
@@ -86,8 +93,9 @@ export type MobileSubscriptionFieldPolicy = {
 	subject?: FieldPolicy<any> | FieldReadFunction<any>,
 	subscriber?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('createActivity' | 'createMobileSubscription' | 'createReservation' | 'deleteMobileSubscription' | 'testMutation' | 'updateUser' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('convertGoogleEvent' | 'createActivity' | 'createMobileSubscription' | 'createReservation' | 'deleteMobileSubscription' | 'testMutation' | 'updateUser' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
+	convertGoogleEvent?: FieldPolicy<any> | FieldReadFunction<any>,
 	createActivity?: FieldPolicy<any> | FieldReadFunction<any>,
 	createMobileSubscription?: FieldPolicy<any> | FieldReadFunction<any>,
 	createReservation?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -171,6 +179,10 @@ export type StrictTypedTypePolicies = {
 	Activity?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | ActivityKeySpecifier | (() => undefined | ActivityKeySpecifier),
 		fields?: ActivityFieldPolicy,
+	},
+	ConvertGoogleEventPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | ConvertGoogleEventPayloadKeySpecifier | (() => undefined | ConvertGoogleEventPayloadKeySpecifier),
+		fields?: ConvertGoogleEventPayloadFieldPolicy,
 	},
 	Coordinates?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | CoordinatesKeySpecifier | (() => undefined | CoordinatesKeySpecifier),

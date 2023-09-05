@@ -1,6 +1,5 @@
 import type { FC } from "react";
 import humanizeDuration from "humanize-duration";
-import RightArrowIcon from "~icons/heroicons/arrow-right-20-solid";
 
 import { Text } from "@mantine/core";
 import type { BoxProps } from "@mantine/core";
@@ -41,13 +40,20 @@ const ActivityCard: FC<ActivityCardProps> = ({
   }, [end]);
 
   return (
-    <Box pos="relative" {...(isOver && { mt: 6 })} {...otherProps}>
+    <AnchorContainer
+      component={Link}
+      href={url}
+      pos="relative"
+      {...(isOver && { mt: 6 })}
+      {...otherProps}
+    >
       <Card
         withBorder
-        sx={({ fn }) => ({
-          ...(!isOver && {
-            "&[data-with-border]": {
-              borderColor: fn.primaryColor(),
+        sx={({ colors, fn }) => ({
+          cursor: "pointer",
+          ...(isOver && {
+            "&[data-with-border]:hover": {
+              borderColor: colors.red[fn.primaryShade()],
             },
           }),
         })}
@@ -105,14 +111,6 @@ const ActivityCard: FC<ActivityCardProps> = ({
         {!!descriptionHtml && (
           <HTMLDescription mah={120}>{descriptionHtml}</HTMLDescription>
         )}
-        <Button
-          component={Link}
-          href={url}
-          leftIcon={<RightArrowIcon />}
-          mt={6}
-        >
-          Go To Activity
-        </Button>
       </Card>
       {isOver && (
         <Badge
@@ -130,7 +128,7 @@ const ActivityCard: FC<ActivityCardProps> = ({
           Recently Ended
         </Badge>
       )}
-    </Box>
+    </AnchorContainer>
   );
 };
 

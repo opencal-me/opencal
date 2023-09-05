@@ -148,7 +148,8 @@ class Activity < ApplicationRecord
   # == Texts
   sig { returns(String) }
   def mobile_subscriber_text_message
-    "New activity from #{owner!.first_name}: #{name} (#{activity_url(self)})"
+    "new activity from #{owner!.first_name.downcase}: #{name.downcase} " \
+      "(#{activity_url(self)})"
   end
 
   sig { void }
