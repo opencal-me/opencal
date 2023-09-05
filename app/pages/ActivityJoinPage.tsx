@@ -100,7 +100,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
                   )
                 );
               })}
-              <Text size="sm">
+              <Text color="gray.7" size="sm">
                 <Anchor
                   component={Link}
                   href={owner.url}
@@ -117,7 +117,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
                 >
                   {owner.firstName}
                 </Anchor>{" "}
-                wants you to join them at...
+                wants you to join them at
               </Text>
             </Group>
             <Box>

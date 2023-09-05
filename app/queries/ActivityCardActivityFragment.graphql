@@ -2,10 +2,7 @@ fragment ActivityCardActivityFragment on Activity {
   descriptionHtml
   durationSeconds
   end
-  isOwnedByViewer
-  joinUrl
   name
   start
   tags
-  url
 }

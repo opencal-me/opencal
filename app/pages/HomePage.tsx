@@ -53,7 +53,7 @@ const HomePage: PageComponent<HomePageProps> = ({
           styles={({ colors, fontSizes }) => ({
             title: {
               fontSize: fontSizes.md,
-              marginBottom: 0,
+              marginBottom: rem(4),
             },
             message: {
               color: colors.brand[0],
@@ -76,7 +76,11 @@ const HomePage: PageComponent<HomePageProps> = ({
         <Stack spacing="xs">
           {!isEmpty(activities) ? (
             activities.map(activity => (
-              <ActivityCard key={activity.id} {...{ activity }} />
+              <ActivityCard
+                key={activity.id}
+                href={activity.url}
+                {...{ activity }}
+              />
             ))
           ) : (
             <Card withBorder>
@@ -125,6 +129,7 @@ const HomePage: PageComponent<HomePageProps> = ({
               return (
                 <ActivityCard
                   key={activityId}
+                  href={activity.joinUrl}
                   topSection={
                     <Card.Section inheritPadding>
                       <Group spacing={8} py={8}>

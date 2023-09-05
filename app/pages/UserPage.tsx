@@ -97,7 +97,11 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user, viewer } }) => {
           </Box>
           {!isEmpty(activities) ? (
             activities.map(activity => (
-              <ActivityCard key={activity.id} {...{ activity }} />
+              <ActivityCard
+                key={activity.id}
+                href={activity.joinUrl}
+                {...{ activity }}
+              />
             ))
           ) : (
             <EmptyCard itemLabel="activities" />

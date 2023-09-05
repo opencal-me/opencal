@@ -1,4 +1,5 @@
 import type { FC, ReactNode } from "react";
+import type { InertiaLinkProps } from "@inertiajs/react";
 import humanizeDuration from "humanize-duration";
 
 import { Text } from "@mantine/core";
@@ -8,10 +9,11 @@ import type { ActivityCardActivityFragment } from "~/helpers/graphql";
 
 import HTMLDescription from "./HTMLDescription";
 
-export type ActivityCardProps = Omit<BoxProps, "children"> & {
-  readonly activity: ActivityCardActivityFragment;
-  readonly topSection?: ReactNode;
-};
+export type ActivityCardProps = Omit<BoxProps, "children"> &
+  Pick<InertiaLinkProps, "href"> & {
+    readonly activity: ActivityCardActivityFragment;
+    readonly topSection?: ReactNode;
+  };
 
 const durationHumanizer = humanizeDuration.humanizer({
   language: "shortEn",
@@ -32,17 +34,8 @@ const durationHumanizer = humanizeDuration.humanizer({
 });
 
 const ActivityCard: FC<ActivityCardProps> = ({
-  activity: {
-    name,
-    tags,
-    descriptionHtml,
-    start,
-    end,
-    durationSeconds,
-    url,
-    joinUrl,
-    isOwnedByViewer,
-  },
+  activity: { name, tags, descriptionHtml, start, end, durationSeconds },
+  href,
   topSection,
   ...otherProps
 }) => {
@@ -54,9 +47,9 @@ const ActivityCard: FC<ActivityCardProps> = ({
   return (
     <AnchorContainer
       component={Link}
-      href={isOwnedByViewer ? url : joinUrl}
       pos="relative"
       {...(isOver && { mt: 6 })}
+      {...{ href }}
       {...otherProps}
     >
       <Card

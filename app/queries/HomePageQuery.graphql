@@ -2,6 +2,7 @@ query HomePageQuery {
   activities {
     ...ActivityCardActivityFragment
     id
+    joinUrl
     owner {
       avatarUrl
       firstName
