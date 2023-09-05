@@ -118,7 +118,9 @@ export const ReservationCreateForm: FC<ReservationCreateFormProps> = ({
             {showNoteField && (
               <Textarea
                 label="Note"
-                description="A little note for the organizer."
+                description={
+                  <>A little note to include to {owner.firstName}.</>
+                }
                 size="md"
                 autosize
                 minRows={2}
