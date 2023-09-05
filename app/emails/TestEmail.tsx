@@ -19,7 +19,13 @@ const TestEmail: PageComponent<TestEmailProps> = ({
   const { firstName } = user ?? {};
   return (
     <>
-      <Text>Hi, {firstName || "anonymous user"}!</Text>
+      <Text>
+        Hi,{" "}
+        <span style={{ textTransform: "none" }}>
+          {firstName || "anonymous user"}
+        </span>
+        !
+      </Text>
       <Text>This is a test email containing your form submission results:</Text>
       <Box
         component={Section}

@@ -124,11 +124,11 @@ const HomePage: PageComponent<HomePageProps> = ({
                   topSection={
                     <Card.Section inheritPadding>
                       <Group spacing={8} py={8}>
-                        <Avatar src={owner.avatarUrl} size="xs" radius="xl">
+                        <Avatar size="xs" radius="xl">
                           {owner.initials}
                         </Avatar>
                         <Text size="sm" color="gray.6">
-                          {owner.firstName} wants you to join them at...
+                          {owner.firstName}&apos;s gonna be at
                         </Text>
                       </Group>
                     </Card.Section>

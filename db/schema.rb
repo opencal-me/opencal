@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_05_055502) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_05_091636) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -234,7 +234,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_05_055502) do
     t.string "google_calendar_next_sync_token"
     t.string "google_calendar_next_page_token"
     t.text "bio"
-    t.boolean "requires_relogin"
+    t.boolean "requires_relogin", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["google_calendar_last_synced_at"], name: "index_users_on_google_calendar_last_synced_at"
     t.index ["handle"], name: "index_users_on_handle", unique: true

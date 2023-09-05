@@ -41,7 +41,7 @@ const ActivityStoryPage: PageComponent<ActivityStoryPageProps> = ({
         <Text size="xl" color="dark.4" weight={600}>
           come join me at
         </Text>
-        <Title align="center" lh={1.3}>
+        <Title align="center" lh={1.3} sx={{ textTransform: "none" }}>
           {name}
         </Title>
         <Badge

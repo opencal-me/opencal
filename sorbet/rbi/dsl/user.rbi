@@ -1380,10 +1380,10 @@ class User
     sig { void }
     def remember_created_at_will_change!; end
 
-    sig { returns(T.nilable(T::Boolean)) }
+    sig { returns(T::Boolean) }
     def requires_relogin; end
 
-    sig { params(value: T.nilable(T::Boolean)).returns(T.nilable(T::Boolean)) }
+    sig { params(value: T::Boolean).returns(T::Boolean) }
     def requires_relogin=(value); end
 
     sig { returns(T::Boolean) }
@@ -1398,10 +1398,10 @@ class User
     sig { returns(T::Boolean) }
     def requires_relogin_came_from_user?; end
 
-    sig { returns(T.nilable([T.nilable(T::Boolean), T.nilable(T::Boolean)])) }
+    sig { returns(T.nilable([T::Boolean, T::Boolean])) }
     def requires_relogin_change; end
 
-    sig { returns(T.nilable([T.nilable(T::Boolean), T.nilable(T::Boolean)])) }
+    sig { returns(T.nilable([T::Boolean, T::Boolean])) }
     def requires_relogin_change_to_be_saved; end
 
     sig { returns(T::Boolean) }
@@ -1410,7 +1410,7 @@ class User
     sig { returns(T.nilable(T::Boolean)) }
     def requires_relogin_in_database; end
 
-    sig { returns(T.nilable([T.nilable(T::Boolean), T.nilable(T::Boolean)])) }
+    sig { returns(T.nilable([T::Boolean, T::Boolean])) }
     def requires_relogin_previous_change; end
 
     sig { returns(T::Boolean) }
@@ -1701,7 +1701,7 @@ class User
     sig { returns(T::Boolean) }
     def saved_change_to_remember_created_at?; end
 
-    sig { returns(T.nilable([T.nilable(T::Boolean), T.nilable(T::Boolean)])) }
+    sig { returns(T.nilable([T::Boolean, T::Boolean])) }
     def saved_change_to_requires_relogin; end
 
     sig { returns(T::Boolean) }

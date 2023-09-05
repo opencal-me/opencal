@@ -72,7 +72,7 @@ const GoogleEventCard: FC<GoogleEventCardProps> = ({
       {...otherProps}
     >
       <Group align="start" noWrap>
-        <Text weight={500} lh={1.2} sx={{ flexGrow: 1 }}>
+        <Text weight={500} lh={1.2} sx={{ flexGrow: 1, textTransform: "none" }}>
           {title ?? "(no title)"}
         </Text>
         <Group

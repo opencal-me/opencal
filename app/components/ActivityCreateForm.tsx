@@ -104,7 +104,7 @@ const ActivityCreateForm: FC<ActivityCreateFormProps> = ({
         <Stack spacing="sm">
           <TextInput
             label="Name"
-            placeholder="A walk in the park"
+            placeholder="a walk in the park"
             required
             size="md"
             {...getInputProps("name")}

@@ -72,7 +72,11 @@ const ActivityCard: FC<ActivityCardProps> = ({
       >
         {topSection}
         <Group align="start" noWrap>
-          <Text weight={500} lh={1.2} sx={{ flexGrow: 1 }}>
+          <Text
+            weight={500}
+            lh={1.2}
+            sx={{ flexGrow: 1, textTransform: "none" }}
+          >
             {name}
           </Text>
           <Group

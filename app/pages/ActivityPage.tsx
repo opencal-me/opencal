@@ -50,7 +50,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
   return (
     <Stack>
       <Box>
-        <Title size="h3" lh={1.3}>
+        <Title size="h3" lh={1.3} sx={{ textTransform: "none" }}>
           {name}
         </Title>
         <Text color="brand" size="sm">
@@ -88,11 +88,24 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
             <Group align="start" spacing={6}>
               <Text component={LocationIcon} color="brand" mt={1} />
               <Box>
-                <Text size="sm" weight={500} color="dark" lh={1.3}>
+                <Text
+                  size="sm"
+                  weight={500}
+                  color="dark"
+                  lh={1.3}
+                  sx={{
+                    textTransform: "none",
+                  }}
+                >
                   {addressPlaceName ?? address}
                 </Text>
                 {!!addressPlaceName && (
-                  <Text size="xs" color="dimmed" lh={1.3}>
+                  <Text
+                    size="xs"
+                    color="dimmed"
+                    lh={1.3}
+                    sx={{ textTransform: "none" }}
+                  >
                     {address}
                   </Text>
                 )}

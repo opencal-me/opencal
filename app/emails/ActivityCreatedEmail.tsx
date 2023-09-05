@@ -29,7 +29,7 @@ const ActivityCreatedEmail: PageComponent<ActivityCreatedEmailProps> = ({
           [open]
         </Box>{" "}
         on your calendar:{" "}
-        <Link href={url} target="_blank">
+        <Link href={url} target="_blank" style={{ textTransform: "none" }}>
           {name}
         </Link>
       </Text>
@@ -47,7 +47,7 @@ const ActivityCreatedEmail: PageComponent<ActivityCreatedEmailProps> = ({
           borderRadius: radius.sm,
         })}
       >
-        Open Activity
+        Open activity
       </Box>
     </>
   );

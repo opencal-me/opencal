@@ -50,7 +50,7 @@ const ReservationCreatedEmail: PageComponent<ReservationCreatedEmailProps> = ({
         fw={600}
         sx={({ white, radius }) => ({ color: white, borderRadius: radius.sm })}
       >
-        Open Activity
+        Open activity
       </Box>
     </>
   );
