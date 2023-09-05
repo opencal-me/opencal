@@ -33,7 +33,7 @@ module GeneratedPathHelpersModule
   def graphql_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def homepages_path(*args); end
+  def homepage_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def join_activity_path(*args); end

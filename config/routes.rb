@@ -58,7 +58,7 @@ Rails.application.routes.draw do
   end
 
   # == Homepage
-  resource :homepages, path: "/home", only: :show
+  resource :homepage, path: "/home", only: :show
 
   # == Activities
   resources :activities, only: :show do
