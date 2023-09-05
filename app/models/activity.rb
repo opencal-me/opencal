@@ -180,8 +180,11 @@ class Activity < ApplicationRecord
       GoogleEventTitle.blank
     end
     if _google_event_is_activity?(event, owner:, title:)
-      activity = _from_google_event(event, owner:, title:)
-      activity.save!
+      activity = transaction do |; activity| # rubocop:disable Layout/SpaceAroundBlockParameters, Layout/LineLength
+        activity = _from_google_event(event, owner:, title:)
+        activity.save!
+        activity
+      end
       if activity.previously_new_record? && title.tags.exclude?("silent")
         activity.send_created_email_later
         activity.send_mobile_subscriber_texts_later
