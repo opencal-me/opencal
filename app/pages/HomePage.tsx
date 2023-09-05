@@ -36,10 +36,14 @@ const HomePage: PageComponent<HomePageProps> = ({
               <Anchor
                 component={Link}
                 href={url}
-                sx={({ white }) => ({
+                sx={({ white, transitionTimingFunction, fn }) => ({
                   color: white,
                   textDecoration: "underline",
                   wordBreak: "break-all",
+                  transition: `color 150ms ${transitionTimingFunction}`,
+                  "&:hover": {
+                    color: fn.lighten(fn.primaryColor(), 0.75),
+                  },
                 })}
               >
                 {urlLabel}

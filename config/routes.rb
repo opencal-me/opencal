@@ -57,8 +57,8 @@ Rails.application.routes.draw do
     post "/", action: :execute, as: :graphql
   end
 
-  # == Homepage
-  resource :homepage, path: "/home", only: :show
+  # == Home
+  resource :home, path: "/home", only: :show
 
   # == Activities
   resources :activities, only: :show do

@@ -30,7 +30,7 @@ module Users
     # == Helpers
     sig { override.params(resource_or_scope: T.untyped).returns(String) }
     def after_sign_in_path_for(resource_or_scope)
-      stored_location_for(resource_or_scope) || homepage_url
+      stored_location_for(resource_or_scope) || home_url
     end
 
     protected

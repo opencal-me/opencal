@@ -33,7 +33,7 @@ module GeneratedUrlHelpersModule
   def graphql_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def homepage_url(*args); end
+  def home_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def join_activity_url(*args); end

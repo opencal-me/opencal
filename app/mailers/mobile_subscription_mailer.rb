@@ -10,7 +10,7 @@ class MobileSubscriptionMailer < ApplicationMailer
     mail(
       inertia: "MobileSubscriptionCreatedEmail",
       props: {
-        "homepageUrl" => homepage_url,
+        "homeUrl" => home_url,
         "data" => data,
       },
       to: subject.email_with_name,

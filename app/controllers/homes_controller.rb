@@ -1,7 +1,7 @@
 # typed: true
 # frozen_string_literal: true
 
-class HomepagesController < ApplicationController
+class HomesController < ApplicationController
   # == Filters
   before_action :authenticate_user!
   before_action :import_activities if Rails.env.development?
