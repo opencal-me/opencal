@@ -103,16 +103,13 @@ class Activity < ApplicationRecord
   geocoded_by :location do |activity, results|
     result = results.first or next
     result = T.cast(result, Geocoder::Result::Here)
-    district = T.let(result.data.dig("address", "district"), T.nilable(String))
-    activity.coordinates = coordinates_factory.point(
-      result.longitude,
-      result.latitude,
-    )
+    activity.coordinates = coordinates_factory
+      .point(result.longitude, result.latitude)
     activity.build_address(
       place_name: result.data["title"],
       full_address: result.address,
       street_address: [result.street_number, result.route].compact.join(" "),
-      neighbourhood: district,
+      neighbourhood: result.data.dig("address", "district"),
       city: result.city,
       country: result.country,
       province: result.province,

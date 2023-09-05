@@ -133,7 +133,7 @@ const HomePage: PageComponent<HomePageProps> = ({
                   topSection={
                     <Card.Section inheritPadding>
                       <Group spacing={8} py={8}>
-                        <Avatar size="xs" radius="xl">
+                        <Avatar src={owner.avatarUrl} size="xs" radius="xl">
                           {owner.initials}
                         </Avatar>
                         <Text size="sm" color="gray.6">
