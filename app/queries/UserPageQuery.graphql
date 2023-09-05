@@ -17,6 +17,5 @@ query UserPageQuery($userId: ID!) {
   viewer {
     ...AppViewerFragment
     id
-    ...MobileSubscriptionFormViewerFragment
   }
 }

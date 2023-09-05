@@ -3,16 +3,18 @@
 
 class ActivitiesController < ApplicationController
   # == Filters
-  before_action :authenticate_user!, only: :show
   before_action :set_activity
   before_action :import_activity if Rails.env.development?
 
   # == Actions
   def show
     activity = T.must(@activity)
-    authorize!(activity, to: :manage?)
-    data = query!("ActivityPageQuery", { activity_id: activity.to_gid.to_s })
-    render(inertia: "ActivityPage", props: { data: })
+    if allowed_to?(:manage?, activity)
+      data = query!("ActivityPageQuery", { activity_id: activity.to_gid.to_s })
+      render(inertia: "ActivityPage", props: { data: })
+    else
+      redirect_to(join_activity_path(activity))
+    end
   end
 
   def join

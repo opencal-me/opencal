@@ -10,3 +10,4 @@ export { default as SearchIcon } from "~icons/heroicons/magnifying-glass-20-soli
 export { default as SettingsIcon } from "~icons/heroicons/cog-6-tooth-20-solid";
 export { default as UserIcon } from "~icons/heroicons/user-20-solid";
 export { default as PhoneIcon } from "~icons/heroicons/device-phone-mobile-20-solid";
+export { default as ClipboardIcon } from "~icons/heroicons/clipboard-20-solid";

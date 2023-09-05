@@ -1,6 +1,5 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
 import { CopyButton, Image, Text } from "@mantine/core";
-import ClipboardIcon from "~icons/heroicons/clipboard-20-solid";
 
 import type { ActivitySharePageQuery } from "~/helpers/graphql";
 
@@ -10,7 +9,7 @@ const ActivitySharePage: PageComponent<ActivitySharePageProps> = ({
   data: { activity },
 }) => {
   invariant(activity, "Missing activity");
-  const { joinUrl, storyImageUrl } = activity;
+  const { url, joinUrl, storyImageUrl } = activity;
 
   return (
     <Stack spacing="lg">
@@ -18,8 +17,12 @@ const ActivitySharePage: PageComponent<ActivitySharePageProps> = ({
         <Title size="h3" lh={1.2}>
           Share to your Instagram story
         </Title>
-        <Text color="dimmed" size="sm">
-          Please do this on your phone.
+        <Text color="dimmed" size="sm" lh={1.3}>
+          Please do this on your phone. To go back to managing your activity,{" "}
+          <Anchor component={Link} href={url} inherit>
+            click here
+          </Anchor>
+          .
         </Text>
       </Stack>
       <Stack spacing={8}>

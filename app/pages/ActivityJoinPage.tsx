@@ -63,7 +63,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
               styles={({ fontSizes }) => ({
                 title: {
                   fontSize: fontSizes.md,
-                  marginBottom: 0,
+                  marginBottom: rem(4),
                   lineHeight: 1.3,
                 },
               })}

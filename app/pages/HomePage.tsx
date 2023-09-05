@@ -26,7 +26,7 @@ const HomePage: PageComponent<HomePageProps> = ({
   const router = useRouter();
 
   return (
-    <Stack spacing={28}>
+    <Stack spacing={32}>
       {!isEmpty(activities) && (
         <Alert
           variant="filled"
