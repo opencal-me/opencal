@@ -154,7 +154,11 @@ class Activity < ApplicationRecord
   # == Texts
   sig { returns(String) }
   def mobile_subscriber_text_message
-    "new activity from #{owner!.first_name}: #{name} (#{activity_url(self)})"
+    owner_name = owner!.first_name.downcase
+    start = self.start.in_time_zone(time_zone)
+    "new activity from #{owner_name}: #{name} at " \
+      "#{start.strftime("%-l:%M %p on %b %e")} " \
+      "(#{activity_url(self)})"
   end
 
   sig { void }
