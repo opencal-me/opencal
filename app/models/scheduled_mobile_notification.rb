@@ -62,7 +62,7 @@ class ScheduledMobileNotification < ApplicationRecord
   scope :to_deliver, -> {
     T.bind(self, PrivateRelation)
     where(delivered_at: nil).where("NOW() > deliver_after")
-      .includes(:subscriber, activity: :owner)
+      .includes(:subscriber, :activity)
       .references(:activity)
       .order("activities.during")
   }
@@ -125,11 +125,14 @@ class ScheduledMobileNotification < ApplicationRecord
       .returns(String)
   end
   private_class_method def self.multi_activity_description(notifications)
-    owner_names = notifications.map do |notification|
-      notification.activity!.owner!.first_name.downcase
-    end.uniq
-    intro = "heyo! #{owner_names.to_sentence} have some things " \
-      "planned for today:"
+    activities = notifications.map(&:activity!)
+    owners = User.where(id: activities.map(&:owner_id).uniq)
+    owner_names = owners.map { |owner| owner.first_name.downcase }
+    intro = [
+      "heyo! #{owner_names.to_sentence}",
+      owners.one? ? "has" : "have",
+      "some things planned for today:",
+    ].join(" ")
     activities = notifications.map do |notification|
       activity = notification.activity!
       time_zone = activity.owner!.time_zone
