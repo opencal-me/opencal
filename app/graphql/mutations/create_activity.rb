@@ -45,7 +45,6 @@ module Mutations
       activity = Activity.from_google_event(google_event, owner:)
       begin
         activity.save!
-        activity.send_mobile_subscriber_texts_later
       rescue
         google_event.delete
         raise

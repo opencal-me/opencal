@@ -13,6 +13,7 @@
 #  handle             :string           not null
 #  location           :string
 #  name               :string           default(""), not null
+#  silent             :boolean          not null
 #  tags               :string           default([]), not null, is an Array
 #  time_zone_override :string
 #  created_at         :datetime         not null
@@ -121,6 +122,8 @@ class Activity < ApplicationRecord
   # == Callbacks
   after_validation :geocode, if: %i[location_changed? location_is_address?]
   after_commit :update_google_event
+  after_create_commit :send_mobile_subscriber_texts_later, unless: :silent?
+  after_create_commit :schedule_destroy_demo_activity, if: :demo?
 
   # == Scopes
   scope :publicly_visible, -> {
@@ -186,9 +189,8 @@ class Activity < ApplicationRecord
         activity.save!
         activity
       end
-      if activity.previously_new_record? && title.tags.exclude?("silent")
+      if activity.previously_new_record? && !activity.silent?
         activity.send_created_email_later
-        activity.send_mobile_subscriber_texts_later
       end
       activity
     elsif (activity = find_by(google_event_id: event.id, owner:))
@@ -268,7 +270,8 @@ class Activity < ApplicationRecord
   end
   def _set_attributes_from_google_event(event, title:)
     self.name = title.name
-    self.tags = title.tags.excluding("silent")
+    self.tags = title.tags
+    self.silent = title.silent
     self.description = event.description
     self.during = event.start_time.to_time..event.end_time.to_time
     self.location = event.location
@@ -302,6 +305,22 @@ class Activity < ApplicationRecord
     activity = find_or_initialize_by(owner:, google_event_id: event.id)
     activity._set_attributes_from_google_event(event, title:)
     activity
+  end
+
+  # == Demo
+  sig { returns(T::Boolean) }
+  def demo?
+    tags.include?("demo")
+  end
+
+  sig { void }
+  def destroy_demo_activity!
+    destroy! if demo?
+  end
+
+  sig { void }
+  private def schedule_destroy_demo_activity
+    DestroyDemoActivityJob.set(wait: 15.minutes).perform_later(self)
   end
 
   # == Methods

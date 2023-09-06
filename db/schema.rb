@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_05_091636) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_05_233216) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -58,6 +58,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_05_091636) do
     t.string "name", default: "", null: false
     t.string "tags", default: [], null: false, array: true
     t.string "time_zone_override"
+    t.boolean "silent", null: false
     t.index ["coordinates"], name: "index_activities_on_coordinates", using: :gist
     t.index ["google_event_id"], name: "index_activities_on_google_event_id", unique: true
     t.index ["handle"], name: "index_activities_on_handle", unique: true
@@ -200,6 +201,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_05_091636) do
     t.index ["activity_id"], name: "index_reservations_on_activity_id"
   end
 
+  create_table "scheduled_mobile_notifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "activity_id", null: false
+    t.uuid "subscriber_id", null: false
+    t.datetime "deliver_after", precision: nil, null: false
+    t.datetime "delivered_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_scheduled_mobile_notifications_on_activity_id"
+    t.index ["deliver_after"], name: "index_scheduled_mobile_notifications_on_deliver_after"
+    t.index ["subscriber_id"], name: "index_scheduled_mobile_notifications_on_subscriber_id"
+  end
+
   create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "subscriber_id", null: false
     t.uuid "subject_id", null: false
@@ -249,6 +262,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_05_091636) do
   add_foreign_key "mobile_subscriptions", "mobile_subscribers", column: "subscriber_id"
   add_foreign_key "mobile_subscriptions", "users", column: "subject_id"
   add_foreign_key "reservations", "activities"
+  add_foreign_key "scheduled_mobile_notifications", "activities"
+  add_foreign_key "scheduled_mobile_notifications", "mobile_subscribers", column: "subscriber_id"
   add_foreign_key "subscriptions", "users", column: "subject_id"
   add_foreign_key "subscriptions", "users", column: "subscriber_id"
 end

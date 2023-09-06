@@ -11,6 +11,7 @@ class GoogleEventTitle < T::Struct
   const :name, String
   const :tags, T::Array[String]
   const :open, T::Boolean
+  const :silent, T::Boolean
   const :capacity, T.nilable(Integer)
 
   # == Parsing
@@ -37,6 +38,7 @@ class GoogleEventTitle < T::Struct
     end
     name = name_parts.filter_map { |part| part.strip.presence }.join(" ")
     open = modifiers.delete("open").present?
+    silent = modifiers.delete("silent").present? || modifiers.include?("demo")
     capacity_tags, tags = modifiers.partition do |tag|
       tag.match?(CAPACITY_TAG_REGEXP)
     end
@@ -44,16 +46,19 @@ class GoogleEventTitle < T::Struct
       match = T.must(CAPACITY_TAG_REGEXP.match(tag))
       match.captures.first!.to_i
     end
-    new(name:, tags:, open:, capacity:)
+    new(name:, tags:, open:, silent:, capacity:)
   end
 
   # == Builders
   sig { returns(T.attached_class) }
   def self.blank
-    new(name: "", tags: [], open: false, capacity: nil)
+    new(name: "", tags: [], open: false, silent: false, capacity: nil)
   end
 
   # == Methods
   sig { returns(T::Boolean) }
   def open? = open
+
+  sig { returns(T::Boolean) }
+  def silent? = silent
 end
