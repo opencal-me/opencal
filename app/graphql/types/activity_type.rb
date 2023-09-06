@@ -14,7 +14,7 @@ module Types
     field :coordinates, CoordinatesType
     field :description_html, String
     field :duration_seconds, Integer, null: false
-    field :end, DateTimeType, null: false, resolver_method: :resolve_end
+    field :end, DateTimeType, null: false, method: :end_time
     field :google_event_id, String, null: false
     # field :handle, String, null: false, method: :to_param
     field :is_owned_by_viewer, Boolean, null: false
@@ -25,7 +25,7 @@ module Types
     field :owner, UserType, null: false
     field :reservations, [ReservationType], null: false, authorized_scope: true
     field :share_url, String, null: false
-    field :start, DateTimeType, null: false
+    field :start, DateTimeType, null: false, method: :start_time
     field :story_image_url, String, null: false
     field :tags, [String], null: false
     field :url, String, null: false
@@ -54,16 +54,13 @@ module Types
 
     sig { returns(T.untyped) }
     def join_url
-      join_activity_url(object)
+      join_activity_url(object.friendly_id)
     end
 
     sig { returns(T::Enumerable[Reservation]) }
     def reservations
       object.reservations.chronological
     end
-
-    sig { returns(Time) }
-    def resolve_end = object.end
 
     sig { returns(String) }
     def story_image_url

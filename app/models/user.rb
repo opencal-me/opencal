@@ -1,4 +1,4 @@
-# typed: true
+# typed: strict
 # frozen_string_literal: true
 
 # rubocop:disable Layout/LineLength
@@ -74,6 +74,7 @@ class User < ApplicationRecord
     [first_name, last_name].compact.join(" ")
   end
 
+  sig { returns(String) }
   def initials
     [first_name.first, last_name&.first].compact.join("")
   end
@@ -99,7 +100,7 @@ class User < ApplicationRecord
   sig { returns(String) }
   def email_domain = email_parts.last
 
-  # == FriendlyIdentifiable
+  # == FriendlyId
   friendly_id :derived_handle
 
   # == Associations
@@ -340,6 +341,13 @@ class User < ApplicationRecord
         event.location = location
         event.description = description
       end
+    end
+  end
+
+  sig { params(event: Google::Event).void }
+  def delete_google_event!(event)
+    with_google_calendar! do |calendar|
+      calendar.delete_event(event)
     end
   end
 

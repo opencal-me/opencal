@@ -264,6 +264,20 @@ class MobileSubscriber
   end
 
   module GeneratedAssociationMethods
+    sig { returns(T::Array[T.untyped]) }
+    def scheduled_notification_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def scheduled_notification_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `MobileSubscriber` class because it declared `has_many :scheduled_notifications`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::ScheduledMobileNotification::PrivateCollectionProxy) }
+    def scheduled_notifications; end
+
+    sig { params(value: T::Enumerable[::ScheduledMobileNotification]).void }
+    def scheduled_notifications=(value); end
+
     # This method is created by ActiveRecord on the `MobileSubscriber` class because it declared `has_many :subscribes_to, through: :subscriptions`.
     # 🔗 [Rails guide for `has_many_through` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-through-association)
     sig { returns(::User::PrivateCollectionProxy) }

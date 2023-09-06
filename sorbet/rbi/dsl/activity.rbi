@@ -268,6 +268,20 @@ class Activity
 
     sig { params(value: T::Enumerable[::Reservation]).void }
     def reservations=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def scheduled_mobile_notification_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def scheduled_mobile_notification_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `Activity` class because it declared `has_many :scheduled_mobile_notifications`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::ScheduledMobileNotification::PrivateCollectionProxy) }
+    def scheduled_mobile_notifications; end
+
+    sig { params(value: T::Enumerable[::ScheduledMobileNotification]).void }
+    def scheduled_mobile_notifications=(value); end
   end
 
   module GeneratedAssociationRelationMethods

@@ -1,4 +1,4 @@
-# typed: true
+# typed: strict
 # frozen_string_literal: true
 
 # == Schema Information
@@ -49,14 +49,28 @@ class Activity < ApplicationRecord
   attribute :handle, :string, default: -> { generate_handle }
 
   sig { returns(Time) }
-  def start = during.begin
+  def start_time
+    during.begin
+  end
+
+  sig { returns(T::Boolean) }
+  def started?
+    start_time.past?
+  end
 
   sig { returns(Time) }
-  def end = during.end
+  def end_time
+    during.end
+  end
+
+  sig { returns(T::Boolean) }
+  def ended?
+    end_time.past?
+  end
 
   sig { returns(Integer) }
   def duration_seconds
-    (self.end - start).to_i
+    (end_time - start_time).to_i
   end
 
   sig { returns(Integer) }
@@ -79,13 +93,26 @@ class Activity < ApplicationRecord
     !location_is_url? && !location_is_coordinates?
   end
 
-  # == FriendlyIdentifiable
+  # == FriendlyId
   friendly_id :handle, slug_limit: 32
+
+  sig { override.returns(String) }
+  def friendly_id
+    prefix = FriendlyId::Candidates.new(self, name).first
+    [prefix, handle].join("--")
+  end
+
+  # == Routing
+  sig { override.returns(String) }
+  def to_param
+    handle
+  end
 
   # == Associations
   belongs_to :owner, class_name: "User"
   has_one :address, dependent: :destroy
   has_many :reservations, dependent: :destroy
+  has_many :scheduled_mobile_notifications, dependent: :destroy
 
   sig { returns(User) }
   def owner!
@@ -121,9 +148,9 @@ class Activity < ApplicationRecord
 
   # == Callbacks
   after_validation :geocode, if: %i[location_changed? location_is_address?]
+  after_update :update_mobile_notifications, if: :saved_change_to_during?
   after_commit :update_google_event
-  after_create_commit :send_mobile_subscriber_texts_later, unless: :silent?
-  after_create_commit :schedule_destroy_demo_activity, if: :demo?
+  after_create_commit :schedule_mobile_notifications, unless: :silent?
 
   # == Scopes
   scope :publicly_visible, -> {
@@ -136,43 +163,41 @@ class Activity < ApplicationRecord
     where("? = ANY(tags)", "hidden")
   }
 
-  # == Routing
-  sig { returns(String) }
-  def to_param
-    prefix = FriendlyId::Candidates.new(self, name).first
-    [prefix, handle].join("--")
-  end
-
   # == Emails
   sig { void }
-  def send_created_email_later
-    ActivityMailer
-      .created_email(self)
-      .deliver_later(wait: notifications_delay)
+  def schedule_created_email
+    ActivityMailer.created_email(self).deliver_later(wait: notifications_delay)
   end
 
-  # == Texts
-  sig { returns(String) }
-  def mobile_subscriber_text_message
-    owner_name = owner!.first_name.downcase
-    start = self.start.in_time_zone(time_zone)
-    "new activity from #{owner_name}: #{name} at " \
-      "#{start.strftime("%-l:%M %p on %b %e")} " \
-      "(#{activity_url(self)})"
-  end
-
+  # == Mobile Notifications
   sig { void }
-  def send_mobile_subscriber_texts
+  def schedule_mobile_notifications
     owner!.mobile_subscribers.find_each do |subscriber|
-      subscriber.send_text(mobile_subscriber_text_message)
-    end
+      scheduled_mobile_notifications.create!(
+        subscriber:,
+        deliver_after: morning_of,
+      )
+    end unless ended?
   end
 
   sig { void }
-  def send_mobile_subscriber_texts_later
-    SendActivityMobileSubscriberTextsJob
+  def schedule_mobile_notifications_later
+    ScheduleActivityMobileNotificationsJob
       .set(wait: notifications_delay)
       .perform_later(self)
+  end
+
+  sig { void }
+  def update_mobile_notifications
+    notifications = scheduled_mobile_notifications.pending_delivery
+    if ended?
+      notifications.destroy_all
+    else
+      notifications.find_each do |notification|
+        notification.deliver_after = morning_of
+        notification.save! if notification.changed?
+      end
+    end
   end
 
   # == Importing
@@ -186,11 +211,11 @@ class Activity < ApplicationRecord
     if _google_event_is_activity?(event, owner:, title:)
       activity = transaction do |; activity| # rubocop:disable Layout/SpaceAroundBlockParameters, Layout/LineLength
         activity = _from_google_event(event, owner:, title:)
-        activity.save!
+        activity.save! if activity.changed?
         activity
       end
       if activity.previously_new_record? && !activity.silent?
-        activity.send_created_email_later
+        activity.schedule_created_email
       end
       activity
     elsif (activity = find_by(google_event_id: event.id, owner:))
@@ -314,16 +339,20 @@ class Activity < ApplicationRecord
   end
 
   sig { void }
-  def destroy_demo_activity!
-    destroy! if demo?
+  def self.destroy_demo_activity!
+    where("? = ANY(tags)", "demo").where("created_at < ?", 15.minutes.ago)
+      .find_each do |activity|
+        activity.owner!.delete_google_event!(activity.google_event!)
+        activity.destroy!
+      end
   end
 
   sig { void }
-  private def schedule_destroy_demo_activity
-    DestroyDemoActivityJob.set(wait: 15.minutes).perform_later(self)
+  def self.destroy_demo_activity_later
+    DestroyDemoActivitiesJob.perform_later
   end
 
-  # == Methods
+  # == Description
   sig do
     params(description: String, view_context: ActionView::Base)
       .returns(String)
@@ -339,15 +368,16 @@ class Activity < ApplicationRecord
     end
   end
 
-  sig { returns(Integer) }
-  def openings
-    capacity_or_default - reservations.count
-  end
-
   sig { params(view_context: ActionView::Base).returns(T.nilable(String)) }
   def description_html(view_context:)
     description = self.description or return
     self.class.parse_description_as_html(description, view_context:)
+  end
+
+  # == Methods
+  sig { returns(Integer) }
+  def openings
+    capacity_or_default - reservations.count
   end
 
   sig { returns(ActiveSupport::TimeZone) }
@@ -357,6 +387,14 @@ class Activity < ApplicationRecord
     else
       owner!.time_zone
     end
+  end
+
+  sig { returns(ActiveSupport::TimeWithZone) }
+  def morning_of
+    start_time = self.start_time.in_time_zone(time_zone)
+    beginning_of_day = start_time.beginning_of_day
+    beginning_of_day -= 1.day if start_time.hour < 8
+    beginning_of_day + 8.hours - 1.second
   end
 
   private

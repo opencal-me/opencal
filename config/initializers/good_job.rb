@@ -24,6 +24,16 @@ Rails.application.configure do
         description: "Sync Google Calendar channels.",
         cron: "0 * * * *",
       },
+      "send_scheduled_mobile_notification_texts": {
+        class: "SendScheduledMobileNotificationTextsJob",
+        description: "Send scheduled mobile notification texts.",
+        cron: "*/5 * * * *",
+      },
+      "destroy_demo_activities": {
+        class: "DestroyDemoActivitiesJob",
+        description: "Destroy demo activities.",
+        cron: "3-59/5 * * * *",
+      },
     }
 
     # == Errors

@@ -9,6 +9,9 @@ module GeneratedPathHelpersModule
   include ::ActionDispatch::Routing::PolymorphicRoutes
 
   sig { params(args: T.untyped).returns(String) }
+  def activities_mobile_subscriber_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def activity_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }

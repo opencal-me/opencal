@@ -76,6 +76,13 @@ Rails.application.routes.draw do
   # == Users
   resources :users, path: "/u", only: :show
 
+  # == Mobile Subscribers
+  resources :mobile_subscribers, path: "/subscribers", only: [] do
+    member do
+      get :activities
+    end
+  end
+
   # == Superusers
   get :scott, to: redirect("/u/scottrlangille", status: 302)
   get :kai, to: redirect("/u/hulloitskai", status: 302)

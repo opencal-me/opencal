@@ -13,13 +13,13 @@ class ActivitiesController < ApplicationController
       data = query!("ActivityPageQuery", { activity_id: activity.to_gid.to_s })
       render(inertia: "ActivityPage", props: { data: })
     else
-      redirect_to(join_activity_path(activity))
+      redirect_to(join_activity_path(activity.friendly_id))
     end
   end
 
   def join
     activity = T.must(@activity)
-    if params[:id] == activity.to_param
+    if params[:id] == activity.friendly_id
       authorize!(activity, to: :show?)
       data = query!(
         "ActivityJoinPageQuery",
@@ -27,7 +27,7 @@ class ActivitiesController < ApplicationController
       )
       render(inertia: "ActivityJoinPage", props: { data: })
     else
-      redirect_to(activity_path(activity))
+      redirect_to(join_activity_path(activity.friendly_id))
     end
   end
 

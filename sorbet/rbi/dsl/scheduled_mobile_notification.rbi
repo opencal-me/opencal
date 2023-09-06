@@ -289,14 +289,32 @@ class ScheduledMobileNotification
     sig { params(args: T.untyped, blk: T.untyped).returns(::Activity) }
     def build_activity(*args, &blk); end
 
+    sig { params(args: T.untyped, blk: T.untyped).returns(::MobileSubscriber) }
+    def build_subscriber(*args, &blk); end
+
     sig { params(args: T.untyped, blk: T.untyped).returns(::Activity) }
     def create_activity(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(::Activity) }
     def create_activity!(*args, &blk); end
 
+    sig { params(args: T.untyped, blk: T.untyped).returns(::MobileSubscriber) }
+    def create_subscriber(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(::MobileSubscriber) }
+    def create_subscriber!(*args, &blk); end
+
     sig { returns(T.nilable(::Activity)) }
     def reload_activity; end
+
+    sig { returns(T.nilable(::MobileSubscriber)) }
+    def reload_subscriber; end
+
+    sig { returns(T.nilable(::MobileSubscriber)) }
+    def subscriber; end
+
+    sig { params(value: T.nilable(::MobileSubscriber)).void }
+    def subscriber=(value); end
   end
 
   module GeneratedAssociationRelationMethods
@@ -422,6 +440,9 @@ class ScheduledMobileNotification
     def order(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def pending_delivery(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def preload(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
@@ -453,6 +474,9 @@ class ScheduledMobileNotification
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def structurally_compatible?(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def to_deliver(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def uniq!(*args, &blk); end
@@ -975,6 +999,9 @@ class ScheduledMobileNotification
     def order(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def pending_delivery(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def preload(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
@@ -1006,6 +1033,9 @@ class ScheduledMobileNotification
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def structurally_compatible?(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def to_deliver(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def uniq!(*args, &blk); end

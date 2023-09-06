@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_05_233216) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_06_064010) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -208,6 +208,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_05_233216) do
     t.datetime "delivered_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["activity_id", "subscriber_id"], name: "index_scheduled_mobile_notifications_uniqueness", unique: true
     t.index ["activity_id"], name: "index_scheduled_mobile_notifications_on_activity_id"
     t.index ["deliver_after"], name: "index_scheduled_mobile_notifications_on_deliver_after"
     t.index ["subscriber_id"], name: "index_scheduled_mobile_notifications_on_subscriber_id"
