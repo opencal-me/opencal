@@ -182,6 +182,7 @@ export type InputFieldError = {
 
 export type MobileSubscriber = Node & {
   __typename?: 'MobileSubscriber';
+  activities: Array<Activity>;
   /** ID of the object. */
   id: Scalars['ID']['output'];
   phone: Scalars['String']['output'];
@@ -257,6 +258,7 @@ export type Query = {
   bootedAt: Scalars['DateTime']['output'];
   contactEmail: Scalars['String']['output'];
   imageBySignedId?: Maybe<Image>;
+  mobileSubscriber?: Maybe<MobileSubscriber>;
   mobileSubscription?: Maybe<MobileSubscription>;
   passwordStrength: Scalars['Float']['output'];
   reservation?: Maybe<Reservation>;
@@ -273,6 +275,11 @@ export type QueryActivityArgs = {
 
 export type QueryImageBySignedIdArgs = {
   signedId: Scalars['String']['input'];
+};
+
+
+export type QueryMobileSubscriberArgs = {
+  id: Scalars['ID']['input'];
 };
 
 

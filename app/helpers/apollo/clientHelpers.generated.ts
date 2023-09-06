@@ -84,8 +84,9 @@ export type InputFieldErrorFieldPolicy = {
 	field?: FieldPolicy<any> | FieldReadFunction<any>,
 	message?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MobileSubscriberKeySpecifier = ('id' | 'phone' | MobileSubscriberKeySpecifier)[];
+export type MobileSubscriberKeySpecifier = ('activities' | 'id' | 'phone' | MobileSubscriberKeySpecifier)[];
 export type MobileSubscriberFieldPolicy = {
+	activities?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	phone?: FieldPolicy<any> | FieldReadFunction<any>
 };
@@ -109,7 +110,7 @@ export type NodeKeySpecifier = ('id' | NodeKeySpecifier)[];
 export type NodeFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('activities' | 'activity' | 'activityStatus' | 'announcement' | 'bootedAt' | 'contactEmail' | 'imageBySignedId' | 'mobileSubscription' | 'passwordStrength' | 'reservation' | 'testEcho' | 'user' | 'viewer' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('activities' | 'activity' | 'activityStatus' | 'announcement' | 'bootedAt' | 'contactEmail' | 'imageBySignedId' | 'mobileSubscriber' | 'mobileSubscription' | 'passwordStrength' | 'reservation' | 'testEcho' | 'user' | 'viewer' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	activities?: FieldPolicy<any> | FieldReadFunction<any>,
 	activity?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -118,6 +119,7 @@ export type QueryFieldPolicy = {
 	bootedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	contactEmail?: FieldPolicy<any> | FieldReadFunction<any>,
 	imageBySignedId?: FieldPolicy<any> | FieldReadFunction<any>,
+	mobileSubscriber?: FieldPolicy<any> | FieldReadFunction<any>,
 	mobileSubscription?: FieldPolicy<any> | FieldReadFunction<any>,
 	passwordStrength?: FieldPolicy<any> | FieldReadFunction<any>,
 	reservation?: FieldPolicy<any> | FieldReadFunction<any>,

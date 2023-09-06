@@ -1,0 +1,21 @@
+query MobileSubscriberActivitiesPageQuery($subscriberId: ID!) {
+  subscriber: mobileSubscriber(id: $subscriberId) {
+    activities {
+      ...ActivityCardActivityFragment
+      id
+      joinUrl
+      owner {
+        avatarUrl
+        firstName
+        id
+        initials
+        url
+      }
+    }
+    id
+  }
+  viewer {
+    ...AppViewerFragment
+    id
+  }
+}

@@ -107,7 +107,7 @@ const UserRegisterPageForm: FC<UserRegisterPageFormProps> = () => {
           {...getInputProps("passwordConfirmation")}
         />
         <Button type="submit" disabled={!isDirty()} {...{ loading }}>
-          Sign Up
+          Sign up
         </Button>
       </Stack>
     </form>

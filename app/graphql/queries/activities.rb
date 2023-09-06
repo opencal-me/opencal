@@ -11,9 +11,7 @@ module Queries
       returns(T::Enumerable[::Activity])
     end
     def resolve
-      ::Activity.publicly_visible
-        .where("UPPER(during) >= NOW()")
-        .order(:during)
+      ::Activity.publicly_visible.where("UPPER(during) >= NOW()").order(:during)
     end
   end
 end

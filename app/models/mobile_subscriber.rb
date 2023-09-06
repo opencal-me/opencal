@@ -88,7 +88,7 @@ class MobileSubscriber < ApplicationRecord
     send_text_later(welcome_text_message)
   end
 
-  # == Methods
+  # == Texting
   sig { params(message: String).void }
   def send_text(message)
     TwilioClient.send_message(message, to: phone)

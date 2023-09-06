@@ -142,7 +142,7 @@ const AppMenu: FC<AppMenuProps> = ({ viewer, sx }) => {
   ) : (
     <UserLoginForm>
       <Badge component="button" type="submit" color="gray.4" {...badgeProps}>
-        Sign In
+        Sign in
       </Badge>
     </UserLoginForm>
   );

@@ -155,7 +155,7 @@ class Activity < ApplicationRecord
   # == Scopes
   scope :publicly_visible, -> {
     T.bind(self, PrivateRelation)
-    where("? = ANY(tags)", "public")
+    where("? = ANY(tags)", "public").merge(Activity.hidden.invert_where)
   }
 
   scope :hidden, -> {

@@ -161,6 +161,8 @@ type InputFieldError {
 }
 
 type MobileSubscriber implements Node {
+  activities: [Activity!]!
+
   """ID of the object."""
   id: ID!
   phone: String!
@@ -220,6 +222,7 @@ type Query {
   bootedAt: DateTime!
   contactEmail: String!
   imageBySignedId(signedId: String!): Image
+  mobileSubscriber(id: ID!): MobileSubscriber
   mobileSubscription(id: ID!): MobileSubscription
   passwordStrength(password: String!): Float!
   reservation(id: ID!): Reservation

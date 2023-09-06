@@ -4,11 +4,17 @@
 class MobileSubscribersController < ApplicationController
   # == Filters
   before_action :set_subscriber
+  before_action :import_activities if Rails.env.development?
 
   # == Actions
   def activities
     subscriber = T.must(@subscriber)
-    render(plain: "should show activities for #{subscriber.formatted_phone}")
+    authorize!(subscriber, to: :show?)
+    data = query!(
+      "MobileSubscriberActivitiesPageQuery",
+      { subscriber_id: subscriber.to_gid.to_s },
+    )
+    render(inertia: "MobileSubscriberActivitiesPage", props: { data: })
   end
 
   private
@@ -20,5 +26,9 @@ class MobileSubscribersController < ApplicationController
     if (phone = params[:id])
       @subscriber = MobileSubscriber.find_by_phone!(phone)
     end
+  end
+
+  def import_activities
+    Activity.import_for_user!(current_user!)
   end
 end

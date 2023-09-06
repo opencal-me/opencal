@@ -19,6 +19,7 @@ module Types
 
     field :activities, resolver: Queries::Activities
     field :activity, resolver: Queries::Activity
+    field :mobile_subscriber, resolver: Queries::MobileSubscriber
     field :mobile_subscription, resolver: Queries::MobileSubscription
     field :reservation, resolver: Queries::Reservation
     field :user, resolver: Queries::User
