@@ -413,6 +413,7 @@ class Activity < ApplicationRecord
   def google_event_attributes_previously_changed?
     name_previously_changed? ||
       tags_previously_changed? ||
+      silent_previously_changed? ||
       capacity_previously_changed?
   end
 
