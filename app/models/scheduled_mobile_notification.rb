@@ -132,15 +132,9 @@ class ScheduledMobileNotification < ApplicationRecord
       "planned for today:"
     activities = notifications.map do |notification|
       activity = notification.activity!
-      owner = activity.owner!
-<<<<<<< Updated upstream
-      "  - #{owner.first_name.downcase} is starting #{activity.name} at " \
-        "#{activity.start_time.strftime("%-l:%M %p")}"
-=======
-      time_zone = owner.time_zone
-      "  - #{activity.name} " \
-        "#{activity.start_time.in_time_zone(time_zone).strftime("%-l:%M %p")}"
->>>>>>> Stashed changes
+      time_zone = activity.owner!.time_zone
+      start_time = activity.start_time.in_time_zone(time_zone)
+      "  - #{activity.name} #{start_time.strftime("%-l:%M %p")}"
     end
     [intro, *activities].join("\n")
   end
@@ -149,7 +143,9 @@ class ScheduledMobileNotification < ApplicationRecord
   private_class_method def self.single_activity_description(notification)
     activity = notification.activity!
     owner = activity.owner!
+    time_zone = owner.time_zone
+    start_time = activity.start_time.in_time_zone(time_zone)
     "heyo! #{owner.first_name.downcase} is starting #{activity.name} at " \
-      "#{activity.start_time.strftime("%-l:%M %p")}"
+      "#{start_time.strftime("%-l:%M %p")}"
   end
 end
