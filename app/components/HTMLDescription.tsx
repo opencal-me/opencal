@@ -38,6 +38,7 @@ const HTMLDescription: FC<HTMLDescriptionProps> = ({
       {...otherProps}
     >
       <TypographyStylesProvider
+        lh={1.3}
         sx={({ fontSizes, colors }) => ({
           color: colors.dark[3],
           fontSize: fontSizes.sm,

@@ -67,7 +67,7 @@ const ActivityCard: FC<ActivityCardProps> = ({
         <Group align="start" noWrap>
           <Text
             weight={500}
-            lh={1.2}
+            lh={1.3}
             sx={{ flexGrow: 1, textTransform: "none" }}
           >
             {name}
@@ -119,7 +119,9 @@ const ActivityCard: FC<ActivityCardProps> = ({
           </Group>
         )}
         {!!descriptionHtml && (
-          <HTMLDescription mah={120}>{descriptionHtml}</HTMLDescription>
+          <HTMLDescription mah={120} mt={4} sx={{ textTransform: "none" }}>
+            {descriptionHtml}
+          </HTMLDescription>
         )}
       </Card>
       {isOver && (
