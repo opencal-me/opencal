@@ -116,7 +116,7 @@ class ScheduledMobileNotification < ApplicationRecord
     else
       single_activity_description(notifications.first!)
     end
-    cta = "wanna join? go to #{activities_url}"
+    cta = "wanna join? go to: #{activities_url}"
     [description, cta].join("\n\n")
   end
 
@@ -133,8 +133,14 @@ class ScheduledMobileNotification < ApplicationRecord
     activities = notifications.map do |notification|
       activity = notification.activity!
       owner = activity.owner!
+<<<<<<< Updated upstream
       "  - #{owner.first_name.downcase} is starting #{activity.name} at " \
         "#{activity.start_time.strftime("%-l:%M %p")}"
+=======
+      time_zone = owner.time_zone
+      "  - #{activity.name} " \
+        "#{activity.start_time.in_time_zone(time_zone).strftime("%-l:%M %p")}"
+>>>>>>> Stashed changes
     end
     [intro, *activities].join("\n")
   end
