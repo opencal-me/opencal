@@ -118,7 +118,6 @@ UserPage.layout = buildLayout<UserPageProps>(
     return (
       <AppLayout
         title={`${user.firstName}'s OpenCal`}
-        noIndex
         breadcrumbs={[
           ...(user.isViewer ? [{ title: "Home", href: "/home" }] : []),
           { title: `${user.firstName}'s OpenCal`, href: user.url },

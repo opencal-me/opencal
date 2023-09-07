@@ -257,7 +257,6 @@ ActivityPage.layout = buildLayout<ActivityPageProps>(
     return (
       <AppLayout
         title={activity.name}
-        noIndex
         breadcrumbs={[
           { title: "Home", href: "/home" },
           { title: activity.name, href: activity.url },
