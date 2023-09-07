@@ -5,3 +5,4 @@ Disallow: /
 
 User-agent: *
 Disallow: /privacy
+Disallow: /tos
