@@ -18,5 +18,7 @@ bin/setup
 
 - [ ] Sanitize all links from description to open in new tab, and have safe
       'rel' attribute options.
+- [ ] Automatically generate a sitemap with
+      [Sitemap Generator](https://github.com/kjvarga/sitemap_generator)
 - [x] Show a dedicated page for users without a Google refresh token, requiring
       them to proceed manually; then, disable the /login route.
