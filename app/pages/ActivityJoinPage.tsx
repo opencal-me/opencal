@@ -15,9 +15,9 @@ import Map from "~/components/Map";
 import PageContainer from "~/components/PageContainer";
 import HTMLDescription from "~/components/HTMLDescription";
 
-export type ActivityPageProps = PagePropsWithData<ActivityJoinPageQuery>;
+export type ActivityJoinPageProps = PagePropsWithData<ActivityJoinPageQuery>;
 
-const ActivityPage: PageComponent<ActivityPageProps> = ({
+const ActivityJoinPage: PageComponent<ActivityJoinPageProps> = ({
   data: { activity },
 }) => {
   invariant(activity, "Missing activity");
@@ -107,7 +107,6 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
                   color="dark"
                   weight={600}
                   sx={({ transitionTimingFunction, fn }) => ({
-                    textTransform: "none",
                     textDecoration: "underline",
                     transition: `color 150ms ${transitionTimingFunction}`,
                     "&:hover": {
@@ -245,7 +244,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
   );
 };
 
-ActivityPage.layout = buildLayout<ActivityPageProps>(
+ActivityJoinPage.layout = buildLayout<ActivityJoinPageProps>(
   (page, { data: { viewer, activity } }) => {
     invariant(activity, "Missing activity");
     const { owner } = activity;
@@ -274,4 +273,4 @@ ActivityPage.layout = buildLayout<ActivityPageProps>(
   },
 );
 
-export default ActivityPage;
+export default ActivityJoinPage;
