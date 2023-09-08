@@ -359,6 +359,13 @@ class User < ApplicationRecord
       loop do
         sync_next_google_calendar_page(calendar:, &block)
         break unless google_calendar_next_page_token?
+      rescue Google::GoneError => error
+        raise unless error.message
+          .include?("Sync token is no longer valid, a full sync is required.")
+        update!(
+          google_calendar_next_sync_token: nil,
+          google_calendar_next_page_token: nil,
+        )
       end
     end
   end
