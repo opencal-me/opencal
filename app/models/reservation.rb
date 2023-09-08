@@ -9,7 +9,7 @@
 #  email       :string           not null
 #  name        :string           not null
 #  note        :text
-#  phone       :string
+#  phone       :string           not null
 #  status      :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
@@ -27,23 +27,21 @@
 class Reservation < ApplicationRecord
   include Identifiable
 
+  # == Constants
+  MISSING_PHONE_VALUE = "MISSING_PHONE_NUMBER"
+
   # == Attributes
   enumerize :status, in: %i[requested approved rejected], default: :approved
 
   sig { returns(T.nilable(String)) }
   def formatted_phone
-    if (phone = self.phone)
-      Phonelib.parse(phone).international
-    end
+    return MISSING_PHONE_VALUE if phone == MISSING_PHONE_VALUE
+    Phonelib.parse(phone).international
   end
 
   sig { returns(String) }
   def name_with_phone
-    if phone?
-      "#{name} (#{formatted_phone})"
-    else
-      name
-    end
+    "#{name} (#{formatted_phone})"
   end
 
   # == Associations
@@ -55,8 +53,8 @@ class Reservation < ApplicationRecord
   end
 
   # == Normalizations
-  removes_blank :phone, :note
-  before_validation :normalize_phone
+  removes_blank :note
+  after_validation :normalize_phone
 
   # == Validations
   validates :name, presence: true, length: { maximum: 129 }
@@ -68,7 +66,7 @@ class Reservation < ApplicationRecord
               scope: :activity,
               message: "already added",
             }
-  validates :phone, phone: { possible: true }, allow_nil: true
+  validates :phone, presence: true, phone: { possible: true }
 
   # == Callbacks
   after_create_commit :update_google_event
@@ -95,9 +93,7 @@ class Reservation < ApplicationRecord
   # == Normalization Handlers
   sig { void }
   def normalize_phone
-    if (phone = self.phone)
-      self.phone = Phonelib.parse(phone).to_s
-    end
+    self.phone = Phonelib.parse(phone).to_s
   end
 
   # == Callback Handlers

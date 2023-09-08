@@ -1,6 +1,6 @@
 query HomePageQuery {
   activities {
-    ...ActivityCardActivityFragment
+    ...ActivitiesActivityFragment
     id
     joinUrl
     owner {

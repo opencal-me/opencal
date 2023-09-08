@@ -3,10 +3,10 @@ import { Avatar, CopyButton, Text } from "@mantine/core";
 
 import type { UserPageQuery } from "~/helpers/graphql";
 
+import Activities from "~/components/Activities";
 import ActivityCard from "~/components/ActivityCard";
 import UserBio from "~/components/UserBio";
 import UserMobileSubscribeForm from "~/components/MobileSubscriptionForm";
-import { groupBy } from "lodash-es";
 
 export type UserPageProps = PagePropsWithData<UserPageQuery>;
 
@@ -22,29 +22,6 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user, viewer } }) => {
     url,
     isViewer,
   } = user;
-
-  // == Activity Groupings
-  const activityGroupings = useMemo(
-    () =>
-      groupBy(activities, ({ start }) => {
-        const today = DateTime.now();
-        const dayAfterTomorrow = today
-          .plus({ days: 2 })
-          .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-        const nextWeek = today
-          .plus({ weeks: 1 })
-          .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-        const startDateTime = DateTime.fromISO(start);
-        if (startDateTime < dayAfterTomorrow) {
-          return "Today and tomorrow";
-        }
-        if (startDateTime < nextWeek) {
-          return "This week";
-        }
-        return "Later";
-      }),
-    [activities],
-  );
 
   return (
     <Stack spacing={32}>
@@ -119,35 +96,19 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user, viewer } }) => {
               Join an activity, and get involved with {firstName}&apos;s life :)
             </Text>
           </Box>
-          {!isEmpty(activityGroupings) ? (
-            Object.entries(activityGroupings).map(([grouping, activities]) => (
-              <>
-                <Divider
-                  label={grouping}
-                  color="gray"
-                  styles={({ colors }) => ({
-                    label: {
-                      "&::after": {
-                        borderColor: colors.gray[3],
-                      },
-                    },
-                  })}
+          <Activities
+            renderItem={activity => {
+              const { id: activityId, joinUrl } = activity;
+              return (
+                <ActivityCard
+                  key={activityId}
+                  href={joinUrl}
+                  {...{ activity }}
                 />
-                {activities.map(activity => {
-                  const { id: activityId, joinUrl } = activity;
-                  return (
-                    <ActivityCard
-                      key={activityId}
-                      href={joinUrl}
-                      {...{ activity }}
-                    />
-                  );
-                })}
-              </>
-            ))
-          ) : (
-            <EmptyCard itemLabel="activities" />
-          )}
+              );
+            }}
+            {...{ activities }}
+          />
         </Stack>
       </Stack>
     </Stack>

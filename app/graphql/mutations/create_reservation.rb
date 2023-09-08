@@ -18,7 +18,7 @@ module Mutations
     argument :email, String
     argument :name, String
     argument :note, String, required: false
-    argument :phone, String, required: false
+    argument :phone, String
 
     # == Resolver
     sig do

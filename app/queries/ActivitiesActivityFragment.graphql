@@ -1,0 +1,4 @@
+fragment ActivitiesActivityFragment on Activity {
+  ...ActivityCardActivityFragment
+  id
+}

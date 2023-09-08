@@ -748,10 +748,10 @@ class Reservation
     sig { void }
     def note_will_change!; end
 
-    sig { returns(T.nilable(::String)) }
+    sig { returns(::String) }
     def phone; end
 
-    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    sig { params(value: ::String).returns(::String) }
     def phone=(value); end
 
     sig { returns(T::Boolean) }
@@ -766,10 +766,10 @@ class Reservation
     sig { returns(T::Boolean) }
     def phone_came_from_user?; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def phone_change; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def phone_change_to_be_saved; end
 
     sig { returns(T::Boolean) }
@@ -778,7 +778,7 @@ class Reservation
     sig { returns(T.nilable(::String)) }
     def phone_in_database; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def phone_previous_change; end
 
     sig { returns(T::Boolean) }
@@ -856,7 +856,7 @@ class Reservation
     sig { returns(T::Boolean) }
     def saved_change_to_note?; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def saved_change_to_phone; end
 
     sig { returns(T::Boolean) }

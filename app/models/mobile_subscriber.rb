@@ -43,7 +43,7 @@ class MobileSubscriber < ApplicationRecord
            dependent: :destroy
 
   # == Normalizations
-  before_validation :normalize_phone
+  after_validation :normalize_phone
 
   # == Validations
   validates :phone, presence: true, phone: { possible: true }
@@ -110,8 +110,6 @@ class MobileSubscriber < ApplicationRecord
   # == Normalization Handlers
   sig { void }
   def normalize_phone
-    if (phone = self.phone)
-      self.phone = self.class.normalize_phone(phone)
-    end
+    self.phone = self.class.normalize_phone(phone)
   end
 end

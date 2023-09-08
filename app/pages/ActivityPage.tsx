@@ -1,7 +1,7 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
-import humanizeDuration from "humanize-duration";
 import { CopyButton, Spoiler, Text } from "@mantine/core";
 import { Marker } from "react-map-gl";
+import humanizeDuration from "humanize-duration";
 
 import HideIcon from "~icons/heroicons/chevron-double-up-20-solid";
 import JoinIcon from "~icons/heroicons/hand-raised-20-solid";

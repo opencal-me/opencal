@@ -103,7 +103,7 @@ export const ReservationCreateForm: FC<ReservationCreateFormProps> = ({
             {...getInputProps("email")}
           />
           <TextInput
-            label="Phone Number"
+            label="Phone #"
             description={
               <>
                 In case something comes up, so {owner.firstName} can contact
@@ -111,6 +111,7 @@ export const ReservationCreateForm: FC<ReservationCreateFormProps> = ({
               </>
             }
             placeholder="+1 (555) 555-5555"
+            required
             size="md"
             {...getInputProps("phone")}
           />
