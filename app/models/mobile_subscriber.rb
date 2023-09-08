@@ -71,7 +71,7 @@ class MobileSubscriber < ApplicationRecord
   sig { returns(String) }
   def welcome_text_message
     message =
-      "hey, this is openCal. save this #, we'll text you when your friends " \
+      "hey, this is opencal. save this #, we'll text you when your friends " \
         "are up to stuff."
     disclaimer = "Msg and data rates may apply. Msg frequency varies. Reply " \
       "HELP for help, STOP to cancel."
