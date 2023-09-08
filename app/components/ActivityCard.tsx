@@ -101,7 +101,7 @@ const ActivityCard: FC<ActivityCardProps> = ({
               span
               sx={({ fontFamilyMonospace, colors }) => ({
                 fontFamily: fontFamilyMonospace,
-                color: isOver ? colors.red[3] : colors.gray[4],
+                color: isOver ? colors.red[3] : colors.gray[3],
               })}
             >
               {" / "}

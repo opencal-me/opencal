@@ -9,6 +9,7 @@ import MobileSubscriptionBadge from "~/components/MobileSubscriptionBadge";
 import ActivityCreateButton from "~/components/ActivityCreateButton";
 
 import createFromCalendarImageSrc from "~/assets/images/create-from-calendar.gif";
+import { groupBy } from "lodash-es";
 
 export type HomePageProps = PagePropsWithData<HomePageQuery>;
 
@@ -21,6 +22,29 @@ const HomePage: PageComponent<HomePageProps> = ({
     const u = new URL(url);
     return `${u.host}${u.pathname}`;
   }, [url]);
+
+  // == Activity Groupings
+  const activityGroupings = useMemo(
+    () =>
+      groupBy(activities, ({ start }) => {
+        const today = DateTime.now();
+        const dayAfterTomorrow = today
+          .plus({ days: 2 })
+          .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+        const nextWeek = today
+          .plus({ weeks: 1 })
+          .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+        const startDateTime = DateTime.fromISO(start);
+        if (startDateTime < dayAfterTomorrow) {
+          return "Today and tomorrow";
+        }
+        if (startDateTime < nextWeek) {
+          return "This week";
+        }
+        return "Later";
+      }),
+    [activities],
+  );
 
   // == Routing
   const router = useRouter();
@@ -74,13 +98,28 @@ const HomePage: PageComponent<HomePageProps> = ({
           </Text>
         </Box>
         <Stack spacing="xs">
-          {!isEmpty(activities) ? (
-            activities.map(activity => (
-              <ActivityCard
-                key={activity.id}
-                href={activity.url}
-                {...{ activity }}
-              />
+          {!isEmpty(activityGroupings) ? (
+            Object.entries(activityGroupings).map(([grouping, activities]) => (
+              <>
+                <Divider
+                  label={grouping}
+                  color="brand"
+                  styles={({ colors }) => ({
+                    label: {
+                      "&::after": {
+                        borderColor: colors.gray[3],
+                      },
+                    },
+                  })}
+                />
+                {activities.map(activity => (
+                  <ActivityCard
+                    key={activity.id}
+                    href={activity.url}
+                    {...{ activity }}
+                  />
+                ))}
+              </>
             ))
           ) : (
             <Card withBorder>
