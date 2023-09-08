@@ -1,12 +1,13 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
-import { Marker } from "react-map-gl";
+import humanizeDuration from "humanize-duration";
 import { CopyButton, Spoiler, Text } from "@mantine/core";
+import { Marker } from "react-map-gl";
 
-import LocationIcon from "~icons/heroicons/map-pin-20-solid";
-import ShowMoreIcon from "~icons/heroicons/chevron-double-down-20-solid";
 import HideIcon from "~icons/heroicons/chevron-double-up-20-solid";
 import JoinIcon from "~icons/heroicons/hand-raised-20-solid";
+import LocationIcon from "~icons/heroicons/map-pin-20-solid";
 import ProfileIcon from "~icons/heroicons/user-20-solid";
+import ShowMoreIcon from "~icons/heroicons/chevron-double-down-20-solid";
 import StoryIcon from "~icons/heroicons/photo-20-solid";
 
 import type { ActivityPageQuery } from "~/helpers/graphql";
@@ -22,8 +23,9 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
 }) => {
   invariant(activity, "Missing activity");
   const {
-    start,
     name,
+    start,
+    durationSeconds,
     descriptionHtml,
     coordinates,
     address,
@@ -41,10 +43,16 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
       return "Today";
     }
     return startDateTime.toLocaleString({
-      month: "short",
+      month: "long",
       day: "numeric",
     });
   }, [startDateTime]);
+
+  // == Duration
+  const durationLabel = useMemo(
+    () => humanizeDuration(durationSeconds * 1000),
+    [durationSeconds],
+  );
 
   return (
     <Stack spacing={32}>
@@ -83,12 +91,32 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
           <Title size="h3" lh={1.3} sx={{ textTransform: "none" }}>
             {name}
           </Title>
-          <Text color="brand" size="sm">
-            {startDateLabel} at{" "}
-            <Time format={{ hour: "numeric", minute: "numeric" }}>
-              {startDateTime}
-            </Time>
-          </Text>
+          <Group
+            spacing={6}
+            noWrap
+            sx={({ fontSizes, fn }) => ({
+              flexShrink: 0,
+              fontSize: fontSizes.sm,
+              color: fn.primaryColor(),
+            })}
+          >
+            <Text size="sm">
+              {startDateLabel} at{" "}
+              <Time format={{ hour: "numeric", minute: "numeric" }}>
+                {startDateTime}
+              </Time>
+            </Text>
+            <Text
+              span
+              color="gray.4"
+              sx={({ fontFamilyMonospace }) => ({
+                fontFamily: fontFamilyMonospace,
+              })}
+            >
+              {" / "}
+            </Text>{" "}
+            <Text color="gray">{durationLabel}</Text>
+          </Group>
           {!isEmpty(tags) && (
             <Group spacing={4} mt={4}>
               {tags.map(tag => (

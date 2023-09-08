@@ -1,4 +1,5 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
+import humanizeDuration from "humanize-duration";
 import { Marker } from "react-map-gl";
 
 import LocationIcon from "~icons/heroicons/map-pin-20-solid";
@@ -24,6 +25,7 @@ const ActivityJoinPage: PageComponent<ActivityJoinPageProps> = ({
   const {
     owner,
     start,
+    durationSeconds,
     name,
     descriptionHtml,
     coordinates,
@@ -45,6 +47,12 @@ const ActivityJoinPage: PageComponent<ActivityJoinPageProps> = ({
       day: "numeric",
     });
   }, [startDateTime]);
+
+  // == Duration
+  const durationLabel = useMemo(
+    () => humanizeDuration(durationSeconds * 1000),
+    [durationSeconds],
+  );
 
   // == Reservation Footer
   const { entry: footerIntersection, ref: footerRef } =
@@ -123,12 +131,32 @@ const ActivityJoinPage: PageComponent<ActivityJoinPageProps> = ({
               <Title size="h3" lh={1.3} sx={{ textTransform: "none" }}>
                 {name}
               </Title>
-              <Text color="brand" size="sm">
-                {startDateLabel} at{" "}
-                <Time format={{ hour: "numeric", minute: "numeric" }}>
-                  {startDateTime}
-                </Time>
-              </Text>
+              <Group
+                spacing={6}
+                noWrap
+                sx={({ fontSizes, fn }) => ({
+                  flexShrink: 0,
+                  fontSize: fontSizes.sm,
+                  color: fn.primaryColor(),
+                })}
+              >
+                <Text size="sm">
+                  {startDateLabel} at{" "}
+                  <Time format={{ hour: "numeric", minute: "numeric" }}>
+                    {startDateTime}
+                  </Time>
+                </Text>
+                <Text
+                  span
+                  color="gray.4"
+                  sx={({ fontFamilyMonospace }) => ({
+                    fontFamily: fontFamilyMonospace,
+                  })}
+                >
+                  {" / "}
+                </Text>{" "}
+                <Text color="gray">{durationLabel}</Text>
+              </Group>
               {!isEmpty(tags) && (
                 <Group spacing={4} mt={4}>
                   {tags.map(tag => (

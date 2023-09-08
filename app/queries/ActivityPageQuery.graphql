@@ -8,6 +8,7 @@ query ActivityPageQuery($activityId: ID!) {
       longitude
     }
     descriptionHtml
+    durationSeconds
     end
     id
     joinUrl

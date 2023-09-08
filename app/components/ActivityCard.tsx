@@ -44,6 +44,12 @@ const ActivityCard: FC<ActivityCardProps> = ({
     return dateTime.diffNow("seconds").seconds <= 0;
   }, [end]);
 
+  // == Duration
+  const durationLabel = useMemo(
+    () => durationHumanizer(durationSeconds * 1000),
+    [durationSeconds],
+  );
+
   return (
     <AnchorContainer
       component={Link}
@@ -75,12 +81,11 @@ const ActivityCard: FC<ActivityCardProps> = ({
           <Group
             spacing={6}
             noWrap
-            lh={1.4}
+            lh={1.3}
             sx={({ fontSizes, colors, fn }) => ({
               flexShrink: 0,
               fontSize: fontSizes.sm,
               color: isOver ? colors.red[5] : fn.dimmed(),
-              lh: 1.4,
             })}
           >
             <Box>
@@ -99,14 +104,14 @@ const ActivityCard: FC<ActivityCardProps> = ({
             </Box>
             <Text
               span
-              sx={({ fontFamilyMonospace, colors }) => ({
+              color={isOver ? "red.3" : "gray.3"}
+              sx={({ fontFamilyMonospace }) => ({
                 fontFamily: fontFamilyMonospace,
-                color: isOver ? colors.red[3] : colors.gray[3],
               })}
             >
               {" / "}
             </Text>{" "}
-            <Text>{durationHumanizer(durationSeconds * 1000)}</Text>
+            <Text>{durationLabel}</Text>
           </Group>
         </Group>
         {!isEmpty(tags) && (
