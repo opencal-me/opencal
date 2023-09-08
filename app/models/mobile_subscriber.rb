@@ -94,9 +94,9 @@ class MobileSubscriber < ApplicationRecord
     TwilioClient.send_message(message, to: phone)
   end
 
-  sig { params(message: String, lowercase: T::Boolean).void }
-  def send_text_later(message, lowercase: true)
-    SendMobileSubscriberTextJob.perform_later(self, message, lowercase:)
+  sig { params(message: String).void }
+  def send_text_later(message)
+    SendMobileSubscriberTextJob.perform_later(self, message)
   end
 
   # == Phone

@@ -9,13 +9,12 @@ class SendMobileSubscriberTextJob
     sig do
       params(
         subscriber: ::MobileSubscriber,
-        message: ::String,
-        options: T.untyped
+        message: ::String
       ).returns(T.any(SendMobileSubscriberTextJob, FalseClass))
     end
-    def perform_later(subscriber, message, **options); end
+    def perform_later(subscriber, message); end
 
-    sig { params(subscriber: ::MobileSubscriber, message: ::String, options: T.untyped).void }
-    def perform_now(subscriber, message, **options); end
+    sig { params(subscriber: ::MobileSubscriber, message: ::String).void }
+    def perform_now(subscriber, message); end
   end
 end

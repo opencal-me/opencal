@@ -3,14 +3,8 @@
 
 class SendMobileSubscriberTextJob < ApplicationJob
   # == Job
-  sig do
-    params(
-      subscriber: MobileSubscriber,
-      message: String,
-      options: T.untyped,
-    ).void
-  end
-  def perform(subscriber, message, **options)
-    subscriber.send_text(message, **options.compact)
+  sig { params(subscriber: MobileSubscriber, message: String).void }
+  def perform(subscriber, message)
+    subscriber.send_text(message)
   end
 end
