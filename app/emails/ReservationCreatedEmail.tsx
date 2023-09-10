@@ -57,7 +57,7 @@ const ReservationCreatedEmail: PageComponent<ReservationCreatedEmailProps> = ({
 };
 
 ReservationCreatedEmail.layout = buildLayout<ReservationCreatedEmailProps>(
-  page => <EmailLayout header="New Reservation">{page}</EmailLayout>,
+  page => <EmailLayout header="New reservation">{page}</EmailLayout>,
 );
 
 export default ReservationCreatedEmail;

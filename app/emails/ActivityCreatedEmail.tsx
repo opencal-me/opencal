@@ -54,7 +54,7 @@ const ActivityCreatedEmail: PageComponent<ActivityCreatedEmailProps> = ({
 };
 
 ActivityCreatedEmail.layout = buildLayout<ActivityCreatedEmailProps>(page => (
-  <EmailLayout header="Activity Created">{page}</EmailLayout>
+  <EmailLayout header="Activity created">{page}</EmailLayout>
 ));
 
 export default ActivityCreatedEmail;

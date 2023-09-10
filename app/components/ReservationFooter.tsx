@@ -57,9 +57,7 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
               size="sm"
               color="gray.7"
               sx={({ fn }) => ({
-                [fn.smallerThan(420)]: {
-                  display: "none",
-                },
+                [fn.smallerThan(428)]: { display: "none" },
               })}
             >
               Get involved with {owner.firstName}&apos;s life :)
@@ -90,7 +88,7 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
               <Button
                 variant="gradient"
                 gradient={{ from: "brand", to: "indigo" }}
-                px="xl"
+                px="md"
                 fz="md"
                 fw={800}
                 sx={{
@@ -121,7 +119,7 @@ const ReservationFooter: FC<ReservationFooterProps> = ({
                   });
                 }}
               >
-                I&apos;ll be there!
+                Join & add to calendar
               </Button>
             </Tooltip>
           </Group>

@@ -50,7 +50,7 @@ const MobileSubscriptionCreatedEmail: PageComponent<
 
 MobileSubscriptionCreatedEmail.layout =
   buildLayout<MobileSubscriptionCreatedEmailProps>(page => (
-    <EmailLayout header="New Subscription">{page}</EmailLayout>
+    <EmailLayout header="New subscription">{page}</EmailLayout>
   ));
 
 export default MobileSubscriptionCreatedEmail;
