@@ -10,7 +10,7 @@
 #  coordinates        :geography        point, 4326
 #  description        :string
 #  during             :tstzrange        not null
-#  handle             :string           not null
+#  slug             :string           not null
 #  location           :string
 #  name               :string           default(""), not null
 #  silent             :boolean          not null
@@ -25,7 +25,7 @@
 #
 #  index_activities_on_coordinates      (coordinates) USING gist
 #  index_activities_on_google_event_id  (google_event_id) UNIQUE
-#  index_activities_on_handle           (handle) UNIQUE
+#  index_activities_on_slug           (slug) UNIQUE
 #  index_activities_on_owner_id         (owner_id)
 #  index_activities_on_tags             (tags)
 #
@@ -35,7 +35,7 @@
 #
 class Activity < ApplicationRecord
   include Identifiable
-  include Handled
+  include Slugged
   include FriendlyIdentifiable
 
   # == Constants
@@ -46,7 +46,7 @@ class Activity < ApplicationRecord
   class_attribute :notifications_delay, default: 10.seconds
 
   # == Attributes
-  attribute :handle, :string, default: -> { generate_handle }
+  attribute :slug, :string, default: -> { generate_slug }
 
   sig { returns(Time) }
   def start_time
@@ -94,18 +94,18 @@ class Activity < ApplicationRecord
   end
 
   # == FriendlyId
-  friendly_id :handle, slug_limit: 32
+  friendly_id :slug, slug_limit: 32
 
   sig { override.returns(String) }
   def friendly_id
     prefix = FriendlyId::Candidates.new(self, name).first
-    [prefix, handle].join("--")
+    [prefix, slug].join("--")
   end
 
   # == Routing
   sig { override.returns(String) }
   def to_param
-    handle
+    slug
   end
 
   # == Associations
@@ -417,7 +417,7 @@ class Activity < ApplicationRecord
       capacity_previously_changed?
   end
 
-  # == Callback Handlers
+  # == Callback Slugrs
   sig { void }
   def update_google_event
     event = google_event or return

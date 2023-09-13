@@ -16,7 +16,6 @@ module Types
     field :duration_seconds, Integer, null: false
     field :end, DateTimeType, null: false, method: :end_time
     field :google_event_id, String, null: false
-    # field :handle, String, null: false, method: :to_param
     field :is_owned_by_viewer, Boolean, null: false
     field :join_url, String, null: false
     field :location, String

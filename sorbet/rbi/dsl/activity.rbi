@@ -762,51 +762,6 @@ class Activity
     sig { void }
     def google_event_id_will_change!; end
 
-    sig { returns(::String) }
-    def handle; end
-
-    sig { params(value: ::String).returns(::String) }
-    def handle=(value); end
-
-    sig { returns(T::Boolean) }
-    def handle?; end
-
-    sig { returns(T.nilable(::String)) }
-    def handle_before_last_save; end
-
-    sig { returns(T.untyped) }
-    def handle_before_type_cast; end
-
-    sig { returns(T::Boolean) }
-    def handle_came_from_user?; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def handle_change; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def handle_change_to_be_saved; end
-
-    sig { returns(T::Boolean) }
-    def handle_changed?; end
-
-    sig { returns(T.nilable(::String)) }
-    def handle_in_database; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def handle_previous_change; end
-
-    sig { returns(T::Boolean) }
-    def handle_previously_changed?; end
-
-    sig { returns(T.nilable(::String)) }
-    def handle_previously_was; end
-
-    sig { returns(T.nilable(::String)) }
-    def handle_was; end
-
-    sig { void }
-    def handle_will_change!; end
-
     sig { returns(T.nilable(::String)) }
     def id; end
 
@@ -1006,9 +961,6 @@ class Activity
     def restore_google_event_id!; end
 
     sig { void }
-    def restore_handle!; end
-
-    sig { void }
     def restore_id!; end
 
     sig { void }
@@ -1022,6 +974,9 @@ class Activity
 
     sig { void }
     def restore_silent!; end
+
+    sig { void }
+    def restore_slug!; end
 
     sig { void }
     def restore_tags!; end
@@ -1068,12 +1023,6 @@ class Activity
     sig { returns(T::Boolean) }
     def saved_change_to_google_event_id?; end
 
-    sig { returns(T.nilable([::String, ::String])) }
-    def saved_change_to_handle; end
-
-    sig { returns(T::Boolean) }
-    def saved_change_to_handle?; end
-
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def saved_change_to_id; end
 
@@ -1103,6 +1052,12 @@ class Activity
 
     sig { returns(T::Boolean) }
     def saved_change_to_silent?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def saved_change_to_slug; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_slug?; end
 
     sig { returns(T.nilable([T::Array[::String], T::Array[::String]])) }
     def saved_change_to_tags; end
@@ -1166,6 +1121,51 @@ class Activity
 
     sig { void }
     def silent_will_change!; end
+
+    sig { returns(::String) }
+    def slug; end
+
+    sig { params(value: ::String).returns(::String) }
+    def slug=(value); end
+
+    sig { returns(T::Boolean) }
+    def slug?; end
+
+    sig { returns(T.nilable(::String)) }
+    def slug_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def slug_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def slug_came_from_user?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def slug_change; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def slug_change_to_be_saved; end
+
+    sig { returns(T::Boolean) }
+    def slug_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def slug_in_database; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def slug_previous_change; end
+
+    sig { returns(T::Boolean) }
+    def slug_previously_changed?; end
+
+    sig { returns(T.nilable(::String)) }
+    def slug_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def slug_was; end
+
+    sig { void }
+    def slug_will_change!; end
 
     sig { returns(T::Array[::String]) }
     def tags; end
@@ -1321,9 +1321,6 @@ class Activity
     def will_save_change_to_google_event_id?; end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_handle?; end
-
-    sig { returns(T::Boolean) }
     def will_save_change_to_id?; end
 
     sig { returns(T::Boolean) }
@@ -1337,6 +1334,9 @@ class Activity
 
     sig { returns(T::Boolean) }
     def will_save_change_to_silent?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_slug?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_tags?; end

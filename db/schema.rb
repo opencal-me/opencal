@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_08_155527) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_13_053639) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -53,7 +53,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_08_155527) do
     t.geography "coordinates", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "handle", null: false
+    t.string "slug", null: false
     t.integer "capacity"
     t.string "name", default: "", null: false
     t.string "tags", default: [], null: false, array: true
@@ -61,8 +61,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_08_155527) do
     t.boolean "silent", null: false
     t.index ["coordinates"], name: "index_activities_on_coordinates", using: :gist
     t.index ["google_event_id"], name: "index_activities_on_google_event_id", unique: true
-    t.index ["handle"], name: "index_activities_on_handle", unique: true
     t.index ["owner_id"], name: "index_activities_on_owner_id"
+    t.index ["slug"], name: "index_activities_on_slug", unique: true
     t.index ["tags"], name: "index_activities_on_tags"
   end
 
@@ -244,15 +244,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_08_155527) do
     t.string "avatar_url"
     t.string "last_name"
     t.datetime "google_calendar_last_synced_at", precision: nil
-    t.string "handle", null: false
+    t.string "slug", null: false
     t.string "google_calendar_next_sync_token"
     t.string "google_calendar_next_page_token"
     t.text "bio"
     t.boolean "requires_relogin", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["google_calendar_last_synced_at"], name: "index_users_on_google_calendar_last_synced_at"
-    t.index ["handle"], name: "index_users_on_handle", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["slug"], name: "index_users_on_slug", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

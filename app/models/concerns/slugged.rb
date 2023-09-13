@@ -1,7 +1,7 @@
 # typed: strict
 # frozen_string_literal: true
 
-module Handled
+module Slugged
   extend T::Sig
   extend T::Helpers
   extend ActiveSupport::Concern
@@ -17,8 +17,8 @@ module Handled
                        RequiresColumn::ClassMethods))
 
     # == Configuration
-    requires_column :handle
-    class_attribute :generated_handle_length, default: 16
+    requires_column :slug
+    class_attribute :generated_slug_length, default: 16
   end
 
   class_methods do
@@ -26,42 +26,45 @@ module Handled
     extend T::Helpers
 
     # == Annotations
-    requires_ancestor { T.class_of(ApplicationRecord) }
+    requires_ancestor { T.class_of(ActiveRecord::Base) }
 
     # == Methods
     sig { returns(String) }
-    def generate_handle
+    def generate_slug
       Nanoid.generate(
         alphabet:
           "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
-        size: generated_handle_length,
+        size: generated_slug_length,
       )
     end
   end
 
   # == Interface
   sig { abstract.returns(::String) }
-  def handle; end
+  def slug; end
 
   sig { abstract.params(value: ::String).returns(::String) }
-  def handle=(value); end
+  def slug=(value); end
 
   sig { abstract.returns(T::Boolean) }
-  def handle?; end
+  def slug?; end
 
   # == Methods
   sig { returns(String) }
-  def generate_handle
-    self[:handle] ||= T.cast(self.class, ClassMethods).generate_handle
+  def generate_slug
+    self[:slug] ||= scoped do
+      klass = T.cast(self.class, ClassMethods)
+      klass.generate_slug
+    end
   end
 
   sig { returns(String) }
-  def generate_handle!
-    self.handle = generate_handle
+  def generate_slug!
+    self.slug = generate_slug
   end
 
   sig { void }
-  def clear_handle
-    self[:handle] = nil
+  def clear_slug
+    self[:slug] = nil
   end
 end
