@@ -10,6 +10,12 @@ class User
   extend CommonRelationMethods
   extend GeneratedRelationMethods
 
+  sig { returns(T.untyped) }
+  def password_confirmation; end
+
+  sig { params(password_confirmation: T.untyped).returns(T.untyped) }
+  def password_confirmation=(password_confirmation); end
+
   private
 
   sig { returns(NilClass) }
@@ -549,8 +555,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def avatar_url_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def avatar_url_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def avatar_url_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def avatar_url_in_database; end
@@ -558,8 +564,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def avatar_url_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def avatar_url_previously_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def avatar_url_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def avatar_url_previously_was; end
@@ -594,8 +600,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def bio_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def bio_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def bio_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def bio_in_database; end
@@ -603,8 +609,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def bio_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def bio_previously_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def bio_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def bio_previously_was; end
@@ -639,8 +645,8 @@ class User
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def created_at_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def created_at_changed?; end
+    sig { params(from: ::ActiveSupport::TimeWithZone, to: ::ActiveSupport::TimeWithZone).returns(T::Boolean) }
+    def created_at_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def created_at_in_database; end
@@ -648,8 +654,8 @@ class User
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def created_at_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def created_at_previously_changed?; end
+    sig { params(from: ::ActiveSupport::TimeWithZone, to: ::ActiveSupport::TimeWithZone).returns(T::Boolean) }
+    def created_at_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def created_at_previously_was; end
@@ -684,8 +690,13 @@ class User
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def current_sign_in_at_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def current_sign_in_at_changed?; end
+    sig do
+      params(
+        from: T.nilable(::ActiveSupport::TimeWithZone),
+        to: T.nilable(::ActiveSupport::TimeWithZone)
+      ).returns(T::Boolean)
+    end
+    def current_sign_in_at_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def current_sign_in_at_in_database; end
@@ -693,8 +704,13 @@ class User
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def current_sign_in_at_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def current_sign_in_at_previously_changed?; end
+    sig do
+      params(
+        from: T.nilable(::ActiveSupport::TimeWithZone),
+        to: T.nilable(::ActiveSupport::TimeWithZone)
+      ).returns(T::Boolean)
+    end
+    def current_sign_in_at_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def current_sign_in_at_previously_was; end
@@ -729,8 +745,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def current_sign_in_ip_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def current_sign_in_ip_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def current_sign_in_ip_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def current_sign_in_ip_in_database; end
@@ -738,8 +754,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def current_sign_in_ip_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def current_sign_in_ip_previously_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def current_sign_in_ip_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def current_sign_in_ip_previously_was; end
@@ -774,8 +790,8 @@ class User
     sig { returns(T.nilable([::String, ::String])) }
     def email_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def email_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def email_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def email_in_database; end
@@ -783,8 +799,8 @@ class User
     sig { returns(T.nilable([::String, ::String])) }
     def email_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def email_previously_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def email_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def email_previously_was; end
@@ -819,8 +835,8 @@ class User
     sig { returns(T.nilable([::String, ::String])) }
     def encrypted_password_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def encrypted_password_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def encrypted_password_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def encrypted_password_in_database; end
@@ -828,8 +844,8 @@ class User
     sig { returns(T.nilable([::String, ::String])) }
     def encrypted_password_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def encrypted_password_previously_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def encrypted_password_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def encrypted_password_previously_was; end
@@ -864,8 +880,8 @@ class User
     sig { returns(T.nilable([::String, ::String])) }
     def first_name_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def first_name_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def first_name_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def first_name_in_database; end
@@ -873,8 +889,8 @@ class User
     sig { returns(T.nilable([::String, ::String])) }
     def first_name_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def first_name_previously_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def first_name_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def first_name_previously_was; end
@@ -909,8 +925,13 @@ class User
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def google_calendar_last_synced_at_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def google_calendar_last_synced_at_changed?; end
+    sig do
+      params(
+        from: T.nilable(::ActiveSupport::TimeWithZone),
+        to: T.nilable(::ActiveSupport::TimeWithZone)
+      ).returns(T::Boolean)
+    end
+    def google_calendar_last_synced_at_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def google_calendar_last_synced_at_in_database; end
@@ -918,8 +939,13 @@ class User
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def google_calendar_last_synced_at_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def google_calendar_last_synced_at_previously_changed?; end
+    sig do
+      params(
+        from: T.nilable(::ActiveSupport::TimeWithZone),
+        to: T.nilable(::ActiveSupport::TimeWithZone)
+      ).returns(T::Boolean)
+    end
+    def google_calendar_last_synced_at_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def google_calendar_last_synced_at_previously_was; end
@@ -954,8 +980,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def google_calendar_next_page_token_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def google_calendar_next_page_token_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def google_calendar_next_page_token_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def google_calendar_next_page_token_in_database; end
@@ -963,8 +989,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def google_calendar_next_page_token_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def google_calendar_next_page_token_previously_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def google_calendar_next_page_token_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def google_calendar_next_page_token_previously_was; end
@@ -999,8 +1025,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def google_calendar_next_sync_token_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def google_calendar_next_sync_token_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def google_calendar_next_sync_token_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def google_calendar_next_sync_token_in_database; end
@@ -1008,8 +1034,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def google_calendar_next_sync_token_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def google_calendar_next_sync_token_previously_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def google_calendar_next_sync_token_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def google_calendar_next_sync_token_previously_was; end
@@ -1044,8 +1070,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def google_refresh_token_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def google_refresh_token_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def google_refresh_token_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def google_refresh_token_in_database; end
@@ -1053,8 +1079,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def google_refresh_token_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def google_refresh_token_previously_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def google_refresh_token_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def google_refresh_token_previously_was; end
@@ -1089,8 +1115,8 @@ class User
     sig { returns(T.nilable([::String, ::String])) }
     def google_uid_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def google_uid_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def google_uid_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def google_uid_in_database; end
@@ -1098,8 +1124,8 @@ class User
     sig { returns(T.nilable([::String, ::String])) }
     def google_uid_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def google_uid_previously_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def google_uid_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def google_uid_previously_was; end
@@ -1134,8 +1160,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def id_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def id_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def id_in_database; end
@@ -1143,8 +1169,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def id_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def id_previously_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def id_previously_was; end
@@ -1179,8 +1205,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def last_name_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def last_name_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def last_name_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def last_name_in_database; end
@@ -1188,8 +1214,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def last_name_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def last_name_previously_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def last_name_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def last_name_previously_was; end
@@ -1224,8 +1250,13 @@ class User
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def last_sign_in_at_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def last_sign_in_at_changed?; end
+    sig do
+      params(
+        from: T.nilable(::ActiveSupport::TimeWithZone),
+        to: T.nilable(::ActiveSupport::TimeWithZone)
+      ).returns(T::Boolean)
+    end
+    def last_sign_in_at_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def last_sign_in_at_in_database; end
@@ -1233,8 +1264,13 @@ class User
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def last_sign_in_at_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def last_sign_in_at_previously_changed?; end
+    sig do
+      params(
+        from: T.nilable(::ActiveSupport::TimeWithZone),
+        to: T.nilable(::ActiveSupport::TimeWithZone)
+      ).returns(T::Boolean)
+    end
+    def last_sign_in_at_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def last_sign_in_at_previously_was; end
@@ -1269,8 +1305,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def last_sign_in_ip_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def last_sign_in_ip_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def last_sign_in_ip_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def last_sign_in_ip_in_database; end
@@ -1278,8 +1314,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def last_sign_in_ip_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def last_sign_in_ip_previously_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def last_sign_in_ip_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def last_sign_in_ip_previously_was; end
@@ -1314,8 +1350,13 @@ class User
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def remember_created_at_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def remember_created_at_changed?; end
+    sig do
+      params(
+        from: T.nilable(::ActiveSupport::TimeWithZone),
+        to: T.nilable(::ActiveSupport::TimeWithZone)
+      ).returns(T::Boolean)
+    end
+    def remember_created_at_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def remember_created_at_in_database; end
@@ -1323,8 +1364,13 @@ class User
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def remember_created_at_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def remember_created_at_previously_changed?; end
+    sig do
+      params(
+        from: T.nilable(::ActiveSupport::TimeWithZone),
+        to: T.nilable(::ActiveSupport::TimeWithZone)
+      ).returns(T::Boolean)
+    end
+    def remember_created_at_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def remember_created_at_previously_was; end
@@ -1359,8 +1405,8 @@ class User
     sig { returns(T.nilable([T::Boolean, T::Boolean])) }
     def requires_relogin_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def requires_relogin_changed?; end
+    sig { params(from: T::Boolean, to: T::Boolean).returns(T::Boolean) }
+    def requires_relogin_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(T::Boolean)) }
     def requires_relogin_in_database; end
@@ -1368,8 +1414,8 @@ class User
     sig { returns(T.nilable([T::Boolean, T::Boolean])) }
     def requires_relogin_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def requires_relogin_previously_changed?; end
+    sig { params(from: T::Boolean, to: T::Boolean).returns(T::Boolean) }
+    def requires_relogin_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(T::Boolean)) }
     def requires_relogin_previously_was; end
@@ -1404,8 +1450,13 @@ class User
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def reset_password_sent_at_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def reset_password_sent_at_changed?; end
+    sig do
+      params(
+        from: T.nilable(::ActiveSupport::TimeWithZone),
+        to: T.nilable(::ActiveSupport::TimeWithZone)
+      ).returns(T::Boolean)
+    end
+    def reset_password_sent_at_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def reset_password_sent_at_in_database; end
@@ -1413,8 +1464,13 @@ class User
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def reset_password_sent_at_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def reset_password_sent_at_previously_changed?; end
+    sig do
+      params(
+        from: T.nilable(::ActiveSupport::TimeWithZone),
+        to: T.nilable(::ActiveSupport::TimeWithZone)
+      ).returns(T::Boolean)
+    end
+    def reset_password_sent_at_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def reset_password_sent_at_previously_was; end
@@ -1449,8 +1505,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def reset_password_token_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def reset_password_token_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def reset_password_token_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def reset_password_token_in_database; end
@@ -1458,8 +1514,8 @@ class User
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def reset_password_token_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def reset_password_token_previously_changed?; end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def reset_password_token_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def reset_password_token_previously_was; end
@@ -1710,8 +1766,8 @@ class User
     sig { returns(T.nilable([::Integer, ::Integer])) }
     def sign_in_count_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def sign_in_count_changed?; end
+    sig { params(from: ::Integer, to: ::Integer).returns(T::Boolean) }
+    def sign_in_count_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::Integer)) }
     def sign_in_count_in_database; end
@@ -1719,8 +1775,8 @@ class User
     sig { returns(T.nilable([::Integer, ::Integer])) }
     def sign_in_count_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def sign_in_count_previously_changed?; end
+    sig { params(from: ::Integer, to: ::Integer).returns(T::Boolean) }
+    def sign_in_count_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::Integer)) }
     def sign_in_count_previously_was; end
@@ -1755,8 +1811,8 @@ class User
     sig { returns(T.nilable([::String, ::String])) }
     def slug_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def slug_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def slug_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def slug_in_database; end
@@ -1764,8 +1820,8 @@ class User
     sig { returns(T.nilable([::String, ::String])) }
     def slug_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def slug_previously_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def slug_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def slug_previously_was; end
@@ -1800,8 +1856,8 @@ class User
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def updated_at_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def updated_at_changed?; end
+    sig { params(from: ::ActiveSupport::TimeWithZone, to: ::ActiveSupport::TimeWithZone).returns(T::Boolean) }
+    def updated_at_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def updated_at_in_database; end
@@ -1809,8 +1865,8 @@ class User
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def updated_at_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def updated_at_previously_changed?; end
+    sig { params(from: ::ActiveSupport::TimeWithZone, to: ::ActiveSupport::TimeWithZone).returns(T::Boolean) }
+    def updated_at_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def updated_at_previously_was; end

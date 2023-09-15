@@ -520,8 +520,8 @@ class Subscription
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def created_at_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def created_at_changed?; end
+    sig { params(from: ::ActiveSupport::TimeWithZone, to: ::ActiveSupport::TimeWithZone).returns(T::Boolean) }
+    def created_at_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def created_at_in_database; end
@@ -529,8 +529,8 @@ class Subscription
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def created_at_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def created_at_previously_changed?; end
+    sig { params(from: ::ActiveSupport::TimeWithZone, to: ::ActiveSupport::TimeWithZone).returns(T::Boolean) }
+    def created_at_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def created_at_previously_was; end
@@ -565,8 +565,8 @@ class Subscription
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def id_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def id_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def id_in_database; end
@@ -574,8 +574,8 @@ class Subscription
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def id_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def id_previously_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def id_previously_was; end
@@ -664,8 +664,8 @@ class Subscription
     sig { returns(T.nilable([T.untyped, T.untyped])) }
     def status_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def status_changed?; end
+    sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
+    def status_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.untyped) }
     def status_in_database; end
@@ -673,8 +673,8 @@ class Subscription
     sig { returns(T.nilable([T.untyped, T.untyped])) }
     def status_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def status_previously_changed?; end
+    sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
+    def status_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.untyped) }
     def status_previously_was; end
@@ -709,8 +709,8 @@ class Subscription
     sig { returns(T.nilable([::String, ::String])) }
     def subject_id_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def subject_id_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def subject_id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def subject_id_in_database; end
@@ -718,8 +718,8 @@ class Subscription
     sig { returns(T.nilable([::String, ::String])) }
     def subject_id_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def subject_id_previously_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def subject_id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def subject_id_previously_was; end
@@ -754,8 +754,8 @@ class Subscription
     sig { returns(T.nilable([::String, ::String])) }
     def subscriber_id_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def subscriber_id_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def subscriber_id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def subscriber_id_in_database; end
@@ -763,8 +763,8 @@ class Subscription
     sig { returns(T.nilable([::String, ::String])) }
     def subscriber_id_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def subscriber_id_previously_changed?; end
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def subscriber_id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
     def subscriber_id_previously_was; end
@@ -799,8 +799,8 @@ class Subscription
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def updated_at_change_to_be_saved; end
 
-    sig { returns(T::Boolean) }
-    def updated_at_changed?; end
+    sig { params(from: ::ActiveSupport::TimeWithZone, to: ::ActiveSupport::TimeWithZone).returns(T::Boolean) }
+    def updated_at_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def updated_at_in_database; end
@@ -808,8 +808,8 @@ class Subscription
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def updated_at_previous_change; end
 
-    sig { returns(T::Boolean) }
-    def updated_at_previously_changed?; end
+    sig { params(from: ::ActiveSupport::TimeWithZone, to: ::ActiveSupport::TimeWithZone).returns(T::Boolean) }
+    def updated_at_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def updated_at_previously_was; end

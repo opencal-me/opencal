@@ -10,10 +10,10 @@
 #  coordinates        :geography        point, 4326
 #  description        :string
 #  during             :tstzrange        not null
-#  slug             :string           not null
 #  location           :string
 #  name               :string           default(""), not null
 #  silent             :boolean          not null
+#  slug               :string           not null
 #  tags               :string           default([]), not null, is an Array
 #  time_zone_override :string
 #  created_at         :datetime         not null
@@ -25,8 +25,8 @@
 #
 #  index_activities_on_coordinates      (coordinates) USING gist
 #  index_activities_on_google_event_id  (google_event_id) UNIQUE
-#  index_activities_on_slug           (slug) UNIQUE
 #  index_activities_on_owner_id         (owner_id)
+#  index_activities_on_slug             (slug) UNIQUE
 #  index_activities_on_tags             (tags)
 #
 # Foreign Keys

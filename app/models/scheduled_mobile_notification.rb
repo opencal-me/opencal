@@ -86,6 +86,19 @@ class ScheduledMobileNotification < ApplicationRecord
     SendScheduledMobileNotificationTextsJob.perform_later
   end
 
+  sig { void }
+  def send_text
+    activity = activity!
+    owner = activity.owner!
+    time_zone = owner.time_zone
+    start_time = activity.start_time.in_time_zone(time_zone)
+    description =
+      "heyo! #{owner.first_name.downcase} is starting #{activity.name} at "\
+        "#{start_time.strftime("%-l:%M %p")}"
+    cta = "wanna join? go to: #{join_activity_url(activity.friendly_id)}"
+    subscriber!.send_text([description, cta].join("\n\n"))
+  end
+
   private
 
   # == Helpers

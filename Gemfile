@@ -193,7 +193,7 @@ group :development do
   # Typecheck code
   gem "sorbet", "0.5.10950", require: false
   gem "spoom"
-  gem "tapioca", "~> 0.11.8", require: false
+  gem "tapioca", "~> 0.11.9", require: false
 
   # Use Rubocop to lint code
   #
