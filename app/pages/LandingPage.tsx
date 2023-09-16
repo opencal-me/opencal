@@ -1,53 +1,60 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
-import { Footer, Text } from "@mantine/core";
-import { Tweet } from "react-tweet";
+import { Footer, Image, Text } from "@mantine/core";
+import demoSrc from "~/assets/images/demo.gif";
 
 import type { LandingPageQuery } from "~/helpers/graphql";
 
 import ContactMeLink from "~/components/ContactMeLink";
 import UserLoginForm from "~/components/UserLoginForm";
+import PageContainer from "~/components/PageContainer";
 
 export type LandingPageProps = PagePropsWithData<LandingPageQuery>;
 
-const LandingPage: PageComponent<LandingPageProps> = ({ data: { viewer } }) => {
-  const mounted = useMounted();
-
-  return (
-    <Stack spacing={36}>
-      <Text lh={1.3}>
-        Hi! This is{" "}
-        <Text span weight={600}>
-          OpenCal
-        </Text>
-        , a lowkey way to share what you&apos;ll be up to with your friends, and
-        let them join you on your life&apos;s adventures.
-      </Text>
-      <Card withBorder radius={12} py="lg">
-        <Stack align="center" spacing={8}>
-          <Text color="dark" lh={1.3}>
-            {viewer ? (
-              <>
-                Welcome back,{" "}
-                <Text span weight={600}>
-                  {viewer.firstName}!
-                </Text>
-              </>
-            ) : (
-              <>Ready to get started?</>
-            )}
-          </Text>
-          {viewer ? (
+const LandingPage: PageComponent<LandingPageProps> = ({ data: { viewer } }) => (
+  <>
+    {viewer && (
+      <Container size="sm" w="100%" py="xl">
+        <Alert
+          color="indigo"
+          sx={({ colors }) => ({
+            border: `${rem(1)} solid ${colors.indigo[1]}`,
+          })}
+        >
+          <Group position="apart">
+            <Text color="dark.7" weight={500}>
+              Welcome back, {viewer.firstName} :)
+            </Text>
             <Button
               component={Link}
               href="/home"
-              size="lg"
               radius="md"
               variant="gradient"
               gradient={{ from: "brand", to: "indigo" }}
             >
               Go to your events and activities
             </Button>
-          ) : (
+          </Group>
+        </Alert>
+      </Container>
+    )}
+    <PageContainer size="xs" withGutter>
+      <Stack spacing={44} pt={44} pb="lg">
+        <Stack align="center" spacing="xl">
+          <Title align="center" fz={44} lh={1.2} sx={{ letterSpacing: -1.2 }}>
+            Invite your friends to your everyday activities
+          </Title>
+          <Text align="center" size="lg" color="gray.7" lh={1.3} maw={480}>
+            Add [open] to the title of an event in your calendar, to sync it to
+            your opencal page. share your page with friends, so they can join
+            you when they&apos;re free.
+          </Text>
+        </Stack>
+        <Image src={demoSrc} alt="demo" />
+        {!viewer && (
+          <Stack align="center" spacing="sm">
+            <Text color="dark" lh={1.3}>
+              Ready to get started?
+            </Text>
             <UserLoginForm>
               <Button
                 type="submit"
@@ -59,34 +66,17 @@ const LandingPage: PageComponent<LandingPageProps> = ({ data: { viewer } }) => {
                 Sign in with Google to continue
               </Button>
             </UserLoginForm>
-          )}
-        </Stack>
-      </Card>
-      <Stack spacing={8}>
-        <Text lh={1.3}>Curious to know how it works? Check out this reel:</Text>
-        {mounted && (
-          <Box
-            data-theme="light"
-            sx={{
-              "> .react-tweet-theme": {
-                margin: 0,
-              },
-            }}
-          >
-            <Tweet id="1693789569764761933" />
-          </Box>
+          </Stack>
         )}
       </Stack>
-    </Stack>
-  );
-};
+    </PageContainer>
+  </>
+);
 
 LandingPage.layout = buildLayout<LandingPageProps>(
   (page, { data: { viewer } }) => (
     <AppLayout
-      withContainer
-      containerSize="xs"
-      withGutter
+      padding={0}
       footer={
         <Footer height={80}>
           <Stack align="center" justify="center" spacing={0} h="100%">

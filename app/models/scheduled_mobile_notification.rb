@@ -87,7 +87,7 @@ class ScheduledMobileNotification < ApplicationRecord
   end
 
   sig { void }
-  def send_text
+  def send_subscriber_text
     activity = activity!
     owner = activity.owner!
     time_zone = owner.time_zone
