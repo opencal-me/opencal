@@ -31,7 +31,7 @@ class Address < ApplicationRecord
   # == Associations
   belongs_to :activity
 
-  # == Validations
+  # == Normalizations
   removes_blank :city, :neighbourhood, :place_name, :postal_code,
                 :street_address
 end
