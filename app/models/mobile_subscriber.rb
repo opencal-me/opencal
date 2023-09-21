@@ -92,6 +92,12 @@ class MobileSubscriber < ApplicationRecord
   sig { params(message: String).void }
   def send_text(message)
     TwilioClient.send_message(message, to: phone)
+  rescue Twilio::REST::RestError => error
+    if error.code == 21614 # user has unsubscribed by texting 'STOP' to Twilio
+      destroy!
+    else
+      raise
+    end
   end
 
   sig { params(message: String).void }
