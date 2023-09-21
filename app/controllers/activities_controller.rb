@@ -65,9 +65,7 @@ class ActivitiesController < ApplicationController
   # == Helpers
   sig { returns(Mutex) }
   def self.activity_story_image_semaphore
-    @activity_story_image_semaphore = T.let(@activity_story_image_semaphore,
-                                            T.nilable(Mutex))
-    @activity_story_image_semaphore ||= Mutex.new
+    @activity_story_image_semaphore ||= T.let(Mutex.new, T.nilable(Mutex))
   end
 
   private
@@ -78,24 +76,23 @@ class ActivitiesController < ApplicationController
                   Selenium::WebDriver::DriverExtensions::HasCDP))
   end
   def webdriver
-    @webdriver = T.let(
-      @webdriver,
+    @webdriver ||= T.let(
+      Selenium::WebDriver.for(
+        :chrome,
+        options: Selenium::WebDriver::Chrome::Options.new.tap do |options|
+          options = T.let(options, Selenium::WebDriver::Chrome::Options)
+          options.add_argument("--headless")
+          options.add_argument("--window-size=1080,1920")
+          options.add_argument("--kiosk-printing")
+          options.add_argument("--force-device-scale-factor=1.0")
+          if OS.linux?
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
+          end
+        end,
+      ),
       T.nilable(T.all(Selenium::WebDriver::Chrome::Driver,
                       Selenium::WebDriver::DriverExtensions::HasCDP)),
-    )
-    @webdriver ||= Selenium::WebDriver.for(
-      :chrome,
-      options: Selenium::WebDriver::Chrome::Options.new.tap do |options|
-        options = T.let(options, Selenium::WebDriver::Chrome::Options)
-        options.add_argument("--headless")
-        options.add_argument("--window-size=1080,1920")
-        options.add_argument("--kiosk-printing")
-        options.add_argument("--force-device-scale-factor=1.0")
-        if OS.linux?
-          options.add_argument("--no-sandbox")
-          options.add_argument("--disable-dev-shm-usage")
-        end
-      end,
     )
   end
 

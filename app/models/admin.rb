@@ -13,24 +13,28 @@ module Admin
 
     sig { returns(T::Array[String]) }
     def emails
-      @emails = T.let(@emails, T.nilable(T::Array[String]))
-      @emails ||= if (expr = emails_expr)
-        expr.split(",").select do |entry|
-          entry.include?("@") && EmailValidator.valid?(entry)
-        end
-      else
-        []
-      end
+      @emails ||= T.let(
+        if (expr = emails_expr)
+          expr.split(",").select do |entry|
+            entry.include?("@") && EmailValidator.valid?(entry)
+          end
+        else
+          []
+        end,
+        T.nilable(T::Array[String]),
+      )
     end
 
     sig { returns(T::Array[String]) }
     def email_domains
-      @email_domains = T.let(@email_domains, T.nilable(T::Array[String]))
-      @email_domains ||= if (expr = emails_expr)
-        expr.split(",").select { |entry| entry.exclude?("@") }
-      else
-        []
-      end
+      @email_domains ||= T.let(
+        if (expr = emails_expr)
+          expr.split(",").select { |entry| entry.exclude?("@") }
+        else
+          []
+        end,
+        T.nilable(T::Array[String]),
+      )
     end
   end
 end

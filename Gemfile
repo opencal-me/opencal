@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.2.2"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.0.6"
+gem "rails", "~> 7.0.8"
 
 # JSON-backed, nestable models
 gem "store_model", "~> 1.6"
@@ -24,7 +24,7 @@ gem "rgeo-activerecord", "~> 7.0"
 gem "activerecord-postgis-adapter", "~> 8.0"
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 6.3.0"
+gem "puma", "~> 6.3.1"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails", "~> 3.4"
@@ -52,7 +52,7 @@ gem "ruby-vips", "~> 2.1", require: false
 gem "aws-sdk-s3", "~> 1.126", require: false
 
 # Use Good Job as the backend for Active Job
-gem "good_job", "~> 3.17"
+gem "good_job", "~> 3.19"
 
 # Send emails with Mailjet.
 gem "mailjet", "~> 1.7"
@@ -69,8 +69,8 @@ gem "nanoid", "~> 2.0"
 # Modern concurrency tools
 gem "concurrent-ruby", "~> 1.1"
 
-# Use HTTParty for REST client
-gem "httparty", "~> 0.21.0"
+# Use Faraday to make HTTP requests
+gem "faraday", "~> 2.7"
 
 # Show a healthcheck route
 gem "rails-healthcheck"
@@ -115,7 +115,7 @@ gem "action_policy", "~> 0.6.5"
 gem "action_policy-graphql", "~> 0.5.3"
 
 # Expose a GraphQL API
-gem "graphql", "~> 2.0"
+gem "graphql", "~> 2.1"
 gem "graphql-connections", "~> 1.3"
 gem "graphql-persisted_queries", "~> 1.7"
 gem "graphql-rails_logger"
@@ -125,7 +125,7 @@ gem "graphiql-rails"
 gem "vite_rails", "~> 3.0"
 
 # Use Inertia framework for server-driven SPAs
-gem "inertia_rails", "~> 3.0"
+gem "inertia_rails", "~> 3.1"
 
 # Use Premailer to inline CSS into email templates
 gem "premailer-rails", "~> 1.12"
@@ -163,7 +163,7 @@ gem "nokogiri", "~> 1.15"
 gem "rails_autolink", "~> 1.1"
 
 # Save screenshots of our webpages with Selenium
-gem "selenium-webdriver", "~> 4.11"
+gem "selenium-webdriver", "~> 4.12"
 
 # Detect what OS we are running on
 gem "os", "~> 1.1"
