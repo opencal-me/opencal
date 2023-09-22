@@ -254,6 +254,34 @@ class User
     def google_calendar_channels=(value); end
 
     sig { returns(T::Array[T.untyped]) }
+    def group_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def group_ids=(ids); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def group_membership_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def group_membership_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :group_memberships`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::GroupMembership::PrivateCollectionProxy) }
+    def group_memberships; end
+
+    sig { params(value: T::Enumerable[::GroupMembership]).void }
+    def group_memberships=(value); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :groups, through: :group_memberships`.
+    # 🔗 [Rails guide for `has_many_through` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-through-association)
+    sig { returns(::Group::PrivateCollectionProxy) }
+    def groups; end
+
+    sig { params(value: T::Enumerable[::Group]).void }
+    def groups=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
     def mobile_subscriber_ids; end
 
     sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
@@ -280,6 +308,20 @@ class User
 
     sig { params(value: T::Enumerable[::MobileSubscription]).void }
     def mobile_subscriptions=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def owned_group_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def owned_group_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :owned_groups`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::Group::PrivateCollectionProxy) }
+    def owned_groups; end
+
+    sig { params(value: T::Enumerable[::Group]).void }
+    def owned_groups=(value); end
 
     sig { returns(T::Array[T.untyped]) }
     def subscriber_ids; end

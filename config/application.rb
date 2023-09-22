@@ -27,9 +27,6 @@ module OpenCal
 
     # == Code Loading
     config.before_configuration do
-      # == Libraries
-      require "telnyx"
-
       # == Extensions
       require "action_policy_ext"
       require "better_errors_ext"

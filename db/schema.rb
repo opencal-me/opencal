@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_14_232632) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_22_150917) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -172,6 +172,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_14_232632) do
     t.index ["token"], name: "index_google_calendar_channels_on_token", unique: true
   end
 
+  create_table "group_memberships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "group_id", null: false
+    t.uuid "member_id", null: false
+    t.boolean "admin", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.index ["group_id", "member_id"], name: "index_group_memberships_uniqueness", unique: true
+    t.index ["group_id"], name: "index_group_memberships_on_group_id"
+    t.index ["member_id"], name: "index_group_memberships_on_member_id"
+  end
+
+  create_table "groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "handle", null: false
+    t.uuid "owner_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["handle"], name: "index_groups_on_handle", unique: true
+    t.index ["owner_id"], name: "index_groups_on_owner_id"
+  end
+
   create_table "mobile_subscribers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "phone", null: false
     t.datetime "created_at", null: false
@@ -260,6 +280,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_14_232632) do
   add_foreign_key "activities", "users", column: "owner_id"
   add_foreign_key "addresses", "activities"
   add_foreign_key "google_calendar_channels", "users", column: "owner_id"
+  add_foreign_key "group_memberships", "groups"
+  add_foreign_key "group_memberships", "users", column: "member_id"
+  add_foreign_key "groups", "users", column: "owner_id"
   add_foreign_key "mobile_subscriptions", "mobile_subscribers", column: "subscriber_id"
   add_foreign_key "mobile_subscriptions", "users", column: "subject_id"
   add_foreign_key "reservations", "activities"

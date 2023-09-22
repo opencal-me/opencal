@@ -1,6 +1,8 @@
 # typed: strong
 
 class Activity
+  include FriendlyId::Model
+
   sig { returns(T.nilable(ActiveSupport::Duration)) }
   def self.notifications_delay; end
 

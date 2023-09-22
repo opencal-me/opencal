@@ -34,9 +34,9 @@
 #  fk_rails_...  (owner_id => users.id)
 #
 class Activity < ApplicationRecord
+  extend FriendlyId
   include Identifiable
   include Slugged
-  include FriendlyIdentifiable
 
   # == Constants
   URL_REGEXP = T.let(URI::DEFAULT_PARSER.regexp[:ABS_URI], Regexp)

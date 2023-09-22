@@ -1,6 +1,5 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
 import { Avatar, Code, Image, Text } from "@mantine/core";
-import createFromCalendarImageSrc from "~/assets/images/create-from-calendar.gif";
 
 import type { HomePageQuery } from "~/helpers/graphql";
 
@@ -9,6 +8,8 @@ import Activities from "~/components/Activities";
 import ActivityCard from "~/components/ActivityCard";
 import MobileSubscriptionBadge from "~/components/MobileSubscriptionBadge";
 import ActivityCreateButton from "~/components/ActivityCreateButton";
+
+import createFromCalendarImageSrc from "~/assets/images/create-from-calendar.gif";
 
 export type HomePageProps = PagePropsWithData<HomePageQuery>;
 
@@ -90,8 +91,8 @@ const HomePage: PageComponent<HomePageProps> = ({
                     </Text>
                     <br />
                     <Text span color="dimmed">
-                      Why not try making an <Code>[open]</Code> event in your
-                      calendar?
+                      To create an OpenCal activity, open your calendar and
+                      create an event with <Code>[open]</Code> in the title.
                     </Text>
                   </Text>
                   <Image
@@ -99,18 +100,39 @@ const HomePage: PageComponent<HomePageProps> = ({
                     width={375}
                     radius="md"
                   />
+                  <Text
+                    size="sm"
+                    align="center"
+                    color="dimmed"
+                    maw={375}
+                    lh={1.3}
+                  >
+                    When you&apos;re done, it&apos;ll show up here
+                    <br />& you&apos;ll get an email about it :)
+                  </Text>
+                  <Button
+                    component="a"
+                    href="https://calendar.google.com/calendar/r/eventedit"
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    leftIcon={<OpenExternalIcon />}
+                  >
+                    Try it in Google Calendar
+                  </Button>
                 </Stack>
               </Card>
             }
             {...{ activities }}
           />
-          <Box>
-            <ActivityCreateButton
-              onCreate={({ url }) => {
-                router.visit(url);
-              }}
-            />
-          </Box>
+          {!isEmpty(activities) && (
+            <Box>
+              <ActivityCreateButton
+              // onCreate={({ url }) => {
+              //   router.visit(url);
+              // }}
+              />
+            </Box>
+          )}
         </Stack>
       </Stack>
       {!isEmpty(publicActivities) && (

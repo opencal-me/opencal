@@ -40,9 +40,9 @@
 #  index_users_on_slug                            (slug) UNIQUE
 #
 class User < ApplicationRecord
+  extend FriendlyId
   include Identifiable
   include Slugged
-  include FriendlyIdentifiable
 
   # == Constants
   MIN_PASSWORD_ENTROPY = T.let(14, Integer)
@@ -135,6 +135,17 @@ class User < ApplicationRecord
   has_many :mobile_subscribers,
            through: :mobile_subscriptions,
            source: :subscriber
+
+  has_many :owned_groups,
+           class_name: "Group",
+           inverse_of: :owner,
+           foreign_key: :owner_id,
+           dependent: :destroy
+  has_many :group_memberships,
+           inverse_of: :member,
+           foreign_key: :member_id,
+           dependent: :destroy
+  has_many :groups, through: :group_memberships
 
   sig { returns(Subscription::PrivateAssociationRelation) }
   def subscriptions
