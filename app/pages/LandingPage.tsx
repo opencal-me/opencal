@@ -66,6 +66,18 @@ const LandingPage: PageComponent<LandingPageProps> = ({ data: { viewer } }) => (
                 Sign in with Google to continue
               </Button>
             </UserLoginForm>
+            <Text size="xs" color="dimmed" align="center" maw={400}>
+              OpenCal&apos;s use and transfer to any other app of information
+              received from Google APIs will adhere to{" "}
+              <Anchor
+                href="https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes"
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+              >
+                Google API Services User Data Policy
+              </Anchor>
+              , including the Limited Use requirements.
+            </Text>
           </Stack>
         )}
       </Stack>

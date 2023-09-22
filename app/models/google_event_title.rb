@@ -43,7 +43,9 @@ class GoogleEventTitle < T::Struct
       tag.match?(CAPACITY_TAG_REGEXP)
     end
     capacity = if (tag = capacity_tags.first)
-      match = T.must(CAPACITY_TAG_REGEXP.match(tag))
+      match = T.must_because(CAPACITY_TAG_REGEXP.match(tag)) do
+        "regexp matched previously"
+      end
       match.captures.first!.to_i
     end
     new(name:, tags:, open:, silent:, capacity:)
