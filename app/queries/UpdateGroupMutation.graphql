@@ -1,0 +1,11 @@
+mutation UpdateGroupMutation($input: UpdateGroupInput!) {
+  payload: updateGroup(input: $input) {
+    errors {
+      field
+      message
+    }
+    group {
+      id
+    }
+  }
+}

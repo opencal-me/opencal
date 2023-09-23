@@ -1,4 +1,6 @@
 import type { FC } from "react";
+import InfoIcon from "~icons/heroicons/information-circle-20-solid";
+
 import { Code, Image, Text } from "@mantine/core";
 import type { ButtonProps } from "@mantine/core";
 
@@ -25,7 +27,8 @@ const ActivityCreateButton: FC<ActivityCreateButtonProps> = ({
   ...otherProps
 }) => (
   <Button
-    leftIcon={<AddIcon />}
+    variant="light"
+    leftIcon={<InfoIcon />}
     onClick={() => {
       openModal({
         title: "Create activity",

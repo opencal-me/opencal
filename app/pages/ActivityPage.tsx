@@ -73,7 +73,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
           color="white"
           component={Link}
           href={joinUrl}
-          weight={600}
+          fw={600}
           sx={({ transitionTimingFunction, fn }) => ({
             textDecoration: "underline",
             transition: `color 150ms ${transitionTimingFunction}`,
@@ -172,7 +172,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
             )}
           </Stack>
         )}
-        {descriptionHtml ? (
+        {!!descriptionHtml && (
           <Spoiler
             maxHeight={200}
             showLabel={
@@ -195,7 +195,8 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
           >
             <HTMLDescription>{descriptionHtml}</HTMLDescription>
           </Spoiler>
-        ) : (
+        )}
+        {/* (
           <Card withBorder py="lg">
             <Stack align="center" spacing={4}>
               <Text
@@ -213,14 +214,14 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
               </Text>
             </Stack>
           </Card>
-        )}
+              ) */}
         <ActivityReservations {...{ activity }} />
         <Box>
           <Title order={3} size="h4">
             Share your event!
           </Title>
-          <Stack spacing="xs">
-            <Stack spacing="xs">
+          <Stack spacing="sm">
+            <Stack spacing={8}>
               <Text size="sm" color="gray.7" lh={1.3}>
                 You can share a link to{" "}
                 <Anchor component={Link} href={joinUrl} inherit fw={500}>

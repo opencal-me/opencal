@@ -36,6 +36,9 @@ module GeneratedPathHelpersModule
   def graphql_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def group_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def home_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }

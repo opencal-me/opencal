@@ -6,15 +6,16 @@ import LocationIcon from "~icons/heroicons/map-pin-20-solid";
 import ShowMoreIcon from "~icons/heroicons/chevron-double-down-20-solid";
 import HideIcon from "~icons/heroicons/chevron-double-up-20-solid";
 
-import { Affix, Avatar, Spoiler, Text } from "@mantine/core";
-import { useIntersection } from "@mantine/hooks";
+import { /* Affix, */ Avatar, Spoiler, Text } from "@mantine/core";
+// import { useIntersection } from "@mantine/hooks";
 
 import type { ActivityJoinPageQuery } from "~/helpers/graphql";
 
-import ReservationFooter from "~/components/ReservationFooter";
+// import ReservationFooter from "~/components/ReservationFooter";
 import Map from "~/components/Map";
 import PageContainer from "~/components/PageContainer";
 import HTMLDescription from "~/components/HTMLDescription";
+import { ReservationCreateForm } from "~/components/ReservationCreateForm";
 
 export type ActivityJoinPageProps = PagePropsWithData<ActivityJoinPageQuery>;
 
@@ -34,7 +35,15 @@ const ActivityJoinPage: PageComponent<ActivityJoinPageProps> = ({
     tags,
     url,
     isOwnedByViewer,
+    openings,
   } = activity;
+  const hasOpenings = openings > 0;
+
+  // == Mantine
+  const theme = useMantineTheme();
+
+  // == Routing
+  const router = useRouter();
 
   // == Start
   const startDateTime = useMemo(() => DateTime.fromISO(start), [start]);
@@ -55,19 +64,19 @@ const ActivityJoinPage: PageComponent<ActivityJoinPageProps> = ({
   );
 
   // == Reservation Footer
-  const { entry: footerIntersection, ref: footerRef } =
-    useIntersection<HTMLDivElement>({
-      threshold: 0,
-    });
+  // const { entry: footerIntersection, ref: footerRef } =
+  //   useIntersection<HTMLDivElement>({
+  //     threshold: 0,
+  //   });
 
   return (
     <>
-      <PageContainer size="xs" withGutter sx={{ flexGrow: 1 }}>
+      <PageContainer size={570} withGutter gutterSize="xl" sx={{ flexGrow: 1 }}>
         <Stack spacing={32}>
           {isOwnedByViewer && (
             <Alert
               title="You are previewing the public page for this activity"
-              variant="filled"
+              // variant="filled"
               styles={({ fontSizes }) => ({
                 title: {
                   fontSize: fontSizes.md,
@@ -79,24 +88,27 @@ const ActivityJoinPage: PageComponent<ActivityJoinPageProps> = ({
               To manage this activity,{" "}
               <Anchor
                 inherit
-                color="white"
                 component={Link}
                 href={url}
-                weight={600}
-                sx={({ transitionTimingFunction, fn }) => ({
-                  textDecoration: "underline",
-                  transition: `color 150ms ${transitionTimingFunction}`,
-                  "&:hover": {
-                    color: fn.lighten(fn.primaryColor(), 0.75),
-                  },
-                })}
+                fw={600}
+                // sx={({ transitionTimingFunction, fn }) => ({
+                //   textDecoration: "underline",
+                //   transition: `color 150ms ${transitionTimingFunction}`,
+                //   "&:hover": {
+                //     color: fn.lighten(fn.primaryColor(), 0.75),
+                //   },
+                // })}
               >
                 click here
               </Anchor>
               .
             </Alert>
           )}
-          <Stack>
+          <Stack
+            bg="white"
+            p="md"
+            sx={({ radius }) => ({ borderRadius: radius.md })}
+          >
             <Group spacing="xs">
               {resolve(() => {
                 const { avatarUrl, initials } = owner;
@@ -210,7 +222,7 @@ const ActivityJoinPage: PageComponent<ActivityJoinPageProps> = ({
                 )}
               </Stack>
             )}
-            {descriptionHtml ? (
+            {!!descriptionHtml && (
               <Spoiler
                 maxHeight={200}
                 showLabel={
@@ -233,7 +245,54 @@ const ActivityJoinPage: PageComponent<ActivityJoinPageProps> = ({
               >
                 <HTMLDescription>{descriptionHtml}</HTMLDescription>
               </Spoiler>
-            ) : (
+            )}
+            <Tooltip
+              label="Sorry, this event is full!"
+              withArrow
+              disabled={hasOpenings}
+            >
+              <Button
+                variant="gradient"
+                gradient={{
+                  from: theme.colors.brand[theme.fn.primaryShade()],
+                  to: theme.colors.pink[theme.fn.primaryShade()],
+                }}
+                size="lg"
+                fw={800}
+                mt="xs"
+                sx={{
+                  "&:not(:disabled)": {
+                    boxShadow: "2px 2px 10px #00388b80",
+                  },
+                }}
+                disabled={!hasOpenings}
+                onClick={() => {
+                  openModal({
+                    title: (
+                      <Box>
+                        <Text span>Reserve your spot</Text>
+                        <Text size="sm" weight={400} color="dimmed" lh={1.3}>
+                          Let {owner.firstName} know you&apos;re coming!
+                        </Text>
+                      </Box>
+                    ),
+                    children: (
+                      <ReservationCreateForm
+                        onReserve={() => {
+                          closeAllModals();
+                          router.reload({ preserveScroll: true });
+                        }}
+                        {...{ activity }}
+                      />
+                    ),
+                  });
+                }}
+              >
+                Join & add to calendar
+              </Button>
+            </Tooltip>
+
+            {/* : (
               <Card withBorder py="lg">
                 <Stack align="center" spacing={4}>
                   <Text
@@ -251,11 +310,11 @@ const ActivityJoinPage: PageComponent<ActivityJoinPageProps> = ({
                   </Text>
                 </Stack>
               </Card>
-            )}
+            ) */}
           </Stack>
         </Stack>
       </PageContainer>
-      <Box ref={footerRef} pt="md">
+      {/* <Box ref={footerRef} pt="md">
         <ReservationFooter {...{ activity }} />
       </Box>
       <Affix position={{ left: 0, bottom: 0, right: 0 }}>
@@ -267,7 +326,7 @@ const ActivityJoinPage: PageComponent<ActivityJoinPageProps> = ({
         >
           {style => <ReservationFooter {...{ activity, style }} />}
         </Transition>
-      </Affix>
+      </Affix> */}
     </>
   );
 };
@@ -293,6 +352,23 @@ ActivityJoinPage.layout = buildLayout<ActivityJoinPageProps>(
               ]
         }
         padding={0}
+        styles={({ colors, white, fn }) => ({
+          body: {
+            backgroundImage: fn.linearGradient(
+              120,
+              colors.brand[fn.primaryShade()],
+              colors.pink[fn.primaryShade()],
+            ),
+            ".mantine-Breadcrumbs-root": {
+              ".mantine-Breadcrumbs-breadcrumb": {
+                color: white,
+              },
+              ".mantine-Breadcrumbs-separator": {
+                color: fn.rgba(white, 0.5),
+              },
+            },
+          },
+        })}
         {...{ viewer }}
       >
         {page}

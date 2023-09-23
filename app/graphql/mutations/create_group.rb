@@ -2,28 +2,30 @@
 # frozen_string_literal: true
 
 module Mutations
-  class UpdateUser < BaseMutation
+  class CreateGroup < BaseMutation
     # == Payload
     class Payload < T::Struct
-      const :user, T.nilable(User)
+      const :group, T.nilable(Group)
       const :errors, T.nilable(InputFieldErrors)
     end
 
     # == Fields
     field :errors, [Types::InputFieldErrorType]
-    field :user, Types::UserType
+    field :group, Types::GroupType
 
     # == Arguments
-    argument :bio, String, required: false
+    argument :handle, String
+    argument :name, String
 
     # == Resolver
     sig { override.params(attributes: T.untyped).returns(Payload) }
     def resolve(**attributes)
-      user = current_user!
-      if user.update_without_password(**attributes)
-        Payload.new(user:)
+      owner = current_user!
+      group = owner.owned_groups.build(**attributes)
+      if group.save
+        Payload.new(group:)
       else
-        Payload.new(errors: user.input_field_errors)
+        Payload.new(errors: group.input_field_errors)
       end
     end
   end

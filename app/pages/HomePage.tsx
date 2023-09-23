@@ -3,11 +3,12 @@ import { Avatar, Code, Image, Text } from "@mantine/core";
 
 import type { HomePageQuery } from "~/helpers/graphql";
 
-// import GoogleEvents from "~/components/GoogleEvents";
 import Activities from "~/components/Activities";
 import ActivityCard from "~/components/ActivityCard";
-import MobileSubscriptionBadge from "~/components/MobileSubscriptionBadge";
 import ActivityCreateButton from "~/components/ActivityCreateButton";
+import GroupCard from "~/components/GroupCard";
+import GroupCreateButton from "~/components/GroupCreateButton";
+import MobileSubscriptionBadge from "~/components/MobileSubscriptionBadge";
 
 import createFromCalendarImageSrc from "~/assets/images/create-from-calendar.gif";
 
@@ -17,7 +18,7 @@ const HomePage: PageComponent<HomePageProps> = ({
   data: { viewer, activities: publicActivities },
 }) => {
   invariant(viewer, "Missing viewer");
-  const { activities, mobileSubscriptions, url } = viewer;
+  const { activities, groups, mobileSubscriptions, url } = viewer;
   const urlLabel = useMemo(() => {
     const u = new URL(url);
     return `${u.host}${u.pathname}`;
@@ -133,6 +134,28 @@ const HomePage: PageComponent<HomePageProps> = ({
               />
             </Box>
           )}
+        </Stack>
+      </Stack>
+      <Stack spacing="xs">
+        <Title order={2} size="h3">
+          Your Groups
+        </Title>
+        <Stack spacing="xs">
+          {!isEmpty(groups) ? (
+            groups.map(group => {
+              const { id: groupId, url } = group;
+              return <GroupCard key={groupId} href={url} {...{ group }} />;
+            })
+          ) : (
+            <EmptyCard itemLabel="groups" />
+          )}
+          <Box>
+            <GroupCreateButton
+              onCreate={({ url }) => {
+                router.visit(url);
+              }}
+            />
+          </Box>
         </Stack>
       </Stack>
       {!isEmpty(publicActivities) && (

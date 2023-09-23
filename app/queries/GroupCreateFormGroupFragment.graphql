@@ -1,0 +1,4 @@
+fragment GroupCreateFormGroupFragment on Group {
+  id
+  url
+}

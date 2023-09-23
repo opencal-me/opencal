@@ -1,0 +1,12 @@
+mutation CreateGroupMutation($input: CreateGroupInput!) {
+  payload: createGroup(input: $input) {
+    errors {
+      field
+      message
+    }
+    group {
+      ...GroupCreateFormGroupFragment
+      id
+    }
+  }
+}

@@ -13,6 +13,7 @@ query ActivityJoinPageQuery($activityId: ID!) {
     isOwnedByViewer
     joinUrl
     name
+    openings
     owner {
       avatarUrl
       firstName

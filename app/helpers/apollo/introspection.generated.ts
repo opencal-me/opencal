@@ -8,6 +8,8 @@
   "possibleTypes": {
     "Node": [
       "Activity",
+      "Group",
+      "GroupMembership",
       "Image",
       "MobileSubscriber",
       "MobileSubscription",

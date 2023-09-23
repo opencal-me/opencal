@@ -21,10 +21,9 @@ class ActivitiesController < ApplicationController
     activity = T.must(@activity)
     if params[:id] == activity.friendly_id
       authorize!(activity, to: :show?)
-      data = query!(
-        "ActivityJoinPageQuery",
-        { activity_id: activity.to_gid.to_s },
-      )
+      data = query!("ActivityJoinPageQuery", {
+        activity_id: activity.to_gid.to_s,
+      })
       render(inertia: "ActivityJoinPage", props: { data: })
     else
       redirect_to(join_activity_path(activity.friendly_id))
@@ -34,10 +33,9 @@ class ActivitiesController < ApplicationController
   def share
     activity = T.must(@activity)
     authorize!(activity, to: :show?)
-    data = query!(
-      "ActivitySharePageQuery",
-      { activity_id: activity.to_gid.to_s },
-    )
+    data = query!("ActivitySharePageQuery", {
+      activity_id: activity.to_gid.to_s,
+    })
     render(inertia: "ActivitySharePage", props: { data: })
   end
 

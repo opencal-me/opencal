@@ -1,0 +1,7 @@
+query GroupFormQuery($groupId: ID!) {
+  group(id: $groupId) {
+    handle
+    id
+    name
+  }
+}

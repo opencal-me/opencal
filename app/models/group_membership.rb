@@ -31,4 +31,7 @@ class GroupMembership < ApplicationRecord
   # == Associations
   belongs_to :group, inverse_of: :memberships
   belongs_to :member, class_name: "User"
+
+  # == Validations
+  validates :member, uniqueness: { scope: :group, message: "already added" }
 end

@@ -19,6 +19,11 @@ query HomePageQuery {
       url
     }
     ...AppViewerFragment
+    groups {
+      ...GroupCardGroupFragment
+      id
+      url
+    }
     id
     mobileSubscriptions {
       id

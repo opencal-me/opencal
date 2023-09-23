@@ -32,4 +32,29 @@ class Group < ApplicationRecord
   belongs_to :owner, class_name: "User"
   has_many :memberships, class_name: "GroupMembership", dependent: :destroy
   has_many :members, through: :memberships
+
+  sig { returns(User) }
+  def owner!
+    owner or raise ActiveRecord::RecordNotFound, "Missing owner"
+  end
+
+  # == Normalizations
+  before_validation :add_owner_membership
+
+  # == Validations
+  validates :handle,
+            presence: true,
+            uniqueness: true,
+            format: { with: /\A[a-z0-9_]+\z/ }
+
+  private
+
+  # == Normalization Handlers
+  sig { void }
+  def add_owner_membership
+    owner = owner!
+    unless memberships.to_a.any? { |membership| membership.member == owner }
+      memberships.build(member: owner, admin: true)
+    end
+  end
 end

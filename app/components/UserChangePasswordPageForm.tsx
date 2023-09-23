@@ -64,7 +64,7 @@ const UserChangePasswordPageForm: FC<UserChangePasswordPageFormProps> = ({
     >
       <Stack spacing="xs">
         <PasswordWithStrengthCheckInput
-          label="New Password"
+          label="New password"
           placeholder="new-password"
           required
           minLength={8}
@@ -72,7 +72,7 @@ const UserChangePasswordPageForm: FC<UserChangePasswordPageFormProps> = ({
           {...getInputProps("password")}
         />
         <PasswordInput
-          label="New Password (confirm)"
+          label="New password (confirm)"
           placeholder="new-password"
           required
           minLength={8}

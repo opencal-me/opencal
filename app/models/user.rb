@@ -20,6 +20,7 @@
 #  google_calendar_next_sync_token :string
 #  google_refresh_token            :string
 #  google_uid                      :string           not null
+#  handle                          :string           not null
 #  last_name                       :string
 #  last_sign_in_at                 :datetime
 #  last_sign_in_ip                 :string
@@ -28,7 +29,6 @@
 #  reset_password_sent_at          :datetime
 #  reset_password_token            :string
 #  sign_in_count                   :integer          default(0), not null
-#  slug                            :string           not null
 #  created_at                      :datetime         not null
 #  updated_at                      :datetime         not null
 #
@@ -36,13 +36,12 @@
 #
 #  index_users_on_email                           (email) UNIQUE
 #  index_users_on_google_calendar_last_synced_at  (google_calendar_last_synced_at)
+#  index_users_on_handle                          (handle) UNIQUE
 #  index_users_on_reset_password_token            (reset_password_token) UNIQUE
-#  index_users_on_slug                            (slug) UNIQUE
 #
 class User < ApplicationRecord
   extend FriendlyId
   include Identifiable
-  include Slugged
 
   # == Constants
   MIN_PASSWORD_ENTROPY = T.let(14, Integer)
@@ -101,7 +100,7 @@ class User < ApplicationRecord
   def email_domain = email_parts.last
 
   # == FriendlyId
-  friendly_id :derived_handle
+  friendly_id :derived_handle, slug_column: :handle
 
   # == Associations
   has_many :activities,

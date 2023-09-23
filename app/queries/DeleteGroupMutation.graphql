@@ -1,0 +1,5 @@
+mutation DeleteGroupMutation($input: DeleteGroupInput!) {
+  payload: deleteGroup(input: $input) {
+    success
+  }
+}

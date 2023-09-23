@@ -18,6 +18,7 @@ module Types
     field :google_events, [GoogleEventType], null: false do
       argument :query, String, required: false
     end
+    field :groups, [GroupType], null: false
     field :initials, String, null: false
     field :is_admin, Boolean, null: false, method: :admin?
     field :is_viewer, Boolean, null: false

@@ -1,21 +1,23 @@
 import type { ComponentPropsWithoutRef, FC, ReactNode } from "react";
 
 import { getSize } from "@mantine/core";
-import type { ContainerProps } from "@mantine/core";
+import type { ContainerProps, MantineSize } from "@mantine/core";
 
 export type PageContainerProps = ContainerProps &
   ComponentPropsWithoutRef<"div"> & {
     readonly withGutter?: boolean;
+    readonly gutterSize?: MantineSize;
   };
 
 const PageContainer: FC<PageContainerProps> = ({
   withGutter,
+  gutterSize: gutterSizeProp,
   children,
   size: sizeProp,
   ...otherProps
 }) => {
-  const { spacing } = useMantineTheme();
   const size = sizeProp || "sm";
+  const theme = useMantineTheme();
   let content: ReactNode = children;
   content = (
     <Container
@@ -39,7 +41,11 @@ const PageContainer: FC<PageContainerProps> = ({
       },
       size,
     });
-    const marginSize = `clamp(0px, calc((100vw - ${breakpoint}) / 2), ${spacing.md})`;
+    const gutterSize = getSize({
+      sizes: theme.spacing,
+      size: gutterSizeProp ?? "md",
+    });
+    const marginSize = `clamp(0px, calc((100vw - ${breakpoint}) / 2), ${gutterSize})`;
     content = (
       <MediaQuery
         largerThan={breakpoint}

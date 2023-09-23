@@ -81,13 +81,10 @@ const UserBio: FC<UserBioProps> = ({
       pos="relative"
       {...(editing && {
         component: "form",
-        onSubmit: onSubmit(values => {
+        onSubmit: onSubmit(submission => {
           runUpdateMutation({
             variables: {
-              input: {
-                userId,
-                ...values,
-              },
+              input: submission,
             },
           });
         }),

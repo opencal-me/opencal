@@ -1,0 +1,20 @@
+query GroupPageQuery($groupId: ID!) {
+  group(id: $groupId) {
+    handle
+    id
+    memberships {
+      id
+      isAdmin
+      member {
+        id
+        name
+      }
+    }
+    name
+    url
+  }
+  viewer {
+    ...AppViewerFragment
+    id
+  }
+}

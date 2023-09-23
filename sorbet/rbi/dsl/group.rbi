@@ -228,6 +228,34 @@ class Group
     sig { params(args: T.untyped, blk: T.untyped).returns(::User) }
     def create_owner!(*args, &blk); end
 
+    sig { returns(T::Array[T.untyped]) }
+    def member_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def member_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `Group` class because it declared `has_many :members, through: :memberships`.
+    # 🔗 [Rails guide for `has_many_through` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-through-association)
+    sig { returns(::User::PrivateCollectionProxy) }
+    def members; end
+
+    sig { params(value: T::Enumerable[::User]).void }
+    def members=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def membership_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def membership_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `Group` class because it declared `has_many :memberships`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::GroupMembership::PrivateCollectionProxy) }
+    def memberships; end
+
+    sig { params(value: T::Enumerable[::GroupMembership]).void }
+    def memberships=(value); end
+
     sig { returns(T.nilable(::User)) }
     def owner; end
 

@@ -1,0 +1,4 @@
+fragment GroupCardGroupFragment on Group {
+  id
+  name
+}

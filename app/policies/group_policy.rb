@@ -1,23 +1,24 @@
 # typed: true
 # frozen_string_literal: true
 
-class ReservationPolicy < ApplicationPolicy
+class GroupPolicy < ApplicationPolicy
   # == Rules
   def index? = false
 
-  def manage?
+  def show?
     user = authenticate!
-    reservation = T.cast(record, Reservation)
-    reservation.activity!.owner! == user
+    group = T.cast(record, Group)
+    membership = group.memberships.find_by!(member: user)
+    membership.admin?
   end
 
   # == Aliases
-  alias_method :show?, :manage?
+  alias_rule :manage?, to: :show?
 
   # == Scopes
   relation_scope do |relation|
     if (user = active_user)
-      relation.where(activity: user.activities)
+      relation.merge(user.groups)
     else
       relation.none
     end
