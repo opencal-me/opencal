@@ -292,6 +292,17 @@ class Activity < ApplicationRecord
     [name, modifiers].compact_blank.join(" ")
   end
 
+  # sig { returns(String) }
+  # def google_event_description
+  #   url = join_activity_url(friendly_id)
+  #   cta = "<a href=\"#{url}\" target=\"_blank\">join on opencal</a>"
+  #   if (description = description.presence)
+  #     description + "<br /><br />---<br />#{cta}"
+  #   else
+  #     cta
+  #   end
+  # end
+
   sig { params(event: Google::Event, user: User).returns(T::Boolean) }
   def self.google_event_organized_by_user?(event, user)
     if (attendees = event.attendees)
@@ -360,7 +371,7 @@ class Activity < ApplicationRecord
   # == iCalendar
   sig { params(event: Icalendar::Event).void }
   def save_to_icalendar_event(event)
-    event.uid = id
+    # event.uid = id
     event.dtstart = start_time
     event.dtend = end_time
     event.summary = google_event_title
@@ -463,6 +474,7 @@ class Activity < ApplicationRecord
     activity_url = activity_url(self)
     if persisted? && google_event_attributes_previously_changed?
       event.title = google_event_title
+      # event.description = google_event_description
       event.attachments = [{ "fileUrl" => activity_url }]
       event.save
     elsif destroyed?

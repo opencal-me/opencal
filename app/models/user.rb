@@ -428,9 +428,9 @@ class User < ApplicationRecord
       .where(activities_groups: { group: groups })
   end
 
-  sig { returns(Activity::PrivateAssociationRelation) }
+  sig { returns(ActiveRecord::Relation) }
   def all_activities
-    activities.merge(subscribed_activities)
+    Activity.union(activities, subscribed_activities)
   end
 
   # == Methods
