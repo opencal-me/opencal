@@ -26,6 +26,7 @@ class UsersController < ApplicationController
           format: :ics,
           token: user.calendar_token,
         )
+        cal.refresh_interval = 1.hour.iso8601
         user.all_activities.includes(:reservations).find_each do |activity|
           cal.event do |event|
             activity.save_to_icalendar_event(event)

@@ -1,13 +1,5 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
-import {
-  ActionIcon,
-  Avatar,
-  Code,
-  CopyButton,
-  Image,
-  Text,
-} from "@mantine/core";
-import CalendarIcon from "~icons/heroicons/calendar-days-20-solid";
+import { Avatar, Code, CopyButton, Image, Text } from "@mantine/core";
 import CopyIcon from "~icons/heroicons/clipboard-document-20-solid";
 
 import type { HomePageQuery } from "~/helpers/graphql";
@@ -103,7 +95,7 @@ const HomePage: PageComponent<HomePageProps> = ({
             target="_blank"
             rel="noopener noreferrer nofollow"
             variant="default"
-            leftIcon={<CalendarIcon />}
+            leftIcon={<OpenExternalIcon />}
           >
             Add to Google Calendar
           </Button>
