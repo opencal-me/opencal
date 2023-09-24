@@ -1,5 +1,5 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
-import { Code, CopyButton, Text } from "@mantine/core";
+import { Avatar, Code, CopyButton, Text } from "@mantine/core";
 import SignInIcon from "~icons/heroicons/arrow-right-on-rectangle-20-solid";
 
 import type { GroupPageQuery } from "~/helpers/graphql";
@@ -117,11 +117,23 @@ const GroupPage: PageComponent<GroupPageProps> = ({
           </Title>
           <Activities
             renderItem={activity => {
-              const { id: activityId, joinUrl } = activity;
+              const { id: activityId, joinUrl, owner } = activity;
               return (
                 <ActivityCard
                   key={activityId}
                   href={joinUrl}
+                  topSection={
+                    <Card.Section inheritPadding>
+                      <Group spacing={8} py={8}>
+                        <Avatar src={owner.avatarUrl} size="xs" radius="xl">
+                          {owner.initials}
+                        </Avatar>
+                        <Text size="sm" color="gray.6">
+                          {owner.firstName}&apos;s gonna be at
+                        </Text>
+                      </Group>
+                    </Card.Section>
+                  }
                   {...{ activity }}
                 />
               );

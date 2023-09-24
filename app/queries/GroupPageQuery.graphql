@@ -4,6 +4,12 @@ query GroupPageQuery($groupId: ID!) {
       ...ActivitiesActivityFragment
       id
       joinUrl
+      owner {
+        avatarUrl
+        firstName
+        id
+        initials
+      }
     }
     handle
     id
