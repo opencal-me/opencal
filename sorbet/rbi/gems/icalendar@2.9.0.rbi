@@ -1489,6 +1489,12 @@ module Icalendar::Timezone::TzProperties
   end
 end
 
+# source://icalendar//lib/icalendar/tzinfo.rb#85
+module Icalendar::TimezoneOffset
+  # source://icalendar//lib/icalendar/tzinfo.rb#86
+  def ical_offset; end
+end
+
 # source://icalendar//lib/icalendar/timezone_store.rb#7
 class Icalendar::TimezoneStore < ::SimpleDelegator
   # @return [TimezoneStore] a new instance of TimezoneStore
@@ -1512,6 +1518,24 @@ class Icalendar::TimezoneStore < ::SimpleDelegator
     # source://icalendar//lib/icalendar/timezone_store.rb#18
     def store(timezone); end
   end
+end
+
+# source://icalendar//lib/icalendar/tzinfo.rb#52
+module Icalendar::TimezoneTransition
+  # source://icalendar//lib/icalendar/tzinfo.rb#80
+  def dtstart; end
+
+  # source://icalendar//lib/icalendar/tzinfo.rb#61
+  def offset_abbreviation; end
+
+  # source://icalendar//lib/icalendar/tzinfo.rb#53
+  def offset_from; end
+
+  # source://icalendar//lib/icalendar/tzinfo.rb#57
+  def offset_to; end
+
+  # source://icalendar//lib/icalendar/tzinfo.rb#65
+  def rrule; end
 end
 
 # source://icalendar//lib/icalendar/todo.rb#5
@@ -2255,3 +2279,338 @@ Icalendar::Values::UtcOffset::PARSE_FIELDS_MD_REGEX = T.let(T.unsafe(nil), Regex
 
 # source://icalendar//lib/icalendar/values/utc_offset.rb#42
 Icalendar::Values::UtcOffset::PARSE_FIELDS_WHITESPACE_GSUB_REGEX = T.let(T.unsafe(nil), Regexp)
+
+# source://icalendar//lib/icalendar/tzinfo.rb#94
+module TZInfo
+  class << self
+    # source://tzinfo/2.0.6/lib/tzinfo.rb#14
+    def eager_load!; end
+  end
+end
+
+# source://icalendar//lib/icalendar/tzinfo.rb#95
+class TZInfo::Timezone
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1105
+  def <=>(tz); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1128
+  def =~(regexp); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1137
+  def _dump(limit); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1048
+  def abbr(time = T.unsafe(nil)); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1048
+  def abbreviation(time = T.unsafe(nil)); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1081
+  def base_utc_offset(time = T.unsafe(nil)); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#987
+  def canonical_identifier; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#412
+  def canonical_zone; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#997
+  def current_period; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1008
+  def current_period_and_time; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1008
+  def current_time_and_period; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1059
+  def dst?(time = T.unsafe(nil)); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1113
+  def eql?(tz); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#277
+  def friendly_identifier(skip_first_part = T.unsafe(nil)); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1118
+  def hash; end
+
+  # source://icalendar//lib/icalendar/tzinfo.rb#96
+  def ical_timezone(date, dst = T.unsafe(nil)); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#241
+  def identifier; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#259
+  def inspect; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#831
+  def local_datetime(year, month = T.unsafe(nil), day = T.unsafe(nil), hour = T.unsafe(nil), minute = T.unsafe(nil), second = T.unsafe(nil), sub_second = T.unsafe(nil), dst = T.unsafe(nil), &block); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#743
+  def local_time(year, month = T.unsafe(nil), day = T.unsafe(nil), hour = T.unsafe(nil), minute = T.unsafe(nil), second = T.unsafe(nil), sub_second = T.unsafe(nil), dst = T.unsafe(nil), &block); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#919
+  def local_timestamp(year, month = T.unsafe(nil), day = T.unsafe(nil), hour = T.unsafe(nil), minute = T.unsafe(nil), second = T.unsafe(nil), sub_second = T.unsafe(nil), dst = T.unsafe(nil), &block); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#645
+  def local_to_utc(local_time, dst = T.unsafe(nil)); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#247
+  def name; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#992
+  def now; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1094
+  def observed_utc_offset(time = T.unsafe(nil)); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#947
+  def offsets_up_to(to, from = T.unsafe(nil)); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#319
+  def period_for(time); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#494
+  def period_for_local(local_time, dst = T.unsafe(nil)); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#425
+  def period_for_utc(utc_time); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#342
+  def periods_for_local(local_time); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1039
+  def strftime(format, time = T.unsafe(nil)); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#548
+  def to_local(time); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#253
+  def to_s; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#370
+  def transitions_up_to(to, from = T.unsafe(nil)); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1094
+  def utc_offset(time = T.unsafe(nil)); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#572
+  def utc_to_local(utc_time); end
+
+  private
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1156
+  def raise_unknown_timezone; end
+
+  class << self
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#1147
+    def _load(data); end
+
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#151
+    def all; end
+
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#219
+    def all_country_zone_identifiers; end
+
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#206
+    def all_country_zones; end
+
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#175
+    def all_data_zone_identifiers; end
+
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#169
+    def all_data_zones; end
+
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#157
+    def all_identifiers; end
+
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#193
+    def all_linked_zone_identifiers; end
+
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#187
+    def all_linked_zones; end
+
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#110
+    def default_dst; end
+
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#96
+    def default_dst=(value); end
+
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#127
+    def get(identifier); end
+
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#141
+    def get_proxy(identifier); end
+
+    private
+
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#234
+    def data_source; end
+
+    # source://tzinfo/2.0.6/lib/tzinfo/timezone.rb#229
+    def get_proxies(identifiers); end
+  end
+end
+
+# source://icalendar//lib/icalendar/tzinfo.rb#127
+class TZInfo::TimezoneOffset
+  include ::Icalendar::TimezoneOffset
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_offset.rb#62
+  def initialize(base_utc_offset, std_offset, abbreviation); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_offset.rb#84
+  def ==(toi); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_offset.rb#50
+  def abbr; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_offset.rb#50
+  def abbreviation; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_offset.rb#21
+  def base_utc_offset; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_offset.rb#74
+  def dst?; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_offset.rb#95
+  def eql?(toi); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_offset.rb#101
+  def hash; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_offset.rb#107
+  def inspect; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_offset.rb#43
+  def observed_utc_offset; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_offset.rb#37
+  def std_offset; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_offset.rb#21
+  def utc_offset; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_offset.rb#43
+  def utc_total_offset; end
+end
+
+# source://icalendar//lib/icalendar/tzinfo.rb#132
+class TZInfo::TimezonePeriod
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#23
+  def initialize(offset); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#80
+  def abbr; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#80
+  def abbreviation; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#54
+  def base_utc_offset; end
+
+  # For DST, use the start_transition,
+  # for standard TZ, use the following period (starting from the end_transition).
+  #
+  # source://icalendar//lib/icalendar/tzinfo.rb#136
+  def daylight; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#99
+  def dst?; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#36
+  def end_transition; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#125
+  def ends_at; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#151
+  def local_ends_at; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#138
+  def local_starts_at; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#90
+  def observed_utc_offset; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#16
+  def offset; end
+
+  # source://icalendar//lib/icalendar/tzinfo.rb#160
+  def single; end
+
+  # For standard TZ, use the start_transition,
+  # for DST, use the following period, (starting from the end_transition)
+  #
+  # source://icalendar//lib/icalendar/tzinfo.rb#150
+  def standard; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#30
+  def start_transition; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#112
+  def starts_at; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#72
+  def std_offset; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#54
+  def utc_offset; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#90
+  def utc_total_offset; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#80
+  def zone_identifier; end
+
+  private
+
+  # source://icalendar//lib/icalendar/tzinfo.rb#170
+  def build_timezone(timezone, transition); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#161
+  def raise_not_implemented(method_name); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#168
+  def timestamp(transition); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_period.rb#175
+  def timestamp_with_offset(transition); end
+end
+
+# source://icalendar//lib/icalendar/tzinfo.rb#117
+class TZInfo::TimezoneTransition
+  include ::Icalendar::TimezoneTransition
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_transition.rb#34
+  def initialize(offset, previous_offset, timestamp_value); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_transition.rb#86
+  def ==(tti); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_transition.rb#48
+  def at; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_transition.rb#86
+  def eql?(tti); end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_transition.rb#94
+  def hash; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_transition.rb#62
+  def local_end_at; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_transition.rb#76
+  def local_start_at; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_transition.rb#9
+  def offset; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_transition.rb#12
+  def previous_offset; end
+
+  # source://tzinfo/2.0.6/lib/tzinfo/timezone_transition.rb#21
+  def timestamp_value; end
+end

@@ -21,6 +21,9 @@ class UsersController < ApplicationController
         raise "Invalid token" if user.calendar_token != params[:token]
         cal = Icalendar::Calendar.new
         cal.append_custom_property("x_wr_calname", "opencal")
+        cal.add_timezone(
+          TZInfo::Timezone.get(user.time_zone).ical_timezone(Time.current),
+        )
         cal.source = calendar_user_url(
           user,
           format: :ics,

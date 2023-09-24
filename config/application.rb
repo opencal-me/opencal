@@ -6,7 +6,6 @@ require_relative "boot"
 require "./lib/core_ext"
 require "rails/all"
 require "./lib/rails_ext"
-require "./lib/actionview_ext"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -27,7 +26,11 @@ module OpenCal
 
     # == Code Loading
     config.before_configuration do
+      # == Libraries
+      require "icalendar/tzinfo"
+
       # == Extensions
+      require "actionview_ext"
       require "action_policy_ext"
       require "better_errors_ext"
       require "bullet_ext"

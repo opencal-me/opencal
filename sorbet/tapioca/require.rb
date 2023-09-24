@@ -9,6 +9,7 @@ require "rails/generators"
 require "rails/generators/app_base"
 require "geocoder/results/nominatim"
 require "geocoder/results/here"
+require "icalendar/tzinfo"
 
 # Initialize application.
 Rails.application.initialize!

@@ -4244,6 +4244,9 @@ class TZInfo::Timezone
   # source://tzinfo//lib/tzinfo/timezone.rb#1118
   def hash; end
 
+  # source://icalendar/2.9.0/lib/icalendar/tzinfo.rb#96
+  def ical_timezone(date, dst = T.unsafe(nil)); end
+
   # @return [String] the identifier of the time zone, for example,
   #   `"Europe/Paris"`.
   #
@@ -5253,6 +5256,9 @@ class TZInfo::TimezonePeriod
   # source://tzinfo//lib/tzinfo/timezone_period.rb#54
   def base_utc_offset; end
 
+  # source://icalendar/2.9.0/lib/icalendar/tzinfo.rb#136
+  def daylight; end
+
   # Determines if daylight savings is in effect (i.e. if {std_offset} is
   # non-zero).
   #
@@ -5318,6 +5324,12 @@ class TZInfo::TimezonePeriod
   #
   # source://tzinfo//lib/tzinfo/timezone_period.rb#16
   def offset; end
+
+  # source://icalendar/2.9.0/lib/icalendar/tzinfo.rb#160
+  def single; end
+
+  # source://icalendar/2.9.0/lib/icalendar/tzinfo.rb#150
+  def standard; end
 
   # @return [TimezoneTransition] the transition that defines the start of this
   #   {TimezonePeriod} (`nil` if the start is unbounded).
@@ -5390,6 +5402,9 @@ class TZInfo::TimezonePeriod
   def zone_identifier; end
 
   private
+
+  # source://icalendar/2.9.0/lib/icalendar/tzinfo.rb#170
+  def build_timezone(timezone, transition); end
 
   # Raises a {NotImplementedError} to indicate that subclasses should override
   # a method.
