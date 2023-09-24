@@ -1,6 +1,7 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
 import humanizeDuration from "humanize-duration";
 import { Marker } from "react-map-gl";
+import CalendarIcon from "~icons/heroicons/calendar-days-20-solid";
 
 import LocationIcon from "~icons/heroicons/map-pin-20-solid";
 import ShowMoreIcon from "~icons/heroicons/chevron-double-down-20-solid";
@@ -258,6 +259,8 @@ const ActivityJoinPage: PageComponent<ActivityJoinPageProps> = ({
                   to: theme.colors.pink[theme.fn.primaryShade()],
                 }}
                 size="lg"
+                leftIcon={<CalendarIcon />}
+                disabled={!hasOpenings}
                 fw={800}
                 mt="xs"
                 sx={{
@@ -265,7 +268,6 @@ const ActivityJoinPage: PageComponent<ActivityJoinPageProps> = ({
                     boxShadow: "2px 2px 10px #00388b80",
                   },
                 }}
-                disabled={!hasOpenings}
                 onClick={() => {
                   openModal({
                     title: (
