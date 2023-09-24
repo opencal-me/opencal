@@ -360,6 +360,7 @@ class Activity < ApplicationRecord
   # == iCalendar
   sig { params(event: Icalendar::Event).void }
   def save_to_icalendar_event(event)
+    event.uid = id
     event.dtstart = start_time
     event.dtend = end_time
     event.summary = google_event_title

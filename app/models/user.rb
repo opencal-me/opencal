@@ -420,6 +420,19 @@ class User < ApplicationRecord
     end
   end
 
+  # == Activities
+  sig { returns(Activity::PrivateRelationWhereChain) }
+  def subscribed_activities
+    Activity
+      .joins(:activities_groups)
+      .where(activities_groups: { group: groups })
+  end
+
+  sig { returns(Activity::PrivateAssociationRelation) }
+  def all_activities
+    activities.merge(subscribed_activities)
+  end
+
   # == Methods
   sig { returns(T::Boolean) }
   def admin?

@@ -84,21 +84,19 @@ const HomePage: PageComponent<HomePageProps> = ({
             Google Calendar.
           </Text>
         </Box>
-        <Group spacing={8} noWrap>
-          <Code block pos="relative">
-            {calendarUrl}
-          </Code>
+        <Code block pos="relative">
+          {calendarUrl}
+        </Code>
+        <Group spacing={8} sx={({ colors }) => ({ color: colors.gray[7] })}>
+          <Text>First</Text>
           <CopyButton value={calendarUrl}>
             {({ copy, copied }) => (
-              <Tooltip label={copied ? "Copied!" : "Copy link"} withArrow>
-                <ActionIcon color="brand" onClick={copy}>
-                  <CopyIcon />
-                </ActionIcon>
-              </Tooltip>
+              <Button variant="default" leftIcon={<CopyIcon />} onClick={copy}>
+                {copied ? "Link copied" : "Copy link"}
+              </Button>
             )}
           </CopyButton>
-        </Group>
-        <Box>
+          <Text>and then</Text>
           <Button
             component="a"
             href="https://calendar.google.com/calendar/r/settings/addbyurl"
@@ -109,7 +107,7 @@ const HomePage: PageComponent<HomePageProps> = ({
           >
             Add to Google Calendar
           </Button>
-        </Box>
+        </Group>
       </Stack>
       <Stack spacing="xs">
         <Box>
