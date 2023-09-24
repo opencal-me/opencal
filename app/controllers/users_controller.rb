@@ -21,16 +21,9 @@ class UsersController < ApplicationController
         raise "Invalid token" if user.calendar_token != params[:token]
         cal = Icalendar::Calendar.new
         cal.ip_name = "opencal"
-        user.activities.includes(:reservations).find_each do |activity|
+        user.all_activities.includes(:reservations).find_each do |activity|
           cal.event do |event|
             activity.save_to_icalendar_event(event)
-          end
-        end
-        user.groups.includes(activities: :reservations).find_each do |group|
-          group.activities.find_each do |activity|
-            cal.event do |event|
-              activity.save_to_icalendar_event(event)
-            end
           end
         end
         cal.publish
