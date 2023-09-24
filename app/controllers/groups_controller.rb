@@ -3,13 +3,11 @@
 
 class GroupsController < ApplicationController
   # == Filters
-  before_action :authenticate_user!
   before_action :set_group
 
   # == Actions
   def show
     group = T.must(@group)
-    authorize!(group)
     data = query!("GroupPageQuery", { group_id: group.to_gid.to_s })
     render(inertia: "GroupPage", props: { data: })
   end

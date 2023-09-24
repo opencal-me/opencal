@@ -27,7 +27,7 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user, viewer } }) => {
     <Stack spacing={32}>
       {isViewer && (
         <Alert
-          title="This is your public profile"
+          title="This is your profile page"
           variant="filled"
           styles={({ fontSizes }) => ({
             title: {
@@ -49,7 +49,7 @@ const UserPage: PageComponent<UserPageProps> = ({ data: { user, viewer } }) => {
                     leftIcon={<ClipboardIcon />}
                     onClick={copy}
                   >
-                    {copied ? "Profile link copied!" : "Copy profile link"}
+                    {copied ? "Link copied!" : "Copy link"}
                   </Button>
                 )}
               </CopyButton>

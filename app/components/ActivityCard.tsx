@@ -34,7 +34,15 @@ const durationHumanizer = humanizeDuration.humanizer({
 });
 
 const ActivityCard: FC<ActivityCardProps> = ({
-  activity: { name, tags, descriptionHtml, start, end, durationSeconds },
+  activity: {
+    name,
+    tags,
+    descriptionHtml,
+    start,
+    end,
+    durationSeconds,
+    groups,
+  },
   href,
   topSection,
   ...otherProps
@@ -71,13 +79,23 @@ const ActivityCard: FC<ActivityCardProps> = ({
       >
         {topSection}
         <Group align="start" noWrap>
-          <Text
-            weight={500}
-            lh={1.3}
-            sx={{ flexGrow: 1, textTransform: "none" }}
-          >
-            {name}
-          </Text>
+          <Group spacing={8} sx={{ flexGrow: 1 }}>
+            <Text weight={500} lh={1.3} sx={{ textTransform: "none" }}>
+              {name}
+            </Text>
+            {groups.map(({ id: groupId, handle }) => (
+              <Text
+                key={groupId}
+                color="gray"
+                size="xs"
+                sx={({ fontFamilyMonospace }) => ({
+                  fontFamily: fontFamilyMonospace,
+                })}
+              >
+                @{handle}
+              </Text>
+            ))}
+          </Group>
           <Group
             spacing={6}
             noWrap

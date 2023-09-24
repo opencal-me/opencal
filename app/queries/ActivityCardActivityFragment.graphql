@@ -2,6 +2,10 @@ fragment ActivityCardActivityFragment on Activity {
   descriptionHtml
   durationSeconds
   end
+  groups {
+    handle
+    id
+  }
   name
   start
   tags

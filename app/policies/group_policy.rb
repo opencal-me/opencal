@@ -5,15 +5,12 @@ class GroupPolicy < ApplicationPolicy
   # == Rules
   def index? = false
 
-  def show?
+  def manage?
     user = authenticate!
     group = T.cast(record, Group)
     membership = group.memberships.find_by!(member: user)
     membership.admin?
   end
-
-  # == Aliases
-  alias_rule :manage?, to: :show?
 
   # == Scopes
   relation_scope do |relation|

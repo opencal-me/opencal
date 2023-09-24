@@ -1,0 +1,5 @@
+mutation JoinGroupMutation($input: JoinGroupInput!) {
+  payload: joinGroup(input: $input) {
+    success
+  }
+}

@@ -10,6 +10,11 @@ query ActivityPageQuery($activityId: ID!) {
     descriptionHtml
     durationSeconds
     end
+    groups {
+      handle
+      id
+      url
+    }
     id
     joinUrl
     name

@@ -75,7 +75,7 @@ const ActivityJoinPage: PageComponent<ActivityJoinPageProps> = ({
         <Stack spacing={32}>
           {isOwnedByViewer && (
             <Alert
-              title="You are previewing the public page for this activity"
+              title="This is your activity page"
               // variant="filled"
               styles={({ fontSizes }) => ({
                 title: {
@@ -344,7 +344,7 @@ ActivityJoinPage.layout = buildLayout<ActivityJoinPageProps>(
             ? [
                 { title: "Home", href: "/home" },
                 { title: activity.name, href: activity.url },
-                { title: "Public page preview", href: activity.joinUrl },
+                { title: "Activity page preview", href: activity.joinUrl },
               ]
             : [
                 { title: `${owner.firstName}'s activities`, href: owner.url },

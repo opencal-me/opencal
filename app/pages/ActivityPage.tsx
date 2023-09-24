@@ -34,6 +34,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
     owner,
     joinUrl,
     shareUrl,
+    groups,
   } = activity;
 
   // == Start
@@ -57,7 +58,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
   return (
     <Stack spacing={32}>
       <Alert
-        title="You are viewing the admin page for this activity"
+        title="This is where you manage your activity"
         variant="filled"
         styles={({ fontSizes }) => ({
           title: {
@@ -67,7 +68,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
           },
         })}
       >
-        To see the public page for your activity,{" "}
+        To see your activity page,{" "}
         <Anchor
           inherit
           color="white"
@@ -88,9 +89,25 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
       </Alert>
       <Stack>
         <Box>
-          <Title size="h3" lh={1.3} sx={{ textTransform: "none" }}>
-            {name}
-          </Title>
+          <Group spacing={8}>
+            <Title size="h3" lh={1.3} sx={{ textTransform: "none" }}>
+              {name}
+            </Title>
+            {groups.map(({ id: groupId, handle, url }) => (
+              <Anchor
+                component={Link}
+                href={url}
+                key={groupId}
+                color="gray"
+                size="xs"
+                sx={({ fontFamilyMonospace }) => ({
+                  fontFamily: fontFamilyMonospace,
+                })}
+              >
+                @{handle}
+              </Anchor>
+            ))}
+          </Group>
           <Group
             spacing={6}
             noWrap

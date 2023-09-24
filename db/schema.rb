@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_22_233612) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_23_213801) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -64,6 +64,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_22_233612) do
     t.index ["owner_id"], name: "index_activities_on_owner_id"
     t.index ["slug"], name: "index_activities_on_slug", unique: true
     t.index ["tags"], name: "index_activities_on_tags"
+  end
+
+  create_table "activities_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "group_id", null: false
+    t.uuid "activity_id", null: false
+    t.index ["activity_id"], name: "index_activities_groups_on_activity_id"
+    t.index ["group_id", "activity_id"], name: "index_activities_groups_uniqueness", unique: true
+    t.index ["group_id"], name: "index_activities_groups_on_group_id"
   end
 
   create_table "addresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -278,6 +286,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_22_233612) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "activities", "users", column: "owner_id"
+  add_foreign_key "activities_groups", "activities"
+  add_foreign_key "activities_groups", "groups"
   add_foreign_key "addresses", "activities"
   add_foreign_key "google_calendar_channels", "users", column: "owner_id"
   add_foreign_key "group_memberships", "groups"

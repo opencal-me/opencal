@@ -113,6 +113,7 @@ class Activity < ApplicationRecord
   has_one :address, dependent: :destroy
   has_many :reservations, dependent: :destroy
   has_many :scheduled_mobile_notifications, dependent: :destroy
+  has_and_belongs_to_many :groups
 
   sig { returns(User) }
   def owner!
@@ -302,6 +303,10 @@ class Activity < ApplicationRecord
     self.location = event.location
     self.capacity = title.capacity
     self.time_zone_override = event.time_zone
+    self.groups = scoped do
+      handles = title.mentions.map { |mention| mention.delete_prefix("@") }
+      owner!.groups.where(handle: handles)
+    end
     if (attendees = event.attendees.presence)
       reservations.where.not(email: attendees.pluck("email")).destroy_all
     end
@@ -402,11 +407,12 @@ class Activity < ApplicationRecord
   # == Helpers
   sig { params(include_open_tag: T::Boolean).returns(String) }
   def google_event_title(include_open_tag: true)
-    tags = self.tags.dup
-    tags.prepend("open") if include_open_tag
-    tags.append("/#{capacity}") if capacity.present?
-    tags = "[#{tags.join(" ")}]" if tags.present?
-    [name, tags].compact_blank.join(" ")
+    modifiers = tags.dup
+    modifiers = groups.pluck(:handle).map { |handle| "@#{handle}" } + modifiers
+    modifiers.prepend("open") if include_open_tag
+    modifiers.append("/#{capacity}") if capacity.present?
+    modifiers = "[#{modifiers.join(" ")}]" if modifiers.present?
+    [name, modifiers].compact_blank.join(" ")
   end
 
   sig { returns(T::Boolean) }

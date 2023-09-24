@@ -10,6 +10,7 @@ class GoogleEventTitle < T::Struct
   # == Properties
   const :name, String
   const :tags, T::Array[String]
+  const :mentions, T::Array[String]
   const :open, T::Boolean
   const :silent, T::Boolean
   const :capacity, T.nilable(Integer)
@@ -28,9 +29,9 @@ class GoogleEventTitle < T::Struct
         name_parts << scanner.rest
         break
       end
-      tags_bit = scanner.scan_until(/\]/)
-      if tags_bit
-        modifiers.concat(tags_bit[0..-2].strip.split(" "))
+      modifiers_bit = scanner.scan_until(/\]/)
+      if modifiers_bit
+        modifiers.concat(modifiers_bit[0..-2].strip.split(" "))
       else
         name_parts << "[" + scanner.rest
         break
@@ -39,22 +40,34 @@ class GoogleEventTitle < T::Struct
     name = name_parts.filter_map { |part| part.strip.presence }.join(" ")
     open = modifiers.delete("open").present?
     silent = modifiers.delete("silent").present? || modifiers.include?("demo")
-    capacity_tags, tags = modifiers.partition do |tag|
-      tag.match?(CAPACITY_TAG_REGEXP)
-    end
-    capacity = if (tag = capacity_tags.first)
-      match = T.must_because(CAPACITY_TAG_REGEXP.match(tag)) do
-        "regexp matched previously"
+    mentions = T.let([], T::Array[String])
+    tags = T.let([], T::Array[String])
+    capacity = T.let(nil, T.nilable(Integer))
+    modifiers.each do |modifier|
+      if capacity.nil? &&
+          (match = CAPACITY_TAG_REGEXP.match(modifier)) &&
+          (capture = match.captures.first)
+        capacity = capture.to_i
+      elsif modifier.start_with?("@")
+        mentions << modifier
+      else
+        tags << modifier
       end
-      match.captures.first!.to_i
     end
-    new(name:, tags:, open:, silent:, capacity:)
+    new(name:, mentions:, tags:, open:, silent:, capacity:)
   end
 
   # == Builders
   sig { returns(T.attached_class) }
   def self.blank
-    new(name: "", tags: [], open: false, silent: false, capacity: nil)
+    new(
+      name: "",
+      mentions: [],
+      tags: [],
+      open: false,
+      silent: false,
+      capacity: nil,
+    )
   end
 
   # == Methods

@@ -32,6 +32,7 @@ class Group < ApplicationRecord
   belongs_to :owner, class_name: "User"
   has_many :memberships, class_name: "GroupMembership", dependent: :destroy
   has_many :members, through: :memberships
+  has_and_belongs_to_many :activities
 
   sig { returns(User) }
   def owner!

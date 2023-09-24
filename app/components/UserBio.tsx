@@ -93,7 +93,7 @@ const UserBio: FC<UserBioProps> = ({
     >
       {editing ? (
         <Textarea
-          placeholder="Tell us a lil' bit about yourself!"
+          placeholder="Write a little bit about yourself :)"
           autosize
           minRows={2}
           maxRows={8}

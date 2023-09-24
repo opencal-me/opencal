@@ -1,7 +1,14 @@
 query GroupPageQuery($groupId: ID!) {
   group(id: $groupId) {
+    activities {
+      ...ActivitiesActivityFragment
+      id
+      joinUrl
+    }
     handle
     id
+    isJoinedByViewer
+    isManagedByViewer
     memberships {
       id
       isAdmin

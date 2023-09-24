@@ -243,6 +243,20 @@ class Activity
     sig { params(args: T.untyped, blk: T.untyped).returns(::User) }
     def create_owner!(*args, &blk); end
 
+    sig { returns(T::Array[T.untyped]) }
+    def group_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def group_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `Activity` class because it declared `has_and_belongs_to_many :groups`.
+    # 🔗 [Rails guide for `has_and_belongs_to_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-and-belongs-to-many-association)
+    sig { returns(::Group::PrivateCollectionProxy) }
+    def groups; end
+
+    sig { params(value: T::Enumerable[::Group]).void }
+    def groups=(value); end
+
     sig { returns(T.nilable(::User)) }
     def owner; end
 

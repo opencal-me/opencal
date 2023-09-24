@@ -20,11 +20,11 @@ module Types
 
     field :create_group, mutation: Mutations::CreateGroup
     field :delete_group, mutation: Mutations::DeleteGroup
+    field :join_group, mutation: Mutations::JoinGroup
     field :update_group, mutation: Mutations::UpdateGroup
 
     field :convert_google_event, mutation: Mutations::ConvertGoogleEvent
     field :create_activity, mutation: Mutations::CreateActivity
-    field :create_group_membership, mutation: Mutations::CreateGroupMembership
     field :create_reservation, mutation: Mutations::CreateReservation
   end
 end

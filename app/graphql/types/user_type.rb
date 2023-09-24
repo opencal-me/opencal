@@ -35,15 +35,11 @@ module Types
 
     # == Resolvers
     sig do
-      params(
-        show_hidden: T.nilable(T::Boolean),
-        show_recently_ended: T.nilable(T::Boolean),
-      ).returns(T::Enumerable[Activity])
+      params(show_hidden: T.nilable(T::Boolean))
+        .returns(T::Enumerable[Activity])
     end
-    def activities(show_hidden: nil, show_recently_ended: nil)
-      cutoff = Time.current
-      cutoff -= 12.hours if show_recently_ended
-      activities = object.activities.where("UPPER(during) >= ?", cutoff)
+    def activities(show_hidden: nil)
+      activities = object.activities.where("UPPER(during) >= ?", 12.hours.ago)
       unless show_hidden
         activities = activities.merge(Activity.hidden.invert_where)
       end

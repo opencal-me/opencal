@@ -1,5 +1,5 @@
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
-export type ActivityKeySpecifier = ('address' | 'addressPlaceName' | 'coordinates' | 'descriptionHtml' | 'durationSeconds' | 'end' | 'googleEventId' | 'id' | 'isOwnedByViewer' | 'joinUrl' | 'location' | 'name' | 'openings' | 'owner' | 'reservations' | 'shareUrl' | 'start' | 'storyImageUrl' | 'tags' | 'url' | ActivityKeySpecifier)[];
+export type ActivityKeySpecifier = ('address' | 'addressPlaceName' | 'coordinates' | 'descriptionHtml' | 'durationSeconds' | 'end' | 'googleEventId' | 'groups' | 'id' | 'isOwnedByViewer' | 'joinUrl' | 'location' | 'name' | 'openings' | 'owner' | 'reservations' | 'shareUrl' | 'start' | 'storyImageUrl' | 'tags' | 'url' | ActivityKeySpecifier)[];
 export type ActivityFieldPolicy = {
 	address?: FieldPolicy<any> | FieldReadFunction<any>,
 	addressPlaceName?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -8,6 +8,7 @@ export type ActivityFieldPolicy = {
 	durationSeconds?: FieldPolicy<any> | FieldReadFunction<any>,
 	end?: FieldPolicy<any> | FieldReadFunction<any>,
 	googleEventId?: FieldPolicy<any> | FieldReadFunction<any>,
+	groups?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	isOwnedByViewer?: FieldPolicy<any> | FieldReadFunction<any>,
 	joinUrl?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -38,13 +39,6 @@ export type CreateActivityPayloadKeySpecifier = ('activity' | 'clientMutationId'
 export type CreateActivityPayloadFieldPolicy = {
 	activity?: FieldPolicy<any> | FieldReadFunction<any>,
 	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
-	success?: FieldPolicy<any> | FieldReadFunction<any>
-};
-export type CreateGroupMembershipPayloadKeySpecifier = ('clientMutationId' | 'errors' | 'membership' | 'success' | CreateGroupMembershipPayloadKeySpecifier)[];
-export type CreateGroupMembershipPayloadFieldPolicy = {
-	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
-	errors?: FieldPolicy<any> | FieldReadFunction<any>,
-	membership?: FieldPolicy<any> | FieldReadFunction<any>,
 	success?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type CreateGroupPayloadKeySpecifier = ('clientMutationId' | 'errors' | 'group' | 'success' | CreateGroupPayloadKeySpecifier)[];
@@ -92,10 +86,13 @@ export type GoogleEventFieldPolicy = {
 	start?: FieldPolicy<any> | FieldReadFunction<any>,
 	title?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type GroupKeySpecifier = ('handle' | 'id' | 'memberships' | 'name' | 'url' | GroupKeySpecifier)[];
+export type GroupKeySpecifier = ('activities' | 'handle' | 'id' | 'isJoinedByViewer' | 'isManagedByViewer' | 'memberships' | 'name' | 'url' | GroupKeySpecifier)[];
 export type GroupFieldPolicy = {
+	activities?: FieldPolicy<any> | FieldReadFunction<any>,
 	handle?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	isJoinedByViewer?: FieldPolicy<any> | FieldReadFunction<any>,
+	isManagedByViewer?: FieldPolicy<any> | FieldReadFunction<any>,
 	memberships?: FieldPolicy<any> | FieldReadFunction<any>,
 	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	url?: FieldPolicy<any> | FieldReadFunction<any>
@@ -118,6 +115,13 @@ export type InputFieldErrorFieldPolicy = {
 	field?: FieldPolicy<any> | FieldReadFunction<any>,
 	message?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type JoinGroupPayloadKeySpecifier = ('clientMutationId' | 'errors' | 'membership' | 'success' | JoinGroupPayloadKeySpecifier)[];
+export type JoinGroupPayloadFieldPolicy = {
+	clientMutationId?: FieldPolicy<any> | FieldReadFunction<any>,
+	errors?: FieldPolicy<any> | FieldReadFunction<any>,
+	membership?: FieldPolicy<any> | FieldReadFunction<any>,
+	success?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type MobileSubscriberKeySpecifier = ('activities' | 'id' | 'phone' | MobileSubscriberKeySpecifier)[];
 export type MobileSubscriberFieldPolicy = {
 	activities?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -130,16 +134,16 @@ export type MobileSubscriptionFieldPolicy = {
 	subject?: FieldPolicy<any> | FieldReadFunction<any>,
 	subscriber?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('convertGoogleEvent' | 'createActivity' | 'createGroup' | 'createGroupMembership' | 'createMobileSubscription' | 'createReservation' | 'deleteGroup' | 'deleteMobileSubscription' | 'testMutation' | 'updateGroup' | 'updateUser' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('convertGoogleEvent' | 'createActivity' | 'createGroup' | 'createMobileSubscription' | 'createReservation' | 'deleteGroup' | 'deleteMobileSubscription' | 'joinGroup' | 'testMutation' | 'updateGroup' | 'updateUser' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	convertGoogleEvent?: FieldPolicy<any> | FieldReadFunction<any>,
 	createActivity?: FieldPolicy<any> | FieldReadFunction<any>,
 	createGroup?: FieldPolicy<any> | FieldReadFunction<any>,
-	createGroupMembership?: FieldPolicy<any> | FieldReadFunction<any>,
 	createMobileSubscription?: FieldPolicy<any> | FieldReadFunction<any>,
 	createReservation?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteGroup?: FieldPolicy<any> | FieldReadFunction<any>,
 	deleteMobileSubscription?: FieldPolicy<any> | FieldReadFunction<any>,
+	joinGroup?: FieldPolicy<any> | FieldReadFunction<any>,
 	testMutation?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateGroup?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateUser?: FieldPolicy<any> | FieldReadFunction<any>
@@ -244,10 +248,6 @@ export type StrictTypedTypePolicies = {
 		keyFields?: false | CreateActivityPayloadKeySpecifier | (() => undefined | CreateActivityPayloadKeySpecifier),
 		fields?: CreateActivityPayloadFieldPolicy,
 	},
-	CreateGroupMembershipPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
-		keyFields?: false | CreateGroupMembershipPayloadKeySpecifier | (() => undefined | CreateGroupMembershipPayloadKeySpecifier),
-		fields?: CreateGroupMembershipPayloadFieldPolicy,
-	},
 	CreateGroupPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | CreateGroupPayloadKeySpecifier | (() => undefined | CreateGroupPayloadKeySpecifier),
 		fields?: CreateGroupPayloadFieldPolicy,
@@ -287,6 +287,10 @@ export type StrictTypedTypePolicies = {
 	InputFieldError?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | InputFieldErrorKeySpecifier | (() => undefined | InputFieldErrorKeySpecifier),
 		fields?: InputFieldErrorFieldPolicy,
+	},
+	JoinGroupPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | JoinGroupPayloadKeySpecifier | (() => undefined | JoinGroupPayloadKeySpecifier),
+		fields?: JoinGroupPayloadFieldPolicy,
 	},
 	MobileSubscriber?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | MobileSubscriberKeySpecifier | (() => undefined | MobileSubscriberKeySpecifier),

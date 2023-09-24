@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 module Mutations
-  class CreateGroupMembership < BaseMutation
+  class JoinGroup < BaseMutation
     # == Payload
     class Payload < T::Struct
       const :membership, T.nilable(GroupMembership)
@@ -15,12 +15,11 @@ module Mutations
 
     # == Arguments
     argument :group_id, ID, loads: Types::GroupType
-    argument :member_id, ID, loads: Types::UserType
 
     # == Resolver
-    sig { override.params(group: Group, member: User).returns(Payload) }
-    def resolve(group:, member:)
-      authorize!(group, to: :manage?)
+    sig { override.params(group: Group).returns(Payload) }
+    def resolve(group:)
+      member = current_user!
       membership = group.memberships.build(member:)
       if membership.save
         Payload.new(membership:)

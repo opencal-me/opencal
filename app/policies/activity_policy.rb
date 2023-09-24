@@ -13,10 +13,6 @@ class ActivityPolicy < ApplicationPolicy
 
   # == Scopes
   relation_scope do |relation|
-    if (user = active_user)
-      relation.where(owner: user)
-    else
-      relation.merge(Activity.publicly_visible)
-    end
+    relation.merge(Activity.hidden.invert_where)
   end
 end
