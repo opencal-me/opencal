@@ -26,9 +26,6 @@ module OpenCal
 
     # == Code Loading
     config.before_configuration do
-      # == Libraries
-      require "icalendar/tzinfo"
-
       # == Extensions
       require "actionview_ext"
       require "action_policy_ext"

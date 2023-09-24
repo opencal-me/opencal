@@ -367,7 +367,11 @@ class Activity < ApplicationRecord
     event.description = description
     event.location = location
     reservations.find_each do |reservation|
-      event.append_attendee("mailto:" + reservation.email_with_name)
+      attendee = Icalendar::Values::CalAddress.new(
+        "mailto:#{reservation.email}",
+        cn: reservation.name,
+      )
+      event.append_attendee(attendee)
     end
     attachment = Icalendar::Values::Uri.new(
       join_activity_url(self),

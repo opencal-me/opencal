@@ -1,6 +1,8 @@
 # typed: true
 # frozen_string_literal: true
 
+require "icalendar/tzinfo"
+
 class UsersController < ApplicationController
   # == Filters
   before_action :set_user
@@ -22,7 +24,7 @@ class UsersController < ApplicationController
         cal = Icalendar::Calendar.new
         cal.append_custom_property("x_wr_calname", "opencal")
         cal.add_timezone(
-          TZInfo::Timezone.get(user.time_zone).ical_timezone(Time.current),
+          TZInfo::Timezone.get(user.time_zone.name).ical_timezone(Time.current),
         )
         cal.source = calendar_user_url(
           user,
