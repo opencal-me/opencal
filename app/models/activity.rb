@@ -374,7 +374,7 @@ class Activity < ApplicationRecord
       event.append_attendee(attendee)
     end
     attachment = Icalendar::Values::Uri.new(
-      join_activity_url(self),
+      join_activity_url(friendly_id),
       "fmttype" => "text/html",
     )
     event.append_attach(attachment)

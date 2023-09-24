@@ -58,7 +58,7 @@ Rails.application.routes.draw do
   end
 
   # == Groups
-  resources :groups, only: :show
+  resources :groups, path: "/g", only: :show
 
   # == Activities
   resources :activities, only: :show do

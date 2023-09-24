@@ -83,7 +83,12 @@ const HomePage: PageComponent<HomePageProps> = ({
           <Text>First</Text>
           <CopyButton value={calendarUrl}>
             {({ copy, copied }) => (
-              <Button variant="default" leftIcon={<CopyIcon />} onClick={copy}>
+              <Button
+                variant="default"
+                leftIcon={<CopyIcon />}
+                compact
+                onClick={copy}
+              >
                 {copied ? "Link copied" : "Copy link"}
               </Button>
             )}
@@ -96,6 +101,7 @@ const HomePage: PageComponent<HomePageProps> = ({
             rel="noopener noreferrer nofollow"
             variant="default"
             leftIcon={<OpenExternalIcon />}
+            compact
           >
             Add to Google Calendar
           </Button>

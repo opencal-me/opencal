@@ -89,7 +89,7 @@ const ActivityPage: PageComponent<ActivityPageProps> = ({
       </Alert>
       <Stack>
         <Box>
-          <Group spacing={8}>
+          <Group spacing={8} sx={{ rowGap: 0 }}>
             <Title size="h3" lh={1.3} sx={{ textTransform: "none" }}>
               {name}
             </Title>
