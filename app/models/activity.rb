@@ -93,6 +93,11 @@ class Activity < ApplicationRecord
     !location_is_url? && !location_is_coordinates?
   end
 
+  sig { returns(T::Array[String]) }
+  def mentions
+    groups.pluck(:handle).map { |handle| "@#{handle}" }
+  end
+
   # == FriendlyId
   friendly_id :slug, slug_limit: 32
 
@@ -151,7 +156,8 @@ class Activity < ApplicationRecord
   after_validation :geocode, if: %i[location_changed? location_is_address?]
   after_update :update_mobile_notifications, if: :saved_change_to_during?
   after_commit :update_google_event
-  after_create_commit :schedule_mobile_notifications, unless: :silent?
+  after_create_commit :schedule_mobile_notifications,
+                      if: :send_mobile_notifications?
 
   # == Scopes
   scope :publicly_visible, -> {
@@ -171,6 +177,11 @@ class Activity < ApplicationRecord
   end
 
   # == Mobile Notifications
+  sig { returns(T::Boolean) }
+  def send_mobile_notifications?
+    !silent? && groups.empty?
+  end
+
   sig { void }
   def schedule_mobile_notifications
     owner!.mobile_subscribers.find_each do |subscriber|
@@ -272,6 +283,15 @@ class Activity < ApplicationRecord
     owner!.google_event!(google_event_id)
   end
 
+  sig { params(include_open_tag: T::Boolean).returns(String) }
+  def google_event_title(include_open_tag: true)
+    modifiers = mentions + tags
+    modifiers.prepend("open") if include_open_tag
+    modifiers.append("/#{capacity}") if capacity.present?
+    modifiers = "[#{modifiers.join(" ")}]" if modifiers.present?
+    [name, modifiers].compact_blank.join(" ")
+  end
+
   sig { params(event: Google::Event, user: User).returns(T::Boolean) }
   def self.google_event_organized_by_user?(event, user)
     if (attendees = event.attendees)
@@ -335,6 +355,24 @@ class Activity < ApplicationRecord
     activity = find_or_initialize_by(owner:, google_event_id: event.id)
     activity._set_attributes_from_google_event(event, title:)
     activity
+  end
+
+  # == iCalendar
+  sig { params(event: Icalendar::Event).void }
+  def save_to_icalendar_event(event)
+    event.dtstart = start_time
+    event.dtend = end_time
+    event.summary = google_event_title
+    event.description = description
+    event.location = location
+    reservations.find_each do |reservation|
+      event.append_attendee("mailto:" + reservation.email_with_name)
+    end
+    attachment = Icalendar::Values::Uri.new(
+      join_activity_url(self),
+      "fmttype" => "text/html",
+    )
+    event.append_attach(attachment)
   end
 
   # == Demo
@@ -405,16 +443,6 @@ class Activity < ApplicationRecord
   private
 
   # == Helpers
-  sig { params(include_open_tag: T::Boolean).returns(String) }
-  def google_event_title(include_open_tag: true)
-    modifiers = tags.dup
-    modifiers = groups.pluck(:handle).map { |handle| "@#{handle}" } + modifiers
-    modifiers.prepend("open") if include_open_tag
-    modifiers.append("/#{capacity}") if capacity.present?
-    modifiers = "[#{modifiers.join(" ")}]" if modifiers.present?
-    [name, modifiers].compact_blank.join(" ")
-  end
-
   sig { returns(T::Boolean) }
   def google_event_attributes_previously_changed?
     name_previously_changed? ||

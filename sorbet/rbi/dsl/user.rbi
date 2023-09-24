@@ -663,6 +663,51 @@ class User
     sig { void }
     def bio_will_change!; end
 
+    sig { returns(::String) }
+    def calendar_token; end
+
+    sig { params(value: ::String).returns(::String) }
+    def calendar_token=(value); end
+
+    sig { returns(T::Boolean) }
+    def calendar_token?; end
+
+    sig { returns(T.nilable(::String)) }
+    def calendar_token_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def calendar_token_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def calendar_token_came_from_user?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def calendar_token_change; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def calendar_token_change_to_be_saved; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def calendar_token_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def calendar_token_in_database; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def calendar_token_previous_change; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def calendar_token_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def calendar_token_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def calendar_token_was; end
+
+    sig { void }
+    def calendar_token_will_change!; end
+
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def created_at; end
 
@@ -1413,6 +1458,51 @@ class User
     sig { void }
     def last_sign_in_ip_will_change!; end
 
+    sig { returns(T.nilable(::String)) }
+    def phone; end
+
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    def phone=(value); end
+
+    sig { returns(T::Boolean) }
+    def phone?; end
+
+    sig { returns(T.nilable(::String)) }
+    def phone_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def phone_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def phone_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def phone_change; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def phone_change_to_be_saved; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def phone_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def phone_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def phone_previous_change; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def phone_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def phone_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def phone_was; end
+
+    sig { void }
+    def phone_will_change!; end
+
     sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
     def remember_created_at; end
 
@@ -1620,6 +1710,9 @@ class User
     def restore_bio!; end
 
     sig { void }
+    def restore_calendar_token!; end
+
+    sig { void }
     def restore_created_at!; end
 
     sig { void }
@@ -1668,6 +1761,9 @@ class User
     def restore_last_sign_in_ip!; end
 
     sig { void }
+    def restore_phone!; end
+
+    sig { void }
     def restore_remember_created_at!; end
 
     sig { void }
@@ -1696,6 +1792,12 @@ class User
 
     sig { returns(T::Boolean) }
     def saved_change_to_bio?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def saved_change_to_calendar_token; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_calendar_token?; end
 
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def saved_change_to_created_at; end
@@ -1792,6 +1894,12 @@ class User
 
     sig { returns(T::Boolean) }
     def saved_change_to_last_sign_in_ip?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_phone; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_phone?; end
 
     sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
     def saved_change_to_remember_created_at; end
@@ -1926,6 +2034,9 @@ class User
     def will_save_change_to_bio?; end
 
     sig { returns(T::Boolean) }
+    def will_save_change_to_calendar_token?; end
+
+    sig { returns(T::Boolean) }
     def will_save_change_to_created_at?; end
 
     sig { returns(T::Boolean) }
@@ -1972,6 +2083,9 @@ class User
 
     sig { returns(T::Boolean) }
     def will_save_change_to_last_sign_in_ip?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_phone?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_remember_created_at?; end

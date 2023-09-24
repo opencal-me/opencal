@@ -15,6 +15,9 @@ module GeneratedPathHelpersModule
   def activity_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def calendar_user_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def callback_google_calendar_channel_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }

@@ -500,6 +500,7 @@ export type User = Node & {
   activities: Array<Activity>;
   avatarUrl?: Maybe<Scalars['String']['output']>;
   bio?: Maybe<Scalars['String']['output']>;
+  calendarUrl: Scalars['String']['output'];
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
   googleEvents: Array<GoogleEvent>;

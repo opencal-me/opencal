@@ -174,6 +174,9 @@ gem "high_voltage", "~> 3.1"
 # Send texts with Twilio
 gem "twilio-ruby", "~> 6.5"
 
+# Create subscribable iCalendars
+gem "icalendar", "~> 2.9"
+
 group :development, :test do
   # Auto-detect and warn about N+1 queries
   gem "bullet"

@@ -1,5 +1,14 @@
 import type { PageComponent, PagePropsWithData } from "~/helpers/inertia";
-import { Avatar, Code, Image, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Avatar,
+  Code,
+  CopyButton,
+  Image,
+  Text,
+} from "@mantine/core";
+import CalendarIcon from "~icons/heroicons/calendar-days-20-solid";
+import CopyIcon from "~icons/heroicons/clipboard-document-20-solid";
 
 import type { HomePageQuery } from "~/helpers/graphql";
 
@@ -18,7 +27,7 @@ const HomePage: PageComponent<HomePageProps> = ({
   data: { viewer, activities: publicActivities },
 }) => {
   invariant(viewer, "Missing viewer");
-  const { activities, groups, mobileSubscriptions, url } = viewer;
+  const { activities, groups, mobileSubscriptions, url, calendarUrl } = viewer;
   const urlLabel = useMemo(() => {
     const u = new URL(url);
     return `${u.host}${u.pathname}`;
@@ -68,7 +77,44 @@ const HomePage: PageComponent<HomePageProps> = ({
       <Stack spacing="xs">
         <Box>
           <Title order={2} size="h3">
-            Your Activities
+            What your friends are up to
+          </Title>
+          <Text size="sm" color="dimmed" lh={1.3}>
+            Copy the link below, and click the button below to add it to your
+            Google Calendar.
+          </Text>
+        </Box>
+        <Group spacing={8} noWrap>
+          <Code block pos="relative">
+            {calendarUrl}
+          </Code>
+          <CopyButton value={calendarUrl}>
+            {({ copy, copied }) => (
+              <Tooltip label={copied ? "Copied!" : "Copy link"} withArrow>
+                <ActionIcon color="brand" onClick={copy}>
+                  <CopyIcon />
+                </ActionIcon>
+              </Tooltip>
+            )}
+          </CopyButton>
+        </Group>
+        <Box>
+          <Button
+            component="a"
+            href="https://calendar.google.com/calendar/r/settings/addbyurl"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            variant="default"
+            leftIcon={<CalendarIcon />}
+          >
+            Add to Google Calendar
+          </Button>
+        </Box>
+      </Stack>
+      <Stack spacing="xs">
+        <Box>
+          <Title order={2} size="h3">
+            What you&apos;re up to
           </Title>
           <Text size="sm" color="dimmed" lh={1.3}>
             Any Google calendar event with <Code>[open]</Code> in the title,
@@ -138,7 +184,7 @@ const HomePage: PageComponent<HomePageProps> = ({
       </Stack>
       <Stack spacing="xs">
         <Title order={2} size="h3">
-          Your Groups
+          Your groups
         </Title>
         <Stack spacing="xs">
           {!isEmpty(groups) ? (

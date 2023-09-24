@@ -79,6 +79,11 @@ class Reservation < ApplicationRecord
   end
 
   # == Methods
+  sig { returns(String) }
+  def email_with_name
+    ActionMailer::Base.email_address_with_name(email, name)
+  end
+
   sig { returns(T::Hash[String, T.untyped]) }
   def as_attendee_json
     {

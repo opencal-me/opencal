@@ -13,6 +13,7 @@ module Types
     end
     field :avatar_url, String
     field :bio, String
+    field :calendar_url, String, null: false, authorize_field: { to: :manage? }
     field :email, String, null: false
     field :first_name, String, null: false
     field :google_events, [GoogleEventType], null: false do
@@ -44,6 +45,11 @@ module Types
         activities = activities.merge(Activity.hidden.invert_where)
       end
       activities.order(:during)
+    end
+
+    sig { returns(String) }
+    def calendar_url
+      calendar_user_url(object, format: :ics, token: object.calendar_token)
     end
 
     sig { params(query: T.nilable(String)).returns(T::Array[Google::Event]) }

@@ -10,6 +10,7 @@
 #  id                              :uuid             not null, primary key
 #  avatar_url                      :string
 #  bio                             :text
+#  calendar_token                  :string           not null
 #  current_sign_in_at              :datetime
 #  current_sign_in_ip              :string
 #  email                           :string           not null
@@ -24,6 +25,7 @@
 #  last_name                       :string
 #  last_sign_in_at                 :datetime
 #  last_sign_in_ip                 :string
+#  phone                           :string
 #  remember_created_at             :datetime
 #  requires_relogin                :boolean          not null
 #  reset_password_sent_at          :datetime
@@ -63,6 +65,8 @@ class User < ApplicationRecord
   ]
 
   # == Attributes
+  attribute :calendar_token, :string, default: -> { Devise.friendly_token }
+
   sig { returns(ActiveSupport::TimeWithZone) }
   def created_at!
     created_at or raise "Missing created timestamp"
@@ -396,7 +400,7 @@ class User < ApplicationRecord
       updated_min = google_calendar_last_synced_at || created_at!
       params["updatedMin"] = calendar.send(:encode_time, updated_min)
     end
-    response = scoped do |; response| # rubocop:disable Layout/SpaceAroundBlockParameters
+    response = scoped do |response|
       query = "?" + params.to_query
       response = calendar.send(:send_events_request, query, :get)
       JSON.parse(response.body)

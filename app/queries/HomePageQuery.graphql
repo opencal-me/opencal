@@ -19,6 +19,7 @@ query HomePageQuery {
       url
     }
     ...AppViewerFragment
+    calendarUrl
     groups {
       ...GroupCardGroupFragment
       id

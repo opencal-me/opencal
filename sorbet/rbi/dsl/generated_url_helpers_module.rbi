@@ -15,6 +15,9 @@ module GeneratedUrlHelpersModule
   def activity_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def calendar_user_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def callback_google_calendar_channel_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }

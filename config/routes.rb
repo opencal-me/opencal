@@ -73,8 +73,16 @@ Rails.application.routes.draw do
     end
   end
 
+  # == Calendars
+  # resource :calendar, only: :show
+
   # == Users
   resources :users, path: "/u", only: :show
+  resources :users, only: [] do
+    member do
+      get :calendar
+    end
+  end
 
   # == Mobile Subscribers
   resources :mobile_subscribers, path: "/subscribers", only: [] do

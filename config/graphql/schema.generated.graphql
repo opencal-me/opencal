@@ -404,6 +404,7 @@ type User implements Node {
   activities(showHidden: Boolean, showRecentlyEnded: Boolean): [Activity!]!
   avatarUrl: String
   bio: String
+  calendarUrl: String!
   email: String!
   firstName: String!
   googleEvents(query: String): [GoogleEvent!]!

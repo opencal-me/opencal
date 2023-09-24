@@ -282,8 +282,8 @@ Devise.setup do |config|
     client_secret: Google.client_secret,
     name: :google,
     scope: %w[
-      profile
       email
+      profile
       https://www.googleapis.com/auth/calendar.readonly
       https://www.googleapis.com/auth/calendar.events
     ].join(","),

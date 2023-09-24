@@ -213,11 +213,12 @@ export type UpdateUserPayloadFieldPolicy = {
 	success?: FieldPolicy<any> | FieldReadFunction<any>,
 	user?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type UserKeySpecifier = ('activities' | 'avatarUrl' | 'bio' | 'email' | 'firstName' | 'googleEvents' | 'groups' | 'id' | 'initials' | 'isAdmin' | 'isViewer' | 'lastName' | 'mobileSubscriptions' | 'name' | 'url' | UserKeySpecifier)[];
+export type UserKeySpecifier = ('activities' | 'avatarUrl' | 'bio' | 'calendarUrl' | 'email' | 'firstName' | 'googleEvents' | 'groups' | 'id' | 'initials' | 'isAdmin' | 'isViewer' | 'lastName' | 'mobileSubscriptions' | 'name' | 'url' | UserKeySpecifier)[];
 export type UserFieldPolicy = {
 	activities?: FieldPolicy<any> | FieldReadFunction<any>,
 	avatarUrl?: FieldPolicy<any> | FieldReadFunction<any>,
 	bio?: FieldPolicy<any> | FieldReadFunction<any>,
+	calendarUrl?: FieldPolicy<any> | FieldReadFunction<any>,
 	email?: FieldPolicy<any> | FieldReadFunction<any>,
 	firstName?: FieldPolicy<any> | FieldReadFunction<any>,
 	googleEvents?: FieldPolicy<any> | FieldReadFunction<any>,
