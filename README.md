@@ -1,6 +1,6 @@
 # opencal
 
-_A lowkey way to share what you're up to as an open invite._
+_invite your friends to your everyday activities :)_
 
 ## Setup
 
