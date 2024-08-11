@@ -19,7 +19,7 @@ module Mutations
     # == Resolver
     sig { override.params(google_event_id: String).returns(Payload) }
     def resolve(google_event_id:)
-      owner = current_user!
+      owner = authenticate_user!
       event = owner.google_event!(google_event_id)
       activity = Activity.from_google_event(event, owner:)
       if activity.save

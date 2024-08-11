@@ -20,7 +20,7 @@ module Mutations
     # == Resolver
     sig { override.params(attributes: T.untyped).returns(Payload) }
     def resolve(**attributes)
-      owner = current_user!
+      owner = authenticate_user!
       group = owner.owned_groups.build(**attributes)
       if group.save
         Payload.new(group:)

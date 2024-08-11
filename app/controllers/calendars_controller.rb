@@ -7,7 +7,7 @@ class CalendarsController < ApplicationController
 
   # == Actions
   def show
-    user = current_user!
+    user = authenticate_user!
     respond_to do |format|
       format.ics do
         cal = Icalendar::Calendar.new

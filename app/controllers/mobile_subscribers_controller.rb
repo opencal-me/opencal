@@ -29,6 +29,6 @@ class MobileSubscribersController < ApplicationController
   end
 
   def import_activities
-    Activity.import_for_user!(current_user!)
+    Activity.import_for_user!(authenticate_user!)
   end
 end

@@ -62,7 +62,7 @@ module Resolver
   end
 
   sig { returns(User) }
-  def current_user!
+  def authenticate_user!
     active_user or raise GraphQL::ExecutionError, "Not authenticated."
   end
 end

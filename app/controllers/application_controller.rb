@@ -23,17 +23,6 @@ class ApplicationController < ActionController::Base
     }.compact
   end
 
-  # == Authentication
-  sig { returns(User) }
-  def current_user!
-    authenticate_user!
-  end
-
-  sig { override.returns(T.nilable(User)) }
-  def current_user
-    super
-  end
-
   private
 
   # == Helpers

@@ -35,7 +35,7 @@ module Mutations
       location: nil,
       description: nil
     )
-      owner = current_user!
+      owner = authenticate_user!
       google_event = owner.create_google_event!(
         title: [name, "[open]"].join(" "),
         during: start..(start + duration_seconds),

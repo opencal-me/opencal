@@ -19,7 +19,7 @@ module Mutations
     # == Resolver
     sig { override.params(attributes: T.untyped).returns(Payload) }
     def resolve(**attributes)
-      user = current_user!
+      user = authenticate_user!
       if user.update_without_password(**attributes)
         Payload.new(user:)
       else

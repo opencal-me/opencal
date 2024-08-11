@@ -19,7 +19,7 @@ module Mutations
     # == Resolver
     sig { override.params(group: Group).returns(Payload) }
     def resolve(group:)
-      member = current_user!
+      member = authenticate_user!
       membership = group.memberships.build(member:)
       if membership.save
         Payload.new(membership:)
