@@ -14,21 +14,21 @@ Rails.application.configure do
         description: "Schedule purging of unattached ActiveStorage blobs.",
         cron: "0 */6 * * *",
       },
-      "import_activities": {
-        class: "ImportActivitiesJob",
-        description: "Import activities from Google Calendar.",
-        cron: "* * * * *",
-      },
-      "sync_google_calendar_channels": {
-        class: "SyncGoogleCalendarChannelsJob",
-        description: "Sync Google Calendar channels.",
-        cron: "0 * * * *",
-      },
-      "send_scheduled_mobile_notification_texts": {
-        class: "SendScheduledMobileNotificationTextsJob",
-        description: "Send scheduled mobile notification texts.",
-        cron: "*/5 * * * *",
-      },
+      # "import_activities": {
+      #   class: "ImportActivitiesJob",
+      #   description: "Import activities from Google Calendar.",
+      #   cron: "* * * * *",
+      # },
+      # "sync_google_calendar_channels": {
+      #   class: "SyncGoogleCalendarChannelsJob",
+      #   description: "Sync Google Calendar channels.",
+      #   cron: "0 * * * *",
+      # },
+      # "send_scheduled_mobile_notification_texts": {
+      #   class: "SendScheduledMobileNotificationTextsJob",
+      #   description: "Send scheduled mobile notification texts.",
+      #   cron: "*/5 * * * *",
+      # },
       "destroy_demo_activities": {
         class: "DestroyDemoActivitiesJob",
         description: "Destroy demo activities.",
