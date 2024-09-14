@@ -6,7 +6,7 @@ _invite your friends to your everyday activities :)_
 
 ```bash
 # Install tools
-brew install docker rbenv nodenv yarn watchman overmind
+brew install docker rbenv nodenv watchman overmind
 
 # Set up environment
 git clone git@github.com:opencal-me/opencal

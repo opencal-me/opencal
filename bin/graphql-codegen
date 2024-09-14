@@ -6,4 +6,4 @@ if [ ! -z "$1" ]; then
 fi
 CONFIG="config/graphql/codegen.$TARGET.ts"
 
-bin/yarn --silent graphql-codegen --config "$CONFIG"
+npx graphql-codegen --config "$CONFIG"
