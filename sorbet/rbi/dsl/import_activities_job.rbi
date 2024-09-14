@@ -6,8 +6,13 @@
 
 class ImportActivitiesJob
   class << self
-    sig { params(options: T.untyped).returns(T.any(ImportActivitiesJob, FalseClass)) }
-    def perform_later(**options); end
+    sig do
+      params(
+        options: T.untyped,
+        block: T.nilable(T.proc.params(job: ImportActivitiesJob).void)
+      ).returns(T.any(ImportActivitiesJob, FalseClass))
+    end
+    def perform_later(**options, &block); end
 
     sig { params(options: T.untyped).void }
     def perform_now(**options); end

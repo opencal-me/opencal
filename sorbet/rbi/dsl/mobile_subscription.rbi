@@ -877,6 +877,9 @@ class MobileSubscription
     def to_a; end
 
     sig { returns(T::Array[::MobileSubscription]) }
+    def to_a; end
+
+    sig { returns(T::Array[::MobileSubscription]) }
     def to_ary; end
   end
 
@@ -971,6 +974,9 @@ class MobileSubscription
     def to_a; end
 
     sig { returns(T::Array[::MobileSubscription]) }
+    def to_a; end
+
+    sig { returns(T::Array[::MobileSubscription]) }
     def to_ary; end
   end
 
@@ -979,6 +985,9 @@ class MobileSubscription
     include GeneratedRelationMethods
 
     Elem = type_member { { fixed: ::MobileSubscription } }
+
+    sig { returns(T::Array[::MobileSubscription]) }
+    def to_a; end
 
     sig { returns(T::Array[::MobileSubscription]) }
     def to_a; end

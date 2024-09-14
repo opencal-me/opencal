@@ -983,6 +983,9 @@ class Subscription
     def to_a; end
 
     sig { returns(T::Array[::Subscription]) }
+    def to_a; end
+
+    sig { returns(T::Array[::Subscription]) }
     def to_ary; end
   end
 
@@ -1077,6 +1080,9 @@ class Subscription
     def to_a; end
 
     sig { returns(T::Array[::Subscription]) }
+    def to_a; end
+
+    sig { returns(T::Array[::Subscription]) }
     def to_ary; end
   end
 
@@ -1085,6 +1091,9 @@ class Subscription
     include GeneratedRelationMethods
 
     Elem = type_member { { fixed: ::Subscription } }
+
+    sig { returns(T::Array[::Subscription]) }
+    def to_a; end
 
     sig { returns(T::Array[::Subscription]) }
     def to_a; end

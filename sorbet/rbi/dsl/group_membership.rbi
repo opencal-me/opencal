@@ -918,6 +918,9 @@ class GroupMembership
     def to_a; end
 
     sig { returns(T::Array[::GroupMembership]) }
+    def to_a; end
+
+    sig { returns(T::Array[::GroupMembership]) }
     def to_ary; end
   end
 
@@ -1012,6 +1015,9 @@ class GroupMembership
     def to_a; end
 
     sig { returns(T::Array[::GroupMembership]) }
+    def to_a; end
+
+    sig { returns(T::Array[::GroupMembership]) }
     def to_ary; end
   end
 
@@ -1020,6 +1026,9 @@ class GroupMembership
     include GeneratedRelationMethods
 
     Elem = type_member { { fixed: ::GroupMembership } }
+
+    sig { returns(T::Array[::GroupMembership]) }
+    def to_a; end
 
     sig { returns(T::Array[::GroupMembership]) }
     def to_a; end

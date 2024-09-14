@@ -1530,6 +1530,9 @@ class Activity
     def to_a; end
 
     sig { returns(T::Array[::Activity]) }
+    def to_a; end
+
+    sig { returns(T::Array[::Activity]) }
     def to_ary; end
   end
 
@@ -1627,6 +1630,9 @@ class Activity
     def to_a; end
 
     sig { returns(T::Array[::Activity]) }
+    def to_a; end
+
+    sig { returns(T::Array[::Activity]) }
     def to_ary; end
   end
 
@@ -1638,6 +1644,9 @@ class Activity
 
     sig { returns(T.self_type) }
     def friendly; end
+
+    sig { returns(T::Array[::Activity]) }
+    def to_a; end
 
     sig { returns(T::Array[::Activity]) }
     def to_a; end

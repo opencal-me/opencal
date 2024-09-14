@@ -6,8 +6,13 @@
 
 class RegisterGoogleCalendarChannelForUserJob
   class << self
-    sig { params(user: ::User).returns(T.any(RegisterGoogleCalendarChannelForUserJob, FalseClass)) }
-    def perform_later(user); end
+    sig do
+      params(
+        user: ::User,
+        block: T.nilable(T.proc.params(job: RegisterGoogleCalendarChannelForUserJob).void)
+      ).returns(T.any(RegisterGoogleCalendarChannelForUserJob, FalseClass))
+    end
+    def perform_later(user, &block); end
 
     sig { params(user: ::User).void }
     def perform_now(user); end

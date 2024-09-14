@@ -1136,6 +1136,9 @@ class Reservation
     def to_a; end
 
     sig { returns(T::Array[::Reservation]) }
+    def to_a; end
+
+    sig { returns(T::Array[::Reservation]) }
     def to_ary; end
   end
 
@@ -1230,6 +1233,9 @@ class Reservation
     def to_a; end
 
     sig { returns(T::Array[::Reservation]) }
+    def to_a; end
+
+    sig { returns(T::Array[::Reservation]) }
     def to_ary; end
   end
 
@@ -1238,6 +1244,9 @@ class Reservation
     include GeneratedRelationMethods
 
     Elem = type_member { { fixed: ::Reservation } }
+
+    sig { returns(T::Array[::Reservation]) }
+    def to_a; end
 
     sig { returns(T::Array[::Reservation]) }
     def to_a; end

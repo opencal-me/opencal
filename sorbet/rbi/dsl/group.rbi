@@ -957,6 +957,9 @@ class Group
     def to_a; end
 
     sig { returns(T::Array[::Group]) }
+    def to_a; end
+
+    sig { returns(T::Array[::Group]) }
     def to_ary; end
   end
 
@@ -1054,6 +1057,9 @@ class Group
     def to_a; end
 
     sig { returns(T::Array[::Group]) }
+    def to_a; end
+
+    sig { returns(T::Array[::Group]) }
     def to_ary; end
   end
 
@@ -1065,6 +1071,9 @@ class Group
 
     sig { returns(T.self_type) }
     def friendly; end
+
+    sig { returns(T::Array[::Group]) }
+    def to_a; end
 
     sig { returns(T::Array[::Group]) }
     def to_a; end

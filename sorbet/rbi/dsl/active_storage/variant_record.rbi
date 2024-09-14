@@ -838,6 +838,9 @@ class ActiveStorage::VariantRecord
     def to_a; end
 
     sig { returns(T::Array[::ActiveStorage::VariantRecord]) }
+    def to_a; end
+
+    sig { returns(T::Array[::ActiveStorage::VariantRecord]) }
     def to_ary; end
   end
 
@@ -932,6 +935,9 @@ class ActiveStorage::VariantRecord
     def to_a; end
 
     sig { returns(T::Array[::ActiveStorage::VariantRecord]) }
+    def to_a; end
+
+    sig { returns(T::Array[::ActiveStorage::VariantRecord]) }
     def to_ary; end
   end
 
@@ -940,6 +946,9 @@ class ActiveStorage::VariantRecord
     include GeneratedRelationMethods
 
     Elem = type_member { { fixed: ::ActiveStorage::VariantRecord } }
+
+    sig { returns(T::Array[::ActiveStorage::VariantRecord]) }
+    def to_a; end
 
     sig { returns(T::Array[::ActiveStorage::VariantRecord]) }
     def to_a; end

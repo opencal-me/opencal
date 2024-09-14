@@ -6,8 +6,13 @@
 
 class ScheduleActivityMobileNotificationsJob
   class << self
-    sig { params(activity: ::Activity).returns(T.any(ScheduleActivityMobileNotificationsJob, FalseClass)) }
-    def perform_later(activity); end
+    sig do
+      params(
+        activity: ::Activity,
+        block: T.nilable(T.proc.params(job: ScheduleActivityMobileNotificationsJob).void)
+      ).returns(T.any(ScheduleActivityMobileNotificationsJob, FalseClass))
+    end
+    def perform_later(activity, &block); end
 
     sig { params(activity: ::Activity).void }
     def perform_now(activity); end

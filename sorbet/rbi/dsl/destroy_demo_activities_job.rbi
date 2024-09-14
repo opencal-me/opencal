@@ -6,8 +6,12 @@
 
 class DestroyDemoActivitiesJob
   class << self
-    sig { returns(T.any(DestroyDemoActivitiesJob, FalseClass)) }
-    def perform_later; end
+    sig do
+      params(
+        block: T.nilable(T.proc.params(job: DestroyDemoActivitiesJob).void)
+      ).returns(T.any(DestroyDemoActivitiesJob, FalseClass))
+    end
+    def perform_later(&block); end
 
     sig { void }
     def perform_now; end

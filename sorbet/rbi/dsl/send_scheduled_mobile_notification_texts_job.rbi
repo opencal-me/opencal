@@ -6,8 +6,12 @@
 
 class SendScheduledMobileNotificationTextsJob
   class << self
-    sig { returns(T.any(SendScheduledMobileNotificationTextsJob, FalseClass)) }
-    def perform_later; end
+    sig do
+      params(
+        block: T.nilable(T.proc.params(job: SendScheduledMobileNotificationTextsJob).void)
+      ).returns(T.any(SendScheduledMobileNotificationTextsJob, FalseClass))
+    end
+    def perform_later(&block); end
 
     sig { void }
     def perform_now; end

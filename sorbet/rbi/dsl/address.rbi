@@ -1197,6 +1197,9 @@ class Address
     def to_a; end
 
     sig { returns(T::Array[::Address]) }
+    def to_a; end
+
+    sig { returns(T::Array[::Address]) }
     def to_ary; end
   end
 
@@ -1291,6 +1294,9 @@ class Address
     def to_a; end
 
     sig { returns(T::Array[::Address]) }
+    def to_a; end
+
+    sig { returns(T::Array[::Address]) }
     def to_ary; end
   end
 
@@ -1299,6 +1305,9 @@ class Address
     include GeneratedRelationMethods
 
     Elem = type_member { { fixed: ::Address } }
+
+    sig { returns(T::Array[::Address]) }
+    def to_a; end
 
     sig { returns(T::Array[::Address]) }
     def to_a; end

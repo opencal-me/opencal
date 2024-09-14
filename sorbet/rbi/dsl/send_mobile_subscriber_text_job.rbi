@@ -9,10 +9,11 @@ class SendMobileSubscriberTextJob
     sig do
       params(
         subscriber: ::MobileSubscriber,
-        message: ::String
+        message: ::String,
+        block: T.nilable(T.proc.params(job: SendMobileSubscriberTextJob).void)
       ).returns(T.any(SendMobileSubscriberTextJob, FalseClass))
     end
-    def perform_later(subscriber, message); end
+    def perform_later(subscriber, message, &block); end
 
     sig { params(subscriber: ::MobileSubscriber, message: ::String).void }
     def perform_now(subscriber, message); end

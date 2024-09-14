@@ -744,6 +744,9 @@ class ActionMailbox::InboundEmail
     def to_a; end
 
     sig { returns(T::Array[::ActionMailbox::InboundEmail]) }
+    def to_a; end
+
+    sig { returns(T::Array[::ActionMailbox::InboundEmail]) }
     def to_ary; end
   end
 
@@ -838,6 +841,9 @@ class ActionMailbox::InboundEmail
     def to_a; end
 
     sig { returns(T::Array[::ActionMailbox::InboundEmail]) }
+    def to_a; end
+
+    sig { returns(T::Array[::ActionMailbox::InboundEmail]) }
     def to_ary; end
   end
 
@@ -846,6 +852,9 @@ class ActionMailbox::InboundEmail
     include GeneratedRelationMethods
 
     Elem = type_member { { fixed: ::ActionMailbox::InboundEmail } }
+
+    sig { returns(T::Array[::ActionMailbox::InboundEmail]) }
+    def to_a; end
 
     sig { returns(T::Array[::ActionMailbox::InboundEmail]) }
     def to_a; end

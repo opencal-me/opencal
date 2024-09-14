@@ -1150,6 +1150,9 @@ class GoogleCalendarChannel
     def to_a; end
 
     sig { returns(T::Array[::GoogleCalendarChannel]) }
+    def to_a; end
+
+    sig { returns(T::Array[::GoogleCalendarChannel]) }
     def to_ary; end
   end
 
@@ -1244,6 +1247,9 @@ class GoogleCalendarChannel
     def to_a; end
 
     sig { returns(T::Array[::GoogleCalendarChannel]) }
+    def to_a; end
+
+    sig { returns(T::Array[::GoogleCalendarChannel]) }
     def to_ary; end
   end
 
@@ -1252,6 +1258,9 @@ class GoogleCalendarChannel
     include GeneratedRelationMethods
 
     Elem = type_member { { fixed: ::GoogleCalendarChannel } }
+
+    sig { returns(T::Array[::GoogleCalendarChannel]) }
+    def to_a; end
 
     sig { returns(T::Array[::GoogleCalendarChannel]) }
     def to_a; end

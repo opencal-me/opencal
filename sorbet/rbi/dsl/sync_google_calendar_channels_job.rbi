@@ -6,8 +6,12 @@
 
 class SyncGoogleCalendarChannelsJob
   class << self
-    sig { returns(T.any(SyncGoogleCalendarChannelsJob, FalseClass)) }
-    def perform_later; end
+    sig do
+      params(
+        block: T.nilable(T.proc.params(job: SyncGoogleCalendarChannelsJob).void)
+      ).returns(T.any(SyncGoogleCalendarChannelsJob, FalseClass))
+    end
+    def perform_later(&block); end
 
     sig { void }
     def perform_now; end

@@ -2259,6 +2259,9 @@ class User
     def to_a; end
 
     sig { returns(T::Array[::User]) }
+    def to_a; end
+
+    sig { returns(T::Array[::User]) }
     def to_ary; end
   end
 
@@ -2356,6 +2359,9 @@ class User
     def to_a; end
 
     sig { returns(T::Array[::User]) }
+    def to_a; end
+
+    sig { returns(T::Array[::User]) }
     def to_ary; end
   end
 
@@ -2367,6 +2373,9 @@ class User
 
     sig { returns(T.self_type) }
     def friendly; end
+
+    sig { returns(T::Array[::User]) }
+    def to_a; end
 
     sig { returns(T::Array[::User]) }
     def to_a; end

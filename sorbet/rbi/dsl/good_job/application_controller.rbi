@@ -14,6 +14,7 @@ class GoodJob::ApplicationController
     include ::ViteRails::TagHelpers
     include ::InertiaRails::Helper
     include ::ActionController::Base::HelperMethods
+    include ::GoodJob::IconsHelper
     include ::GoodJob::ApplicationHelper
   end
 

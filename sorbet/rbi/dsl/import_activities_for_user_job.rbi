@@ -6,8 +6,13 @@
 
 class ImportActivitiesForUserJob
   class << self
-    sig { params(user: ::User).returns(T.any(ImportActivitiesForUserJob, FalseClass)) }
-    def perform_later(user); end
+    sig do
+      params(
+        user: ::User,
+        block: T.nilable(T.proc.params(job: ImportActivitiesForUserJob).void)
+      ).returns(T.any(ImportActivitiesForUserJob, FalseClass))
+    end
+    def perform_later(user, &block); end
 
     sig { params(user: ::User).void }
     def perform_now(user); end

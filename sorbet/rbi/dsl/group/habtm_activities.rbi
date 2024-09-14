@@ -814,6 +814,9 @@ class Group::HABTM_Activities
     def to_a; end
 
     sig { returns(T::Array[::Group::HABTM_Activities]) }
+    def to_a; end
+
+    sig { returns(T::Array[::Group::HABTM_Activities]) }
     def to_ary; end
   end
 
@@ -908,6 +911,9 @@ class Group::HABTM_Activities
     def to_a; end
 
     sig { returns(T::Array[::Group::HABTM_Activities]) }
+    def to_a; end
+
+    sig { returns(T::Array[::Group::HABTM_Activities]) }
     def to_ary; end
   end
 
@@ -916,6 +922,9 @@ class Group::HABTM_Activities
     include GeneratedRelationMethods
 
     Elem = type_member { { fixed: ::Group::HABTM_Activities } }
+
+    sig { returns(T::Array[::Group::HABTM_Activities]) }
+    def to_a; end
 
     sig { returns(T::Array[::Group::HABTM_Activities]) }
     def to_a; end

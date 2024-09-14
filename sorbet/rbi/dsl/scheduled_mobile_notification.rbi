@@ -1070,6 +1070,9 @@ class ScheduledMobileNotification
     def to_a; end
 
     sig { returns(T::Array[::ScheduledMobileNotification]) }
+    def to_a; end
+
+    sig { returns(T::Array[::ScheduledMobileNotification]) }
     def to_ary; end
   end
 
@@ -1164,6 +1167,9 @@ class ScheduledMobileNotification
     def to_a; end
 
     sig { returns(T::Array[::ScheduledMobileNotification]) }
+    def to_a; end
+
+    sig { returns(T::Array[::ScheduledMobileNotification]) }
     def to_ary; end
   end
 
@@ -1172,6 +1178,9 @@ class ScheduledMobileNotification
     include GeneratedRelationMethods
 
     Elem = type_member { { fixed: ::ScheduledMobileNotification } }
+
+    sig { returns(T::Array[::ScheduledMobileNotification]) }
+    def to_a; end
 
     sig { returns(T::Array[::ScheduledMobileNotification]) }
     def to_a; end

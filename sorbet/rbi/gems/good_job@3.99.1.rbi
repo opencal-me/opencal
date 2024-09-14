@@ -35,13 +35,15 @@ class ActiveJob::QueueAdapters::GoodJobAdapter < ::GoodJob::Adapter; end
 # source://good_job//lib/good_job/version.rb#3
 module GoodJob
   include ::GoodJob::Dependencies
+  include ::GoodJob::ThreadStatus
   include ::ActiveSupport::Deprecation::DeprecatedConstantAccessor
   extend ::GoodJob::Dependencies::ClassMethods
+  extend ::GoodJob::ThreadStatus::ClassMethods
 
-  # source://good_job//lib/good_job.rb#124
+  # source://good_job//lib/good_job.rb#136
   def _active_record_configuration; end
 
-  # source://good_job//lib/good_job.rb#124
+  # source://good_job//lib/good_job.rb#136
   def _active_record_configuration=(val); end
 
   # source://good_job//lib/good_job/dependencies.rb#9
@@ -50,53 +52,53 @@ module GoodJob
   # source://good_job//lib/good_job/dependencies.rb#9
   def _framework_ready=(val); end
 
-  # source://good_job//lib/good_job.rb#54
+  # source://good_job//lib/good_job.rb#66
   def active_record_parent_class; end
 
-  # source://good_job//lib/good_job.rb#54
+  # source://good_job//lib/good_job.rb#66
   def active_record_parent_class=(val); end
 
-  # source://good_job//lib/good_job.rb#104
+  # source://good_job//lib/good_job.rb#116
   def capsule; end
 
-  # source://good_job//lib/good_job.rb#104
+  # source://good_job//lib/good_job.rb#116
   def capsule=(val); end
 
-  # source://good_job//lib/good_job.rb#98
+  # source://good_job//lib/good_job.rb#110
   def configuration; end
 
-  # source://good_job//lib/good_job.rb#98
+  # source://good_job//lib/good_job.rb#110
   def configuration=(val); end
 
-  # source://good_job//lib/good_job.rb#63
+  # source://good_job//lib/good_job.rb#75
   def logger; end
 
-  # source://good_job//lib/good_job.rb#63
+  # source://good_job//lib/good_job.rb#75
   def logger=(val); end
 
-  # source://good_job//lib/good_job.rb#92
+  # source://good_job//lib/good_job.rb#104
   def on_thread_error; end
 
-  # source://good_job//lib/good_job.rb#92
+  # source://good_job//lib/good_job.rb#104
   def on_thread_error=(val); end
 
-  # source://good_job//lib/good_job.rb#73
+  # source://good_job//lib/good_job.rb#85
   def preserve_job_records; end
 
-  # source://good_job//lib/good_job.rb#73
+  # source://good_job//lib/good_job.rb#85
   def preserve_job_records=(val); end
 
-  # source://good_job//lib/good_job.rb#82
+  # source://good_job//lib/good_job.rb#94
   def retry_on_unhandled_error; end
 
-  # source://good_job//lib/good_job.rb#82
+  # source://good_job//lib/good_job.rb#94
   def retry_on_unhandled_error=(val); end
 
   class << self
-    # source://good_job//lib/good_job.rb#124
+    # source://good_job//lib/good_job.rb#136
     def _active_record_configuration; end
 
-    # source://good_job//lib/good_job.rb#124
+    # source://good_job//lib/good_job.rb#136
     def _active_record_configuration=(val); end
 
     # source://good_job//lib/good_job/dependencies.rb#9
@@ -110,18 +112,19 @@ module GoodJob
     # @param exception [Exception] Exception that was raised
     # @return [void]
     #
-    # source://good_job//lib/good_job.rb#109
+    # source://good_job//lib/good_job.rb#121
     def _on_thread_error(exception); end
 
     # Sends +#shutdown+ or +#restart+ to executable objects ({GoodJob::Notifier}, {GoodJob::Poller}, {GoodJob::Scheduler}, {GoodJob::MultiScheduler}, {GoodJob::CronManager})
     #
-    # @param executables [Array<Notifier, Poller, Scheduler, MultiScheduler, CronManager>] Objects to shut down.
+    # @param executables [Array<Notifier, Poller, Scheduler, MultiScheduler, CronManager, SharedExecutor>] Objects to shut down.
     # @param method_name [:symbol] Method to call, e.g. +:shutdown+ or +:restart+.
     # @param timeout [nil, Numeric]
+    # @param after [Array<Notifier, Poller, Scheduler, MultiScheduler, CronManager, SharedExecutor>] Objects to shut down after initial executables shut down.
     # @return [void]
     #
-    # source://good_job//lib/good_job.rb#165
-    def _shutdown_all(executables, method_name = T.unsafe(nil), timeout: T.unsafe(nil)); end
+    # source://good_job//lib/good_job.rb#178
+    def _shutdown_all(executables, method_name = T.unsafe(nil), timeout: T.unsafe(nil), after: T.unsafe(nil)); end
 
     # The ActiveRecord parent class inherited by +GoodJob::Execution+ (default: +ActiveRecord::Base+).
     # Use this when using multiple databases or other custom ActiveRecord configuration.
@@ -130,7 +133,7 @@ module GoodJob
     #   GoodJob.active_record_parent_class = "CustomApplicationRecord"
     # @return [ActiveRecord::Base]
     #
-    # source://good_job//lib/good_job.rb#54
+    # source://good_job//lib/good_job.rb#66
     def active_record_parent_class; end
 
     # The ActiveRecord parent class inherited by +GoodJob::Execution+ (default: +ActiveRecord::Base+).
@@ -140,21 +143,21 @@ module GoodJob
     #   GoodJob.active_record_parent_class = "CustomApplicationRecord"
     # @return [ActiveRecord::Base]
     #
-    # source://good_job//lib/good_job.rb#54
+    # source://good_job//lib/good_job.rb#66
     def active_record_parent_class=(val); end
 
     # Global/default execution capsule for GoodJob.
     #
     # @return [GoodJob::Capsule, nil]
     #
-    # source://good_job//lib/good_job.rb#104
+    # source://good_job//lib/good_job.rb#116
     def capsule; end
 
     # Global/default execution capsule for GoodJob.
     #
     # @return [GoodJob::Capsule, nil]
     #
-    # source://good_job//lib/good_job.rb#104
+    # source://good_job//lib/good_job.rb#116
     def capsule=(val); end
 
     # Destroys preserved job and batch records.
@@ -168,21 +171,21 @@ module GoodJob
     # @param older_than [nil, Numeric, ActiveSupport::Duration] Jobs older than this will be destroyed (default: +86400+).
     # @return [Integer] Number of job execution records and batches that were destroyed.
     #
-    # source://good_job//lib/good_job.rb#185
+    # source://good_job//lib/good_job.rb#205
     def cleanup_preserved_jobs(older_than: T.unsafe(nil), in_batches_of: T.unsafe(nil)); end
 
     # Global configuration object for GoodJob.
     #
     # @return [GoodJob::Configuration, nil]
     #
-    # source://good_job//lib/good_job.rb#98
+    # source://good_job//lib/good_job.rb#110
     def configuration; end
 
     # Global configuration object for GoodJob.
     #
     # @return [GoodJob::Configuration, nil]
     #
-    # source://good_job//lib/good_job.rb#98
+    # source://good_job//lib/good_job.rb#110
     def configuration=(val); end
 
     # Custom Active Record configuration that is class_eval'ed into +GoodJob::BaseRecord+
@@ -194,14 +197,14 @@ module GoodJob
     # @param block Custom Active Record configuration
     # @return [void]
     #
-    # source://good_job//lib/good_job.rb#121
+    # source://good_job//lib/good_job.rb#133
     def configure_active_record(&block); end
 
     # Deprecator for providing deprecation warnings.
     #
     # @return [ActiveSupport::Deprecation]
     #
-    # source://good_job//lib/good_job.rb#248
+    # source://good_job//lib/good_job.rb#280
     def deprecator; end
 
     # The logger used by GoodJob (default: +Rails.logger+).
@@ -211,7 +214,7 @@ module GoodJob
     #   GoodJob.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new("log/my_logs.log"))
     # @return [Logger, nil]
     #
-    # source://good_job//lib/good_job.rb#63
+    # source://good_job//lib/good_job.rb#75
     def logger; end
 
     # The logger used by GoodJob (default: +Rails.logger+).
@@ -221,7 +224,7 @@ module GoodJob
     #   GoodJob.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new("log/my_logs.log"))
     # @return [Logger, nil]
     #
-    # source://good_job//lib/good_job.rb#63
+    # source://good_job//lib/good_job.rb#75
     def logger=(val); end
 
     # Whether all GoodJob migrations have been applied.
@@ -229,7 +232,7 @@ module GoodJob
     #
     # @return [Boolean]
     #
-    # source://good_job//lib/good_job.rb#261
+    # source://good_job//lib/good_job.rb#293
     def migrated?; end
 
     # This callable will be called when an exception reaches GoodJob (default: +nil+).
@@ -240,7 +243,7 @@ module GoodJob
     #   GoodJob.on_thread_error = -> (exception) { Raven.capture_exception(exception) }
     # @return [Proc, nil]
     #
-    # source://good_job//lib/good_job.rb#92
+    # source://good_job//lib/good_job.rb#104
     def on_thread_error; end
 
     # This callable will be called when an exception reaches GoodJob (default: +nil+).
@@ -251,7 +254,7 @@ module GoodJob
     #   GoodJob.on_thread_error = -> (exception) { Raven.capture_exception(exception) }
     # @return [Proc, nil]
     #
-    # source://good_job//lib/good_job.rb#92
+    # source://good_job//lib/good_job.rb#104
     def on_thread_error=(val); end
 
     # Perform all queued jobs in the current thread.
@@ -259,10 +262,11 @@ module GoodJob
     # Unhandled job errors will be raised.
     #
     # @param queue_string [String] Queues to execute jobs from
+    # @param limit [Integer, nil] Maximum number of iterations for the loop
     # @return [void]
     #
-    # source://good_job//lib/good_job.rb#237
-    def perform_inline(queue_string = T.unsafe(nil)); end
+    # source://good_job//lib/good_job.rb#258
+    def perform_inline(queue_string = T.unsafe(nil), limit: T.unsafe(nil)); end
 
     # Whether to preserve job records in the database after they have finished (default: +true+).
     # If you want to preserve jobs for latter inspection, set this to +true+.
@@ -272,7 +276,7 @@ module GoodJob
     #
     # @return [Boolean, Symbol, nil]
     #
-    # source://good_job//lib/good_job.rb#73
+    # source://good_job//lib/good_job.rb#85
     def preserve_job_records; end
 
     # Whether to preserve job records in the database after they have finished (default: +true+).
@@ -283,7 +287,7 @@ module GoodJob
     #
     # @return [Boolean, Symbol, nil]
     #
-    # source://good_job//lib/good_job.rb#73
+    # source://good_job//lib/good_job.rb#85
     def preserve_job_records=(val); end
 
     # source://railties/7.0.8/lib/rails/engine.rb#405
@@ -304,7 +308,7 @@ module GoodJob
     # @param timeout [Numeric] Seconds to wait for active threads to finish.
     # @return [void]
     #
-    # source://good_job//lib/good_job.rb#154
+    # source://good_job//lib/good_job.rb#166
     def restart(timeout: T.unsafe(nil)); end
 
     # Whether to re-perform a job when a type of +StandardError+ is raised to GoodJob (default: +false+).
@@ -314,7 +318,7 @@ module GoodJob
     #
     # @return [Boolean, nil]
     #
-    # source://good_job//lib/good_job.rb#82
+    # source://good_job//lib/good_job.rb#94
     def retry_on_unhandled_error; end
 
     # Whether to re-perform a job when a type of +StandardError+ is raised to GoodJob (default: +false+).
@@ -324,7 +328,7 @@ module GoodJob
     #
     # @return [Boolean, nil]
     #
-    # source://good_job//lib/good_job.rb#82
+    # source://good_job//lib/good_job.rb#94
     def retry_on_unhandled_error=(val); end
 
     # Stop executing jobs.
@@ -340,14 +344,14 @@ module GoodJob
     #   * +1..+, the scheduler will wait that many seconds before stopping any remaining active tasks.
     # @return [void]
     #
-    # source://good_job//lib/good_job.rb#137
+    # source://good_job//lib/good_job.rb#149
     def shutdown(timeout: T.unsafe(nil)); end
 
     # Tests whether jobs have stopped executing.
     #
     # @return [Boolean] whether background threads are shut down
     #
-    # source://good_job//lib/good_job.rb#143
+    # source://good_job//lib/good_job.rb#155
     def shutdown?; end
 
     # source://railties/7.0.8/lib/rails/engine.rb#397
@@ -355,6 +359,13 @@ module GoodJob
 
     # source://railties/7.0.8/lib/rails/engine.rb#401
     def use_relative_model_naming?; end
+
+    # Tests whether GoodJob can be safely upgraded to v4
+    #
+    # @return [Boolean]
+    #
+    # source://good_job//lib/good_job.rb#274
+    def v4_ready?; end
   end
 end
 
@@ -365,10 +376,10 @@ module GoodJob::ActiveJobExtensions; end
 module GoodJob::ActiveJobExtensions::Batches
   extend ::ActiveSupport::Concern
 
-  # source://good_job//lib/good_job/active_job_extensions/batches.rb#8
+  # source://good_job//lib/good_job/active_job_extensions/batches.rb#14
   def batch; end
 
-  # source://good_job//lib/good_job/active_job_extensions/batches.rb#8
+  # source://good_job//lib/good_job/active_job_extensions/batches.rb#14
   def batch?; end
 end
 
@@ -385,19 +396,26 @@ module GoodJob::ActiveJobExtensions::Concurrency
   # @raise [TypeError]
   # @return [Object] concurrency key
   #
-  # source://good_job//lib/good_job/active_job_extensions/concurrency.rb#92
+  # source://good_job//lib/good_job/active_job_extensions/concurrency.rb#125
   def _good_job_concurrency_key; end
+
+  # Generates the default concurrency key when the configuration doesn't provide one
+  #
+  # @return [String] concurrency key
+  #
+  # source://good_job//lib/good_job/active_job_extensions/concurrency.rb#139
+  def _good_job_default_concurrency_key; end
 
   # Existing or dynamically generated concurrency key
   #
   # @return [Object] concurrency key
   #
-  # source://good_job//lib/good_job/active_job_extensions/concurrency.rb#86
+  # source://good_job//lib/good_job/active_job_extensions/concurrency.rb#119
   def good_job_concurrency_key; end
 
   private
 
-  # source://good_job//lib/good_job/active_job_extensions/concurrency.rb#104
+  # source://good_job//lib/good_job/active_job_extensions/concurrency.rb#145
   def good_job_enqueue_concurrency_check(job, on_abort:, on_enqueue:); end
 
   module GeneratedClassMethods
@@ -411,7 +429,7 @@ end
 
 # source://good_job//lib/good_job/active_job_extensions/concurrency.rb#0
 module GoodJob::ActiveJobExtensions::Concurrency::ClassMethods
-  # source://good_job//lib/good_job/active_job_extensions/concurrency.rb#79
+  # source://good_job//lib/good_job/active_job_extensions/concurrency.rb#112
   def good_job_control_concurrency_with(config); end
 end
 
@@ -421,11 +439,14 @@ class GoodJob::ActiveJobExtensions::Concurrency::ConcurrencyExceededError < ::St
   def backtrace; end
 end
 
-# source://good_job//lib/good_job/active_job_extensions/concurrency.rb#16
+# source://good_job//lib/good_job/active_job_extensions/concurrency.rb#18
 module GoodJob::ActiveJobExtensions::Concurrency::Prepends
-  # source://good_job//lib/good_job/active_job_extensions/concurrency.rb#17
+  # source://good_job//lib/good_job/active_job_extensions/concurrency.rb#19
   def deserialize(job_data); end
 end
+
+# source://good_job//lib/good_job/active_job_extensions/concurrency.rb#16
+class GoodJob::ActiveJobExtensions::Concurrency::ThrottleExceededError < ::GoodJob::ActiveJobExtensions::Concurrency::ConcurrencyExceededError; end
 
 # source://good_job//lib/good_job/active_job_extensions/concurrency.rb#8
 GoodJob::ActiveJobExtensions::Concurrency::VALID_TYPES = T.let(T.unsafe(nil), Array)
@@ -435,6 +456,33 @@ module GoodJob::ActiveJobExtensions::InterruptErrors
   extend ::ActiveSupport::Concern
 end
 
+# source://good_job//lib/good_job/active_job_extensions/labels.rb#5
+module GoodJob::ActiveJobExtensions::Labels
+  extend ::ActiveSupport::Concern
+  include GeneratedInstanceMethods
+
+  mixes_in_class_methods GeneratedClassMethods
+
+  module GeneratedClassMethods
+    def good_job_labels; end
+    def good_job_labels=(value); end
+  end
+
+  module GeneratedInstanceMethods; end
+end
+
+# source://good_job//lib/good_job/active_job_extensions/labels.rb#8
+module GoodJob::ActiveJobExtensions::Labels::Prepends
+  # source://good_job//lib/good_job/active_job_extensions/labels.rb#9
+  def initialize(*arguments); end
+
+  # source://good_job//lib/good_job/active_job_extensions/labels.rb#19
+  def deserialize(job_data); end
+
+  # source://good_job//lib/good_job/active_job_extensions/labels.rb#14
+  def enqueue(options = T.unsafe(nil)); end
+end
+
 # Allows configuring whether GoodJob should emit a NOTIFY event when a job is enqueued.
 # Configuration will apply either globally to the Job Class, or individually to jobs
 # on initial enqueue and subsequent retries.
@@ -442,7 +490,7 @@ end
 # @example
 #   # Include the concern to your job class:
 #   class MyJob < ApplicationJob
-#   include GoodJob::ActiveJobExtensions::Notify
+#   include GoodJob::ActiveJobExtensions::NotifyOptions
 #   self.good_job_notify = false
 #   end
 #
@@ -504,7 +552,7 @@ class GoodJob::Adapter
   #
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/adapter.rb#216
+  # source://good_job//lib/good_job/adapter.rb#252
   def async_started?; end
 
   # Enqueues the ActiveJob job to be performed.
@@ -516,12 +564,20 @@ class GoodJob::Adapter
   # source://good_job//lib/good_job/adapter.rb#41
   def enqueue(active_job); end
 
+  # Defines if enqueueing this job from inside an Active Record transaction
+  # automatically defers the enqueue to after the transaction commit.
+  #
+  # @return [Boolean]
+  #
+  # source://good_job//lib/good_job/adapter.rb#47
+  def enqueue_after_transaction_commit?; end
+
   # Enqueues multiple ActiveJob instances at once
   #
   # @param active_jobs [Array<ActiveJob::Base>] jobs to be enqueued
   # @return [Integer] number of jobs that were successfully enqueued
   #
-  # source://good_job//lib/good_job/adapter.rb#48
+  # source://good_job//lib/good_job/adapter.rb#54
   def enqueue_all(active_jobs); end
 
   # Enqueues an ActiveJob job to be run at a specific time.
@@ -531,61 +587,61 @@ class GoodJob::Adapter
   # @param timestamp [Integer, nil] the epoch time to perform the job
   # @return [GoodJob::Execution]
   #
-  # source://good_job//lib/good_job/adapter.rb#133
+  # source://good_job//lib/good_job/adapter.rb#150
   def enqueue_at(active_job, timestamp); end
 
   # Whether in +:async+ execution mode.
   #
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/adapter.rb#186
+  # source://good_job//lib/good_job/adapter.rb#222
   def execute_async?; end
 
   # Whether in +:external+ execution mode.
   #
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/adapter.rb#193
+  # source://good_job//lib/good_job/adapter.rb#229
   def execute_externally?; end
 
   # Whether in +:inline+ execution mode.
   #
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/adapter.rb#201
+  # source://good_job//lib/good_job/adapter.rb#237
   def execute_inline?; end
 
   # This adapter's execution mode
   #
   # @return [Symbol, nil]
   #
-  # source://good_job//lib/good_job/adapter.rb#180
+  # source://good_job//lib/good_job/adapter.rb#216
   def execution_mode; end
 
   # Shut down the thread pool executors.
   #
-  # @param timeout [nil, Numeric, Symbol] Seconds to wait for active threads.
+  # @param timeout [nil, Numeric, NONE] Seconds to wait for active threads.
   #   * +nil+ trigger a shutdown but not wait for it to complete.
   #   * +-1+ wait until the shutdown is complete.
   #   * +0+ immediately shutdown and stop any threads.
   #   * A positive number will wait that many seconds before stopping any remaining active threads.
   # @return [void]
   #
-  # source://good_job//lib/good_job/adapter.rb#173
+  # source://good_job//lib/good_job/adapter.rb#209
   def shutdown(timeout: T.unsafe(nil)); end
 
   # Start async executors
   #
   # @return [void]
   #
-  # source://good_job//lib/good_job/adapter.rb#207
+  # source://good_job//lib/good_job/adapter.rb#243
   def start_async; end
 
   private
 
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/adapter.rb#222
+  # source://good_job//lib/good_job/adapter.rb#258
   def send_notify?(active_job); end
 
   class << self
@@ -683,42 +739,17 @@ module GoodJob::ApplicationController::HelperMethods
   include ::ViteRails::TagHelpers
   include ::InertiaRails::Helper
   include ::ActionController::Base::HelperMethods
+  include ::GoodJob::IconsHelper
   include ::GoodJob::ApplicationHelper
 end
 
 module GoodJob::ApplicationHelper
+  include ::GoodJob::IconsHelper
+
   def format_duration(sec); end
   def relative_time(timestamp, **options); end
-  def render_icon(name); end
-  def status_badge(status); end
-  def status_icon(status, **options); end
   def translate_hash(key, **options); end
   def translation_exists?(key, **options); end
-end
-
-GoodJob::ApplicationHelper::STATUS_COLOR = T.let(T.unsafe(nil), Hash)
-GoodJob::ApplicationHelper::STATUS_ICONS = T.let(T.unsafe(nil), Hash)
-
-# Extends an ActiveRecord odel to override the connection and use
-# an explicit connection that has been removed from the pool.
-#
-# source://good_job//lib/good_job/assignable_connection.rb#6
-module GoodJob::AssignableConnection
-  extend ::ActiveSupport::Concern
-
-  mixes_in_class_methods ::GoodJob::AssignableConnection::ClassMethods
-end
-
-# source://good_job//lib/good_job/assignable_connection.rb#0
-module GoodJob::AssignableConnection::ClassMethods
-  # source://good_job//lib/good_job/assignable_connection.rb#23
-  def connection; end
-
-  # source://good_job//lib/good_job/assignable_connection.rb#17
-  def connection=(conn); end
-
-  # source://good_job//lib/good_job/assignable_connection.rb#30
-  def with_connection(conn); end
 end
 
 class GoodJob::BaseExecution < ::GoodJob::BaseRecord
@@ -731,25 +762,79 @@ class GoodJob::BaseExecution < ::GoodJob::BaseRecord
   extend ::GoodJob::AdvisoryLockable::ClassMethods
   extend ::GoodJob::Filterable::ClassMethods
 
+  # source://activesupport/7.0.8/lib/active_support/callbacks.rb#940
+  def _perform_callbacks; end
+
+  # source://activesupport/7.0.8/lib/active_support/callbacks.rb#940
+  def _perform_unlocked_callbacks; end
+
+  # source://activesupport/7.0.8/lib/active_support/callbacks.rb#928
+  def _run_perform_callbacks(&block); end
+
+  # source://activesupport/7.0.8/lib/active_support/callbacks.rb#928
+  def _run_perform_unlocked_callbacks(&block); end
+
   def active_job(ignore_deserialization_errors: T.unsafe(nil)); end
   def advisory_lockable_function; end
   def advisory_lockable_function=(_arg0); end
   def advisory_lockable_function?; end
+
+  # source://activerecord/7.0.8/lib/active_record/autosave_association.rb#160
+  def autosave_associated_records_for_batch(*args); end
+
+  # source://activerecord/7.0.8/lib/active_record/autosave_association.rb#160
+  def autosave_associated_records_for_discrete_executions(*args); end
+
   def create_with_advisory_lock; end
   def create_with_advisory_lock=(_arg0); end
+  def destroy_job; end
   def discrete?; end
+  def display_serialized_params; end
+  def executable?; end
   def job_class; end
+  def job_state; end
+  def make_discrete; end
+  def number; end
+  def perform(lock_id:); end
+  def queue_latency; end
+  def running?; end
+  def runtime_latency; end
+
+  # source://activerecord/7.0.8/lib/active_record/autosave_association.rb#160
+  def validate_associated_records_for_discrete_executions(*args); end
 
   private
 
   def active_job_data; end
+  def continue_discard_or_finish_batch; end
+  def reset_batch_values(&block); end
 
   class << self
     # source://activesupport/7.0.8/lib/active_support/callbacks.rb#68
     def __callbacks; end
 
+    # source://activesupport/7.0.8/lib/active_support/callbacks.rb#932
+    def _perform_callbacks; end
+
+    # source://activesupport/7.0.8/lib/active_support/callbacks.rb#936
+    def _perform_callbacks=(value); end
+
+    # source://activesupport/7.0.8/lib/active_support/callbacks.rb#932
+    def _perform_unlocked_callbacks; end
+
+    # source://activesupport/7.0.8/lib/active_support/callbacks.rb#936
+    def _perform_unlocked_callbacks=(value); end
+
+    # source://activerecord/7.0.8/lib/active_record/reflection.rb#11
+    def _reflections; end
+
     # source://activemodel/7.0.8/lib/active_model/validations.rb#52
     def _validators; end
+
+    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
+    def active_job_id(*args, **_arg1); end
+
+    def active_job_id_index_removal_migrated?; end
 
     # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
     def advisory_lock(*args, **_arg1); end
@@ -767,17 +852,49 @@ class GoodJob::BaseExecution < ::GoodJob::BaseRecord
     # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
     def advisory_unlocked(*args, **_arg1); end
 
+    # source://activemodel/7.0.8/lib/active_model/callbacks.rb#144
+    def after_perform(*args, **options, &block); end
+
+    # source://activemodel/7.0.8/lib/active_model/callbacks.rb#144
+    def after_perform_unlocked(*args, **options, &block); end
+
+    # source://activemodel/7.0.8/lib/active_model/callbacks.rb#137
+    def around_perform(*args, **options, &block); end
+
+    # source://activemodel/7.0.8/lib/active_model/callbacks.rb#130
+    def before_perform(*args, **options, &block); end
+
+    def build_for_enqueue(active_job, overrides = T.unsafe(nil)); end
+    def candidate_lookup_index_migrated?; end
     def coalesce_scheduled_at_created_at; end
+
+    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
+    def creation_ordered(*args, **_arg1); end
+
+    def cron_indices_migrated?; end
 
     # source://activerecord/7.0.8/lib/active_record/enum.rb#116
     def defined_enums; end
+
+    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
+    def dequeueing_ordered(*args, **_arg1); end
 
     def discrete_support?; end
 
     # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
     def display_all(*args, **_arg1); end
 
+    def enqueue(active_job, scheduled_at: T.unsafe(nil), create_with_advisory_lock: T.unsafe(nil)); end
+    def enqueue_args(active_job, overrides = T.unsafe(nil)); end
     def error_event_migrated?; end
+
+    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
+    def finished(*args, **_arg1); end
+
+    def format_error(error); end
+
+    # source://activerecord/7.0.8/lib/active_record/model_schema.rb#157
+    def implicit_order_column; end
 
     # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
     def includes_advisory_locks(*args, **_arg1); end
@@ -789,20 +906,91 @@ class GoodJob::BaseExecution < ::GoodJob::BaseRecord
     def joins_advisory_locks(*args, **_arg1); end
 
     def json_string(json, attr); end
+    def labels_indices_migrated?; end
+    def labels_migrated?; end
+    def next_scheduled_at(after: T.unsafe(nil), limit: T.unsafe(nil), now_limit: T.unsafe(nil)); end
+
+    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
+    def only_scheduled(*args, **_arg1); end
 
     # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
     def owns_advisory_locked(*args, **_arg1); end
 
     def params_execution_count; end
     def params_job_class; end
+    def perform_with_advisory_lock(lock_id:, parsed_queues: T.unsafe(nil), queue_select_limit: T.unsafe(nil)); end
+
+    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
+    def priority_ordered(*args, **_arg1); end
+
+    def process_lock_migrated?; end
+
+    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
+    def queue_ordered(*args, **_arg1); end
+
+    def queue_parser(string); end
+
+    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
+    def queue_string(*args, **_arg1); end
+
+    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
+    def running(*args, **_arg1); end
+
+    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
+    def schedule_ordered(*args, **_arg1); end
 
     # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
     def search_text(*args, **_arg1); end
+
+    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
+    def unfinished(*args, **_arg1); end
   end
 end
 
-module GoodJob::BaseExecution::GeneratedAssociationMethods; end
+GoodJob::BaseExecution::DEFAULT_PRIORITY = T.let(T.unsafe(nil), Integer)
+GoodJob::BaseExecution::DEFAULT_QUEUE_NAME = T.let(T.unsafe(nil), String)
+GoodJob::BaseExecution::ERROR_MESSAGE_SEPARATOR = T.let(T.unsafe(nil), String)
+
+module GoodJob::BaseExecution::GeneratedAssociationMethods
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/association.rb#103
+  def batch; end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/association.rb#111
+  def batch=(value); end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/belongs_to.rb#132
+  def batch_changed?; end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/belongs_to.rb#136
+  def batch_previously_changed?; end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#28
+  def build_batch(*args, &block); end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#32
+  def create_batch(*args, &block); end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#36
+  def create_batch!(*args, &block); end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/collection_association.rb#62
+  def discrete_execution_ids; end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/collection_association.rb#72
+  def discrete_execution_ids=(ids); end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/association.rb#103
+  def discrete_executions; end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/association.rb#111
+  def discrete_executions=(value); end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#19
+  def reload_batch; end
+end
+
 module GoodJob::BaseExecution::GeneratedAttributeMethods; end
+class GoodJob::BaseExecution::PreviouslyPerformedError < ::StandardError; end
 
 class GoodJob::BaseFilter
   def initialize(params, base_query = T.unsafe(nil)); end
@@ -817,6 +1005,7 @@ class GoodJob::BaseFilter
   def params=(_arg0); end
   def queues; end
   def records; end
+  def state_names; end
   def states; end
   def to_params(override = T.unsafe(nil)); end
 
@@ -836,6 +1025,8 @@ class GoodJob::BaseRecord < ::ActiveRecord::Base
   class << self
     # source://activemodel/7.0.8/lib/active_model/validations.rb#52
     def _validators; end
+
+    def bind_value(name, value, type_class); end
 
     # source://activerecord/7.0.8/lib/active_record/enum.rb#116
     def defined_enums; end
@@ -1094,6 +1285,12 @@ class GoodJob::BatchRecord < ::GoodJob::BaseRecord
     def finished(*args, **_arg1); end
 
     # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
+    def finished_before(*args, **_arg1); end
+
+    # source://activerecord/7.0.8/lib/active_record/model_schema.rb#157
+    def implicit_order_column; end
+
+    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
     def includes_advisory_locks(*args, **_arg1); end
 
     # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
@@ -1196,7 +1393,7 @@ module GoodJob::Bulk
     # Capture jobs to a buffer. Pass either a block, or specific Active Jobs to be buffered.
     #
     # @param active_jobs [Array<ActiveJob::Base>] Active Jobs to be buffered.
-    # @param queue_adapter Override the jobs implict queue adapter with an explicit one.
+    # @param queue_adapter Override the jobs implicit queue adapter with an explicit one.
     # @raise [ArgumentError]
     # @return [nil, Array<ActiveJob::Base>] The ActiveJob instances that have been buffered; nil if no active buffer
     #
@@ -1275,65 +1472,65 @@ class GoodJob::CLI < ::Thor
   #
   # @return [void]
   #
-  # source://good_job//lib/good_job/cli.rb#141
+  # source://good_job//lib/good_job/cli.rb#156
   def cleanup_preserved_jobs; end
 
-  # source://good_job//lib/good_job/cli.rb#154
+  # source://good_job//lib/good_job/cli.rb#169
   def set_up_application!; end
 
   # The +good_job start+ command. Executes queued jobs.
   #
   # @return [void]
   #
-  # source://good_job//lib/good_job/cli.rb#92
+  # source://good_job//lib/good_job/cli.rb#105
   def start; end
 
   class << self
     # @return [Boolean]
     #
-    # source://good_job//lib/good_job/cli.rb#32
+    # source://good_job//lib/good_job/cli.rb#38
     def exit_on_failure?; end
 
     # Whether to log to STDOUT
     #
     # @return [Boolean, nil]
     #
-    # source://good_job//lib/good_job/cli.rb#28
+    # source://good_job//lib/good_job/cli.rb#34
     def log_to_stdout; end
 
     # Whether to log to STDOUT
     #
     # @return [Boolean, nil]
     #
-    # source://good_job//lib/good_job/cli.rb#28
+    # source://good_job//lib/good_job/cli.rb#34
     def log_to_stdout=(_arg0); end
 
     # Whether to log to STDOUT
     #
     # @return [Boolean, nil]
     #
-    # source://good_job//lib/good_job/cli.rb#28
+    # source://good_job//lib/good_job/cli.rb#34
     def log_to_stdout?; end
 
     # Whether the CLI is running from the executable
     #
     # @return [Boolean, nil]
     #
-    # source://good_job//lib/good_job/cli.rb#23
+    # source://good_job//lib/good_job/cli.rb#29
     def within_exe; end
 
     # Whether the CLI is running from the executable
     #
     # @return [Boolean, nil]
     #
-    # source://good_job//lib/good_job/cli.rb#23
+    # source://good_job//lib/good_job/cli.rb#29
     def within_exe=(_arg0); end
 
     # Whether the CLI is running from the executable
     #
     # @return [Boolean, nil]
     #
-    # source://good_job//lib/good_job/cli.rb#23
+    # source://good_job//lib/good_job/cli.rb#29
     def within_exe?; end
   end
 end
@@ -1343,6 +1540,16 @@ end
 #
 # source://good_job//lib/good_job/cli.rb#18
 GoodJob::CLI::RAILS_ENVIRONMENT_RB = T.let(T.unsafe(nil), String)
+
+# Number of seconds between checking shutdown conditions
+#
+# source://good_job//lib/good_job/cli.rb#21
+GoodJob::CLI::SHUTDOWN_EVENT_TIMEOUT = T.let(T.unsafe(nil), Integer)
+
+# Number of seconds between checking shutdown conditions when idle-timeout is enabled
+#
+# source://good_job//lib/good_job/cli.rb#24
+GoodJob::CLI::SHUTDOWN_EVENT_TIMEOUT_FOR_IDLE_TIMEOUT = T.let(T.unsafe(nil), Integer)
 
 # An object that has case-equality to a Proc or Lambda by responding to #call.
 # This can be used to duck-type match in a case statement.
@@ -1366,60 +1573,93 @@ class GoodJob::Capsule
   # @param configuration [GoodJob::Configuration] Configuration to use for this capsule.
   # @return [Capsule] a new instance of Capsule
   #
-  # source://good_job//lib/good_job/capsule.rb#15
+  # source://good_job//lib/good_job/capsule.rb#19
   def initialize(configuration: T.unsafe(nil)); end
+
+  # source://good_job//lib/good_job/capsule.rb#14
+  def _tracker_id_for_lock(*_arg0, **_arg1, &_arg2); end
+
+  # source://good_job//lib/good_job/capsule.rb#14
+  def _tracker_register(*_arg0, **_arg1, &_arg2); end
+
+  # source://good_job//lib/good_job/capsule.rb#14
+  def _tracker_renew(*_arg0, **_arg1, &_arg2); end
+
+  # source://good_job//lib/good_job/capsule.rb#14
+  def _tracker_unregister(*_arg0, **_arg1, &_arg2); end
 
   # Creates an execution thread(s) with the given attributes.
   #
   # @param job_state [Hash, nil] See {GoodJob::Scheduler#create_thread}.
   # @return [Boolean, nil] Whether the thread was created.
   #
-  # source://good_job//lib/good_job/capsule.rb#83
+  # source://good_job//lib/good_job/capsule.rb#102
   def create_thread(job_state = T.unsafe(nil)); end
+
+  # @param duration [nil, Numeric] Length of idleness to check for (in seconds).
+  # @return [Boolean] Whether the capsule is idle
+  #
+  # source://good_job//lib/good_job/capsule.rb#87
+  def idle?(duration = T.unsafe(nil)); end
+
+  # UUID for this capsule; to be used for inspection (not directly for locking jobs).
+  #
+  # @return [String]
+  #
+  # source://good_job//lib/good_job/capsule.rb#109
+  def process_id; end
 
   # Shutdown and then start the capsule again.
   #
-  # @param timeout [Numeric, Symbol] Seconds to wait for active threads.
+  # @param timeout [Numeric, NONE] Seconds to wait for active threads.
   # @raise [ArgumentError]
   # @return [void]
   #
-  # source://good_job//lib/good_job/capsule.rb#63
+  # source://good_job//lib/good_job/capsule.rb#68
   def restart(timeout: T.unsafe(nil)); end
 
   # @return [Boolean] Whether the capsule is currently running.
   #
-  # source://good_job//lib/good_job/capsule.rb#71
+  # source://good_job//lib/good_job/capsule.rb#76
   def running?; end
 
   # Shut down the thread pool executors.
   #
-  # @param timeout [nil, Numeric, Symbol] Seconds to wait for active threads.
+  # @param timeout [nil, Numeric, NONE] Seconds to wait for active threads.
   #   * +-1+ will wait for all active threads to complete.
   #   * +0+ will interrupt active threads.
   #   * +N+ will wait at most N seconds and then interrupt active threads.
   #   * +nil+ will trigger a shutdown but not wait for it to complete.
   # @return [void]
   #
-  # source://good_job//lib/good_job/capsule.rb#53
+  # source://good_job//lib/good_job/capsule.rb#58
   def shutdown(timeout: T.unsafe(nil)); end
 
   # @return [Boolean] Whether the capsule has been shutdown.
   #
-  # source://good_job//lib/good_job/capsule.rb#76
+  # source://good_job//lib/good_job/capsule.rb#81
   def shutdown?; end
 
   # Start the capsule once. After a shutdown, {#restart} must be used to start again.
   #
   # @return [nil, Boolean] Whether the capsule was started.
   #
-  # source://good_job//lib/good_job/capsule.rb#26
+  # source://good_job//lib/good_job/capsule.rb#33
   def start(force: T.unsafe(nil)); end
+
+  # Returns the value of attribute tracker.
+  #
+  # source://good_job//lib/good_job/capsule.rb#16
+  def tracker; end
 
   private
 
+  # source://good_job//lib/good_job/capsule.rb#115
+  def configuration; end
+
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/capsule.rb#90
+  # source://good_job//lib/good_job/capsule.rb#119
   def startable?(force: T.unsafe(nil)); end
 
   class << self
@@ -1428,6 +1668,132 @@ class GoodJob::Capsule
     # @return [Array<GoodJob::Capsule>, nil]
     #
     # source://good_job//lib/good_job/capsule.rb#12
+    def instances; end
+  end
+end
+
+# CapsuleTracker save a record in the database and periodically refreshes it. The intention is to
+# create a heartbeat that can be used to determine whether a capsule/process is still active
+# and use that to lock (or unlock) jobs.
+#
+# source://good_job//lib/good_job/capsule_tracker.rb#7
+class GoodJob::CapsuleTracker
+  # @param executor [Concurrent::AbstractExecutorService] The executor to use for refreshing the process record.
+  # @return [CapsuleTracker] a new instance of CapsuleTracker
+  #
+  # source://good_job//lib/good_job/capsule_tracker.rb#26
+  def initialize(executor: T.unsafe(nil)); end
+
+  # Tests whether an active advisory lock has been taken on the record.
+  #
+  # @return [Boolean]
+  #
+  # source://good_job//lib/good_job/capsule_tracker.rb#155
+  def advisory_locked?; end
+
+  # Number of tracked job executions with advisory locks.
+  #
+  # @return [Integer]
+  #
+  # source://good_job//lib/good_job/capsule_tracker.rb#17
+  def advisory_locks; end
+
+  # The UUID to use for locking. May be nil if the process is not registered or is unusable/expired.
+  # If UUID has not yet been persisted to the database, this method will make a query to insert or update it.
+  #
+  # @return [String, nil]
+  #
+  # source://good_job//lib/good_job/capsule_tracker.rb#51
+  def id_for_lock; end
+
+  # Number of tracked job executions.
+  #
+  # source://good_job//lib/good_job/capsule_tracker.rb#13
+  def locks; end
+
+  # The expected UUID of the process for use in inspection.
+  # Use {#id_for_lock} if using this as a lock key.
+  #
+  # @return [String]
+  #
+  # source://good_job//lib/good_job/capsule_tracker.rb#71
+  def process_id; end
+
+  # The database record used for tracking.
+  #
+  # @return [GoodJob::Process, nil]
+  #
+  # source://good_job//lib/good_job/capsule_tracker.rb#10
+  def record; end
+
+  # Registers the current process around a job execution site.
+  # +register+ is expected to be called multiple times in a process, but should be advisory locked only once (in a single thread).
+  #
+  # @param with_advisory_lock [Boolean] Whether the lock strategy should us an advisory lock; the connection must be retained to support advisory locks.
+  # @return [void]
+  # @yield [void] If a block is given, the process will be unregistered after the block completes.
+  #
+  # source://good_job//lib/good_job/capsule_tracker.rb#80
+  def register(with_advisory_lock: T.unsafe(nil)); end
+
+  # Refreshes the process record in the database.
+  #
+  # @param silent [Boolean] Whether to silence logging.
+  # @return [void]
+  #
+  # source://good_job//lib/good_job/capsule_tracker.rb#145
+  def renew(silent: T.unsafe(nil)); end
+
+  # source://good_job//lib/good_job/capsule_tracker.rb#160
+  def task_observer(_time, _output, thread_error); end
+
+  # Unregisters the current process from the database.
+  #
+  # @param with_advisory_lock [Boolean] Whether the lock strategy should unlock an advisory lock; the connection must be able to support advisory locks.
+  # @return [void]
+  #
+  # source://good_job//lib/good_job/capsule_tracker.rb#112
+  def unregister(with_advisory_lock: T.unsafe(nil)); end
+
+  private
+
+  # @return [Boolean]
+  #
+  # source://good_job//lib/good_job/capsule_tracker.rb#166
+  def advisory_locked_connection?; end
+
+  # source://good_job//lib/good_job/capsule_tracker.rb#198
+  def cancel_refresh_task; end
+
+  # source://good_job//lib/good_job/capsule_tracker.rb#178
+  def create_refresh_task(delay: T.unsafe(nil)); end
+
+  # source://good_job//lib/good_job/capsule_tracker.rb#174
+  def jitter; end
+
+  # source://good_job//lib/good_job/capsule_tracker.rb#215
+  def ns_reset; end
+
+  # source://good_job//lib/good_job/capsule_tracker.rb#203
+  def reset; end
+
+  # source://good_job//lib/good_job/capsule_tracker.rb#207
+  def reset_on_fork; end
+
+  # Synchronize must always be called from within a Rails Executor; it may deadlock if the order is reversed.
+  #
+  # source://good_job//lib/good_job/capsule_tracker.rb#221
+  def synchronize(&block); end
+
+  # source://good_job//lib/good_job/capsule_tracker.rb#170
+  def task_interval; end
+
+  class << self
+    # List of all instantiated CapsuleTrackers in the current process.
+    #
+    # @return [Array<GoodJob::CapsuleTracker>, nil]
+    #
+    # source://good_job//lib/good_job/capsule_tracker.rb#23
     def instances; end
   end
 end
@@ -1524,14 +1890,14 @@ class GoodJob::Configuration
   #   might specify additional configuration values.
   # @return [Configuration] a new instance of Configuration
   #
-  # source://good_job//lib/good_job/configuration.rb#79
+  # source://good_job//lib/good_job/configuration.rb#83
   def initialize(options, env: T.unsafe(nil)); end
 
   # Whether to automatically destroy discarded jobs that have been preserved.
   #
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/configuration.rb#233
+  # source://good_job//lib/good_job/configuration.rb#248
   def cleanup_discarded_jobs?; end
 
   # Number of jobs a {Scheduler} will execute before automatically cleaning up preserved jobs.
@@ -1539,7 +1905,7 @@ class GoodJob::Configuration
   #
   # @return [Integer, Boolean, nil]
   #
-  # source://good_job//lib/good_job/configuration.rb#254
+  # source://good_job//lib/good_job/configuration.rb#269
   def cleanup_interval_jobs; end
 
   # Number of seconds a {Scheduler} will wait before automatically cleaning up preserved jobs.
@@ -1547,48 +1913,58 @@ class GoodJob::Configuration
   #
   # @return [Integer, nil]
   #
-  # source://good_job//lib/good_job/configuration.rb#288
+  # source://good_job//lib/good_job/configuration.rb#303
   def cleanup_interval_seconds; end
 
   # Number of seconds to preserve jobs before automatic destruction.
   #
   # @return [Integer]
   #
-  # source://good_job//lib/good_job/configuration.rb#242
+  # source://good_job//lib/good_job/configuration.rb#257
   def cleanup_preserved_jobs_before_seconds_ago; end
 
-  # source://good_job//lib/good_job/configuration.rb#205
+  # source://good_job//lib/good_job/configuration.rb#209
   def cron; end
 
-  # source://good_job//lib/good_job/configuration.rb#214
+  # source://good_job//lib/good_job/configuration.rb#219
   def cron_entries; end
 
   # Tests whether to daemonize the process.
   #
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/configuration.rb#322
+  # source://good_job//lib/good_job/configuration.rb#337
   def daemonize?; end
 
-  # source://good_job//lib/good_job/configuration.rb#353
+  # source://good_job//lib/good_job/configuration.rb#384
   def dashboard_default_locale; end
+
+  # source://good_job//lib/good_job/configuration.rb#388
+  def dashboard_live_poll_enabled; end
 
   # Whether to run cron
   #
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/configuration.rb#193
+  # source://good_job//lib/good_job/configuration.rb#197
   def enable_cron; end
 
   # Whether to run cron
   #
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/configuration.rb#193
+  # source://good_job//lib/good_job/configuration.rb#197
   def enable_cron?; end
 
-  # source://good_job//lib/good_job/configuration.rb#341
+  # source://good_job//lib/good_job/configuration.rb#372
   def enable_listen_notify; end
+
+  # Whether the Adapter should have Active Job enqueue jobs after the transaction has committed.
+  #
+  # @return [Boolean]
+  #
+  # source://good_job//lib/good_job/configuration.rb#396
+  def enqueue_after_transaction_commit; end
 
   # The environment from which to read GoodJob's environment variables. By
   # default, this is the current process's environment, but it can be set
@@ -1596,7 +1972,7 @@ class GoodJob::Configuration
   #
   # @return [Hash]
   #
-  # source://good_job//lib/good_job/configuration.rb#48
+  # source://good_job//lib/good_job/configuration.rb#52
   def env; end
 
   # Specifies how and where jobs should be executed. See {Adapter#initialize}
@@ -1604,19 +1980,26 @@ class GoodJob::Configuration
   #
   # @return [Symbol]
   #
-  # source://good_job//lib/good_job/configuration.rb#93
+  # source://good_job//lib/good_job/configuration.rb#97
   def execution_mode; end
+
+  # The number of seconds that a good_job process will idle with out running a job before exiting
+  #
+  # @return [Integer, nil] Number of seconds or nil means do not idle out.
+  #
+  # source://good_job//lib/good_job/configuration.rb#238
+  def idle_timeout; end
 
   # Whether running in a web server process.
   #
   # @return [Boolean, nil]
   #
-  # source://good_job//lib/good_job/configuration.rb#359
+  # source://good_job//lib/good_job/configuration.rb#404
   def in_webserver?; end
 
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/configuration.rb#162
+  # source://good_job//lib/good_job/configuration.rb#166
   def inline_execution_respects_schedule?; end
 
   # The maximum number of future-scheduled jobs to store in memory.
@@ -1625,7 +2008,7 @@ class GoodJob::Configuration
   #
   # @return [Integer]
   #
-  # source://good_job//lib/good_job/configuration.rb#170
+  # source://good_job//lib/good_job/configuration.rb#174
   def max_cache; end
 
   # Indicates the number of threads to use per {Scheduler}. Note that
@@ -1634,7 +2017,7 @@ class GoodJob::Configuration
   #
   # @return [Integer]
   #
-  # source://good_job//lib/good_job/configuration.rb#120
+  # source://good_job//lib/good_job/configuration.rb#124
   def max_threads; end
 
   # The options that were explicitly set when initializing +Configuration+.
@@ -1642,14 +2025,14 @@ class GoodJob::Configuration
   #
   # @return [Hash]
   #
-  # source://good_job//lib/good_job/configuration.rb#42
+  # source://good_job//lib/good_job/configuration.rb#46
   def options; end
 
   # Path of the pidfile to create when running as a daemon.
   #
   # @return [Pathname, String]
   #
-  # source://good_job//lib/good_job/configuration.rb#328
+  # source://good_job//lib/good_job/configuration.rb#343
   def pidfile; end
 
   # The number of seconds between polls for jobs. GoodJob will execute jobs
@@ -1658,14 +2041,28 @@ class GoodJob::Configuration
   #
   # @return [Integer]
   #
-  # source://good_job//lib/good_job/configuration.rb#146
+  # source://good_job//lib/good_job/configuration.rb#150
   def poll_interval; end
+
+  # Rack compliant application to be run on the ProbeServer
+  #
+  # @return [nil, Class]
+  #
+  # source://good_job//lib/good_job/configuration.rb#368
+  def probe_app; end
+
+  # Probe server handler
+  #
+  # @return [nil, Symbol]
+  #
+  # source://good_job//lib/good_job/configuration.rb#359
+  def probe_handler; end
 
   # Port of the probe server
   #
   # @return [nil, Integer]
   #
-  # source://good_job//lib/good_job/configuration.rb#336
+  # source://good_job//lib/good_job/configuration.rb#351
   def probe_port; end
 
   # The number of queued jobs to select when polling for a job to run.
@@ -1675,7 +2072,7 @@ class GoodJob::Configuration
   #
   # @return [Integer, nil]
   #
-  # source://good_job//lib/good_job/configuration.rb#223
+  # source://good_job//lib/good_job/configuration.rb#228
   def queue_select_limit; end
 
   # Describes which queues to execute jobs from and how those queues should
@@ -1685,7 +2082,7 @@ class GoodJob::Configuration
   #
   # @return [String]
   #
-  # source://good_job//lib/good_job/configuration.rb#135
+  # source://good_job//lib/good_job/configuration.rb#139
   def queue_string; end
 
   # The number of seconds to wait for jobs to finish when shutting down
@@ -1693,18 +2090,18 @@ class GoodJob::Configuration
   #
   # @return [Float]
   #
-  # source://good_job//lib/good_job/configuration.rb#182
+  # source://good_job//lib/good_job/configuration.rb#186
   def shutdown_timeout; end
 
-  # source://good_job//lib/good_job/configuration.rb#349
+  # source://good_job//lib/good_job/configuration.rb#380
   def smaller_number_is_higher_priority; end
 
-  # source://good_job//lib/good_job/configuration.rb#86
+  # source://good_job//lib/good_job/configuration.rb#90
   def validate!; end
 
   private
 
-  # source://good_job//lib/good_job/configuration.rb#373
+  # source://good_job//lib/good_job/configuration.rb#418
   def rails_config; end
 
   class << self
@@ -1713,12 +2110,12 @@ class GoodJob::Configuration
     # @param warn [Boolean] whether to print a warning when over the limit
     # @return [Integer]
     #
-    # source://good_job//lib/good_job/configuration.rb#53
+    # source://good_job//lib/good_job/configuration.rb#57
     def total_estimated_threads(warn: T.unsafe(nil)); end
 
     # @raise [ArgumentError]
     #
-    # source://good_job//lib/good_job/configuration.rb#35
+    # source://good_job//lib/good_job/configuration.rb#39
     def validate_execution_mode(execution_mode); end
   end
 end
@@ -1743,6 +2140,11 @@ GoodJob::Configuration::DEFAULT_CLEANUP_PRESERVED_JOBS_BEFORE_SECONDS_AGO = T.le
 # source://good_job//lib/good_job/configuration.rb#33
 GoodJob::Configuration::DEFAULT_DASHBOARD_DEFAULT_LOCALE = T.let(T.unsafe(nil), Symbol)
 
+# Default Dashboard Live Poll button enabled
+#
+# source://good_job//lib/good_job/configuration.rb#35
+GoodJob::Configuration::DEFAULT_DASHBOARD_LIVE_POLL_ENABLED = T.let(T.unsafe(nil), TrueClass)
+
 # Default poll interval for async in development environment
 #
 # source://good_job//lib/good_job/configuration.rb#17
@@ -1757,6 +2159,11 @@ GoodJob::Configuration::DEFAULT_ENABLE_CRON = T.let(T.unsafe(nil), FalseClass)
 #
 # source://good_job//lib/good_job/configuration.rb#31
 GoodJob::Configuration::DEFAULT_ENABLE_LISTEN_NOTIFY = T.let(T.unsafe(nil), TrueClass)
+
+# Default enqueue_after_transaction_commit
+#
+# source://good_job//lib/good_job/configuration.rb#37
+GoodJob::Configuration::DEFAULT_ENQUEUE_AFTER_TRANSACTION_COMMIT = T.let(T.unsafe(nil), FalseClass)
 
 # Default number of threads to use per {Scheduler}
 #
@@ -1883,6 +2290,7 @@ class GoodJob::CronEntry
   def cron; end
   def cron_proc?; end
   def display_property(value); end
+  def enabled_by_default?; end
   def fugit; end
   def kwargs_value; end
   def set_value; end
@@ -2051,10 +2459,16 @@ module GoodJob::CurrentThread
   # source://activesupport/7.0.8/lib/active_support/core_ext/module/attribute_accessors_per_thread.rb#100
   def execution_retried=(obj); end
 
+  # source://activesupport/7.0.8/lib/active_support/core_ext/module/attribute_accessors_per_thread.rb#56
+  def retry_now; end
+
+  # source://activesupport/7.0.8/lib/active_support/core_ext/module/attribute_accessors_per_thread.rb#100
+  def retry_now=(obj); end
+
   class << self
     # @return [String] UUID of the currently executing GoodJob::Execution
     #
-    # source://good_job//lib/good_job/current_thread.rb#87
+    # source://good_job//lib/good_job/current_thread.rb#94
     def active_job_id; end
 
     # Cron At
@@ -2163,7 +2577,7 @@ module GoodJob::CurrentThread
 
     # @return [Integer] Current process ID
     #
-    # source://good_job//lib/good_job/current_thread.rb#92
+    # source://good_job//lib/good_job/current_thread.rb#99
     def process_id; end
 
     # Resets attributes
@@ -2171,19 +2585,33 @@ module GoodJob::CurrentThread
     # @param values [Hash] to assign
     # @return [void]
     #
-    # source://good_job//lib/good_job/current_thread.rb#72
+    # source://good_job//lib/good_job/current_thread.rb#79
     def reset(values = T.unsafe(nil)); end
+
+    # Execution Retried
+    #
+    # @return [Boolean, nil]
+    #
+    # source://activesupport/7.0.8/lib/active_support/core_ext/module/attribute_accessors_per_thread.rb#48
+    def retry_now; end
+
+    # Execution Retried
+    #
+    # @return [Boolean, nil]
+    #
+    # source://activesupport/7.0.8/lib/active_support/core_ext/module/attribute_accessors_per_thread.rb#92
+    def retry_now=(obj); end
 
     # @return [String] Current thread name
     #
-    # source://good_job//lib/good_job/current_thread.rb#97
+    # source://good_job//lib/good_job/current_thread.rb#104
     def thread_name; end
 
     # Exports values to hash
     #
     # @return [Hash]
     #
-    # source://good_job//lib/good_job/current_thread.rb#80
+    # source://good_job//lib/good_job/current_thread.rb#87
     def to_h; end
 
     # Wrap the yielded block with CurrentThread values and reset after the block
@@ -2191,7 +2619,7 @@ module GoodJob::CurrentThread
     # @return [void]
     # @yield [self]
     #
-    # source://good_job//lib/good_job/current_thread.rb#104
+    # source://good_job//lib/good_job/current_thread.rb#111
     def within; end
   end
 end
@@ -2201,7 +2629,9 @@ end
 # source://good_job//lib/good_job/current_thread.rb#10
 GoodJob::CurrentThread::ACCESSORS = T.let(T.unsafe(nil), Array)
 
-# source://good_job//lib/good_job.rb#45
+# Default logger for GoodJob; overridden by Rails.logger in Railtie.
+#
+# source://good_job//lib/good_job.rb#57
 GoodJob::DEFAULT_LOGGER = T.let(T.unsafe(nil), ActiveSupport::Logger)
 
 # Manages daemonization of the current process.
@@ -2232,23 +2662,28 @@ class GoodJob::Daemon
 
   # @return [void]
   #
-  # source://good_job//lib/good_job/daemon.rb#42
+  # source://good_job//lib/good_job/daemon.rb#51
   def check_pid; end
 
   # @return [void]
   #
-  # source://good_job//lib/good_job/daemon.rb#37
+  # source://good_job//lib/good_job/daemon.rb#43
+  def check_pid_dir; end
+
+  # @return [void]
+  #
+  # source://good_job//lib/good_job/daemon.rb#38
   def delete_pid; end
 
   # @param pidfile [Pathname, String]
   # @return [Symbol]
   #
-  # source://good_job//lib/good_job/daemon.rb#53
+  # source://good_job//lib/good_job/daemon.rb#62
   def pid_status(pidfile); end
 
   # @return [void]
   #
-  # source://good_job//lib/good_job/daemon.rb#28
+  # source://good_job//lib/good_job/daemon.rb#29
   def write_pid; end
 end
 
@@ -2285,6 +2720,7 @@ class GoodJob::DiscreteExecution < ::GoodJob::BaseRecord
   def clear_performed_at_change; end
 
   def display_serialized_params; end
+  def filtered_error_backtrace; end
   def last_status_at; end
   def number; end
 
@@ -2367,13 +2803,20 @@ class GoodJob::DiscreteExecution < ::GoodJob::BaseRecord
     # source://activemodel/7.0.8/lib/active_model/attribute_methods.rb#72
     def attribute_aliases; end
 
+    def backtrace_migrated?; end
+
     # source://activerecord/7.0.8/lib/active_record/enum.rb#116
     def defined_enums; end
 
+    def duration_interval_migrated?; end
+    def duration_interval_usable?; end
     def error_event_migrated?; end
 
     # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
     def finished(*args, **_arg1); end
+
+    # source://activerecord/7.0.8/lib/active_record/model_schema.rb#157
+    def implicit_order_column; end
   end
 end
 
@@ -2459,60 +2902,12 @@ class GoodJob::Execution < ::GoodJob::BaseExecution
   include ::GoodJob::Execution::GeneratedAttributeMethods
   include ::GoodJob::Execution::GeneratedAssociationMethods
 
-  # source://activesupport/7.0.8/lib/active_support/callbacks.rb#940
-  def _perform_callbacks; end
-
-  # source://activesupport/7.0.8/lib/active_support/callbacks.rb#940
-  def _perform_unlocked_callbacks; end
-
-  # source://activesupport/7.0.8/lib/active_support/callbacks.rb#928
-  def _run_perform_callbacks(&block); end
-
-  # source://activesupport/7.0.8/lib/active_support/callbacks.rb#928
-  def _run_perform_unlocked_callbacks(&block); end
-
-  # source://activerecord/7.0.8/lib/active_record/autosave_association.rb#160
-  def autosave_associated_records_for_batch(*args); end
-
-  # source://activerecord/7.0.8/lib/active_record/autosave_association.rb#160
-  def autosave_associated_records_for_discrete_executions(*args); end
-
   # source://activerecord/7.0.8/lib/active_record/autosave_association.rb#160
   def autosave_associated_records_for_job(*args); end
-
-  def destroy_job; end
-  def display_serialized_params; end
-  def executable?; end
-  def make_discrete; end
-  def number; end
-  def perform; end
-  def queue_latency; end
-  def running?; end
-  def runtime_latency; end
-
-  # source://activerecord/7.0.8/lib/active_record/autosave_association.rb#160
-  def validate_associated_records_for_discrete_executions(*args); end
-
-  private
-
-  def continue_discard_or_finish_batch; end
-  def reset_batch_values(&block); end
 
   class << self
     # source://activesupport/7.0.8/lib/active_support/callbacks.rb#68
     def __callbacks; end
-
-    # source://activesupport/7.0.8/lib/active_support/callbacks.rb#932
-    def _perform_callbacks; end
-
-    # source://activesupport/7.0.8/lib/active_support/callbacks.rb#936
-    def _perform_callbacks=(value); end
-
-    # source://activesupport/7.0.8/lib/active_support/callbacks.rb#932
-    def _perform_unlocked_callbacks; end
-
-    # source://activesupport/7.0.8/lib/active_support/callbacks.rb#936
-    def _perform_unlocked_callbacks=(value); end
 
     # source://activerecord/7.0.8/lib/active_record/reflection.rb#11
     def _reflections; end
@@ -2520,123 +2915,20 @@ class GoodJob::Execution < ::GoodJob::BaseExecution
     # source://activemodel/7.0.8/lib/active_model/validations.rb#52
     def _validators; end
 
-    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
-    def active_job_id(*args, **_arg1); end
-
-    def advisory_lockable_column; end
-
-    # source://activemodel/7.0.8/lib/active_model/callbacks.rb#144
-    def after_perform(*args, **options, &block); end
-
-    # source://activemodel/7.0.8/lib/active_model/callbacks.rb#144
-    def after_perform_unlocked(*args, **options, &block); end
-
-    # source://activemodel/7.0.8/lib/active_model/callbacks.rb#137
-    def around_perform(*args, **options, &block); end
-
-    # source://activemodel/7.0.8/lib/active_model/callbacks.rb#130
-    def before_perform(*args, **options, &block); end
-
-    def build_for_enqueue(active_job, overrides = T.unsafe(nil)); end
-
-    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
-    def creation_ordered(*args, **_arg1); end
-
-    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
-    def dead(*args, **_arg1); end
-
     # source://activerecord/7.0.8/lib/active_record/enum.rb#116
     def defined_enums; end
-
-    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
-    def dequeueing_ordered(*args, **_arg1); end
-
-    def enqueue(active_job, scheduled_at: T.unsafe(nil), create_with_advisory_lock: T.unsafe(nil)); end
-    def enqueue_args(active_job, overrides = T.unsafe(nil)); end
-
-    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
-    def finished(*args, **_arg1); end
-
-    def format_error(error); end
-
-    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
-    def head(*args, **_arg1); end
-
-    def next_scheduled_at(after: T.unsafe(nil), limit: T.unsafe(nil), now_limit: T.unsafe(nil)); end
-
-    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
-    def only_scheduled(*args, **_arg1); end
-
-    def perform_with_advisory_lock(parsed_queues: T.unsafe(nil), queue_select_limit: T.unsafe(nil)); end
-
-    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
-    def priority_ordered(*args, **_arg1); end
-
-    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
-    def queue_ordered(*args, **_arg1); end
-
-    def queue_parser(string); end
-
-    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
-    def queue_string(*args, **_arg1); end
-
-    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
-    def running(*args, **_arg1); end
-
-    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
-    def schedule_ordered(*args, **_arg1); end
-
-    # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
-    def unfinished(*args, **_arg1); end
   end
 end
 
-GoodJob::Execution::DEFAULT_PRIORITY = T.let(T.unsafe(nil), Integer)
-GoodJob::Execution::DEFAULT_QUEUE_NAME = T.let(T.unsafe(nil), String)
-GoodJob::Execution::ERROR_MESSAGE_SEPARATOR = T.let(T.unsafe(nil), String)
-
 module GoodJob::Execution::GeneratedAssociationMethods
-  # source://activerecord/7.0.8/lib/active_record/associations/builder/association.rb#103
-  def batch; end
-
-  # source://activerecord/7.0.8/lib/active_record/associations/builder/association.rb#111
-  def batch=(value); end
-
-  # source://activerecord/7.0.8/lib/active_record/associations/builder/belongs_to.rb#132
-  def batch_changed?; end
-
-  # source://activerecord/7.0.8/lib/active_record/associations/builder/belongs_to.rb#136
-  def batch_previously_changed?; end
-
-  # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#28
-  def build_batch(*args, &block); end
-
   # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#28
   def build_job(*args, &block); end
-
-  # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#32
-  def create_batch(*args, &block); end
-
-  # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#36
-  def create_batch!(*args, &block); end
 
   # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#32
   def create_job(*args, &block); end
 
   # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#36
   def create_job!(*args, &block); end
-
-  # source://activerecord/7.0.8/lib/active_record/associations/builder/collection_association.rb#62
-  def discrete_execution_ids; end
-
-  # source://activerecord/7.0.8/lib/active_record/associations/builder/collection_association.rb#72
-  def discrete_execution_ids=(ids); end
-
-  # source://activerecord/7.0.8/lib/active_record/associations/builder/association.rb#103
-  def discrete_executions; end
-
-  # source://activerecord/7.0.8/lib/active_record/associations/builder/association.rb#111
-  def discrete_executions=(value); end
 
   # source://activerecord/7.0.8/lib/active_record/associations/builder/association.rb#103
   def job; end
@@ -2651,14 +2943,10 @@ module GoodJob::Execution::GeneratedAssociationMethods
   def job_previously_changed?; end
 
   # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#19
-  def reload_batch; end
-
-  # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#19
   def reload_job; end
 end
 
 module GoodJob::Execution::GeneratedAttributeMethods; end
-class GoodJob::Execution::PreviouslyPerformedError < ::StandardError; end
 
 class GoodJob::ExecutionResult
   def initialize(value:, handled_error: T.unsafe(nil), unhandled_error: T.unsafe(nil), error_event: T.unsafe(nil), unexecutable: T.unsafe(nil), retried: T.unsafe(nil)); end
@@ -2718,6 +3006,7 @@ module GoodJob::FrontendsController::HelperMethods
   include ::ViteRails::TagHelpers
   include ::InertiaRails::Helper
   include ::ActionController::Base::HelperMethods
+  include ::GoodJob::IconsHelper
   include ::GoodJob::ApplicationHelper
 end
 
@@ -2729,44 +3018,6 @@ GoodJob::FrontendsController::STATIC_ASSETS = T.let(T.unsafe(nil), Hash)
 # source://good_job//lib/good_job/version.rb#8
 GoodJob::GEM_VERSION = T.let(T.unsafe(nil), Gem::Version)
 
-# source://good_job//lib/good_job/http_server.rb#4
-class GoodJob::HttpServer
-  # @return [HttpServer] a new instance of HttpServer
-  #
-  # source://good_job//lib/good_job/http_server.rb#7
-  def initialize(app, options = T.unsafe(nil)); end
-
-  # source://good_job//lib/good_job/http_server.rb#15
-  def run; end
-
-  # @return [Boolean]
-  #
-  # source://good_job//lib/good_job/http_server.rb#30
-  def running?; end
-
-  # source://good_job//lib/good_job/http_server.rb#25
-  def stop; end
-
-  private
-
-  # source://good_job//lib/good_job/http_server.rb#43
-  def handle_connections; end
-
-  # source://good_job//lib/good_job/http_server.rb#64
-  def parse_request(request); end
-
-  # source://good_job//lib/good_job/http_server.rb#70
-  def respond(client, status, headers, body); end
-
-  # source://good_job//lib/good_job/http_server.rb#36
-  def start_server; end
-end
-
-# in seconds
-#
-# source://good_job//lib/good_job/http_server.rb#5
-GoodJob::HttpServer::SOCKET_READ_TIMEOUT = T.let(T.unsafe(nil), Integer)
-
 class GoodJob::I18nConfig < ::I18n::Config
   def available_locales; end
   def available_locales_set; end
@@ -2777,6 +3028,15 @@ end
 GoodJob::I18nConfig::AVAILABLE_LOCALES = T.let(T.unsafe(nil), Array)
 GoodJob::I18nConfig::AVAILABLE_LOCALES_SET = T.let(T.unsafe(nil), Set)
 GoodJob::I18nConfig::BACKEND = T.let(T.unsafe(nil), I18n::Backend::Simple)
+
+module GoodJob::IconsHelper
+  def render_icon(name, **options); end
+  def status_badge(status); end
+  def status_icon(status, **options); end
+end
+
+GoodJob::IconsHelper::STATUS_COLOR = T.let(T.unsafe(nil), Hash)
+GoodJob::IconsHelper::STATUS_ICONS = T.let(T.unsafe(nil), Hash)
 
 # Exception raised when a job is interrupted by a SIGKILL or power failure.
 #
@@ -2799,6 +3059,9 @@ class GoodJob::Job < ::GoodJob::BaseExecution
   # source://activerecord/7.0.8/lib/active_record/autosave_association.rb#160
   def autosave_associated_records_for_executions(*args); end
 
+  # source://activerecord/7.0.8/lib/active_record/autosave_association.rb#160
+  def autosave_associated_records_for_locked_by_process(*args); end
+
   def destroy_job; end
   def discard_job(message); end
   def discarded?; end
@@ -2818,9 +3081,6 @@ class GoodJob::Job < ::GoodJob::BaseExecution
   def running?; end
   def succeeded?; end
   def tail_execution; end
-
-  # source://activerecord/7.0.8/lib/active_record/autosave_association.rb#160
-  def validate_associated_records_for_discrete_executions(*args); end
 
   # source://activerecord/7.0.8/lib/active_record/autosave_association.rb#160
   def validate_associated_records_for_executions(*args); end
@@ -2856,6 +3116,9 @@ class GoodJob::Job < ::GoodJob::BaseExecution
     # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
     def finished_before(*args, **_arg1); end
 
+    # source://activerecord/7.0.8/lib/active_record/model_schema.rb#157
+    def implicit_order_column; end
+
     # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
     def queued(*args, **_arg1); end
 
@@ -2880,6 +3143,7 @@ class GoodJob::Job < ::GoodJob::BaseExecution
 end
 
 class GoodJob::Job::ActionForStateMismatchError < ::StandardError; end
+class GoodJob::Job::ActiveJobDeserializationError < ::StandardError; end
 class GoodJob::Job::AdapterNotGoodJobError < ::StandardError; end
 class GoodJob::Job::DiscardJobError < ::StandardError; end
 
@@ -2899,11 +3163,20 @@ module GoodJob::Job::GeneratedAssociationMethods
   # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#28
   def build_batch(*args, &block); end
 
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#28
+  def build_locked_by_process(*args, &block); end
+
   # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#32
   def create_batch(*args, &block); end
 
   # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#36
   def create_batch!(*args, &block); end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#32
+  def create_locked_by_process(*args, &block); end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#36
+  def create_locked_by_process!(*args, &block); end
 
   # source://activerecord/7.0.8/lib/active_record/associations/builder/collection_association.rb#62
   def discrete_execution_ids; end
@@ -2929,8 +3202,23 @@ module GoodJob::Job::GeneratedAssociationMethods
   # source://activerecord/7.0.8/lib/active_record/associations/builder/association.rb#111
   def executions=(value); end
 
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/association.rb#103
+  def locked_by_process; end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/association.rb#111
+  def locked_by_process=(value); end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/belongs_to.rb#132
+  def locked_by_process_changed?; end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/belongs_to.rb#136
+  def locked_by_process_previously_changed?; end
+
   # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#19
   def reload_batch; end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/singular_association.rb#19
+  def reload_locked_by_process; end
 end
 
 module GoodJob::Job::GeneratedAttributeMethods; end
@@ -2947,27 +3235,28 @@ class GoodJob::JobPerformer
   # @return [JobPerformer] a new instance of JobPerformer
   #
   # source://good_job//lib/good_job/job_performer.rb#17
-  def initialize(queue_string); end
+  def initialize(queue_string, capsule: T.unsafe(nil)); end
 
   # Destroy expired preserved jobs
   #
   # @return [void]
   #
-  # source://good_job//lib/good_job/job_performer.rb#71
+  # source://good_job//lib/good_job/job_performer.rb#88
   def cleanup; end
 
   # A meaningful name to identify the performer in logs and for debugging.
   #
   # @return [String] The queues from which Jobs are worked
   #
-  # source://good_job//lib/good_job/job_performer.rb#23
+  # source://good_job//lib/good_job/job_performer.rb#25
   def name; end
 
   # Perform the next eligible job
   #
   # @return [Object, nil] Returns job result or +nil+ if no job was found
+  # @yield [Execution] Yields the execution, if one is dequeued
   #
-  # source://good_job//lib/good_job/job_performer.rb#29
+  # source://good_job//lib/good_job/job_performer.rb#32
   def next; end
 
   # Tests whether this performer should be used in GoodJob's current state.
@@ -2980,7 +3269,7 @@ class GoodJob::JobPerformer
   # @return [Boolean] whether the performer's {#next} method should be
   #   called in the current state.
   #
-  # source://good_job//lib/good_job/job_performer.rb#48
+  # source://good_job//lib/good_job/job_performer.rb#65
   def next?(state = T.unsafe(nil)); end
 
   # The Returns timestamps of when next tasks may be available.
@@ -2990,7 +3279,7 @@ class GoodJob::JobPerformer
   # @param now_limit [Integer] number of past timestamps to return
   # @return [Array<DateTime, Time>, nil]
   #
-  # source://good_job//lib/good_job/job_performer.rb#65
+  # source://good_job//lib/good_job/job_performer.rb#82
   def next_at(after: T.unsafe(nil), limit: T.unsafe(nil), now_limit: T.unsafe(nil)); end
 
   # source://good_job//lib/good_job/job_performer.rb#14
@@ -2999,17 +3288,31 @@ class GoodJob::JobPerformer
   # source://good_job//lib/good_job/job_performer.rb#14
   def performing_active_job_ids=(val); end
 
+  # Reset metrics about this performer
+  #
+  # @return [void]
+  #
+  # source://good_job//lib/good_job/job_performer.rb#102
+  def reset_stats; end
+
+  # Metrics about this performer
+  #
+  # @return [Hash]
+  #
+  # source://good_job//lib/good_job/job_performer.rb#94
+  def stats; end
+
   private
 
-  # source://good_job//lib/good_job/job_performer.rb#79
+  # source://good_job//lib/good_job/job_performer.rb#110
   def job_query; end
 
-  # source://good_job//lib/good_job/job_performer.rb#83
+  # source://good_job//lib/good_job/job_performer.rb#114
   def parsed_queues; end
 
   # Returns the value of attribute queue_string.
   #
-  # source://good_job//lib/good_job/job_performer.rb#77
+  # source://good_job//lib/good_job/job_performer.rb#108
   def queue_string; end
 
   class << self
@@ -3019,6 +3322,65 @@ class GoodJob::JobPerformer
     # source://good_job//lib/good_job/job_performer.rb#14
     def performing_active_job_ids=(val); end
   end
+end
+
+# Metrics for the scheduler.
+#
+# source://good_job//lib/good_job/job_performer/metrics.rb#8
+class GoodJob::JobPerformer::Metrics
+  # @return [Metrics] a new instance of Metrics
+  #
+  # source://good_job//lib/good_job/job_performer/metrics.rb#9
+  def initialize; end
+
+  # Increments number of dequeue attempts with no executions.
+  #
+  # @return [Integer]
+  #
+  # source://good_job//lib/good_job/job_performer/metrics.rb#34
+  def increment_empty_executions; end
+
+  # Increments number of failed executions.
+  #
+  # @return [Integer]
+  #
+  # source://good_job//lib/good_job/job_performer/metrics.rb#20
+  def increment_errored_executions; end
+
+  # Increments number of succeeded executions.
+  #
+  # @return [Integer]
+  #
+  # source://good_job//lib/good_job/job_performer/metrics.rb#27
+  def increment_succeeded_executions; end
+
+  # Reset counters.
+  #
+  # @return [void]
+  #
+  # source://good_job//lib/good_job/job_performer/metrics.rb#66
+  def reset; end
+
+  # All metrics in a Hash.
+  #
+  # @return [Hash]
+  #
+  # source://good_job//lib/good_job/job_performer/metrics.rb#52
+  def to_h; end
+
+  # Last time the queue was checked for jobs.
+  #
+  # @return [Time, nil]
+  #
+  # source://good_job//lib/good_job/job_performer/metrics.rb#46
+  def touch_check_queue_at; end
+
+  # Last time a job was executed (started or finished).
+  #
+  # @return [Time, nil]
+  #
+  # source://good_job//lib/good_job/job_performer/metrics.rb#40
+  def touch_execution_at; end
 end
 
 class GoodJob::JobsController < ::GoodJob::ApplicationController
@@ -3060,6 +3422,7 @@ GoodJob::JobsController::FORCE_DISCARD_MESSAGE = T.let(T.unsafe(nil), String)
 class GoodJob::JobsFilter < ::GoodJob::BaseFilter
   def filtered_count; end
   def filtered_query(filter_params = T.unsafe(nil)); end
+  def state_names; end
   def states; end
 
   private
@@ -3103,13 +3466,13 @@ class GoodJob::LogSubscriber < ::ActiveSupport::LogSubscriber
   # source://good_job//lib/good_job/log_subscriber.rb#62
   def cron_manager_start(event); end
 
-  # source://good_job//lib/good_job/log_subscriber.rb#265
+  # source://good_job//lib/good_job/log_subscriber.rb#267
   def debug(progname = T.unsafe(nil), tags: T.unsafe(nil), &block); end
 
-  # source://good_job//lib/good_job/log_subscriber.rb#265
+  # source://good_job//lib/good_job/log_subscriber.rb#267
   def error(progname = T.unsafe(nil), tags: T.unsafe(nil), &block); end
 
-  # source://good_job//lib/good_job/log_subscriber.rb#265
+  # source://good_job//lib/good_job/log_subscriber.rb#267
   def fatal(progname = T.unsafe(nil), tags: T.unsafe(nil), &block); end
 
   # Responds to the +finished_job_task.good_job+ notification.
@@ -3128,7 +3491,7 @@ class GoodJob::LogSubscriber < ::ActiveSupport::LogSubscriber
   # source://good_job//lib/good_job/log_subscriber.rb#31
   def finished_timer_task(event); end
 
-  # source://good_job//lib/good_job/log_subscriber.rb#265
+  # source://good_job//lib/good_job/log_subscriber.rb#267
   def info(progname = T.unsafe(nil), tags: T.unsafe(nil), &block); end
 
   # Get the logger associated with this {LogSubscriber} instance.
@@ -3229,10 +3592,10 @@ class GoodJob::LogSubscriber < ::ActiveSupport::LogSubscriber
   # source://good_job//lib/good_job/log_subscriber.rb#165
   def systemd_watchdog_start(event); end
 
-  # source://good_job//lib/good_job/log_subscriber.rb#265
+  # source://good_job//lib/good_job/log_subscriber.rb#267
   def unknown(progname = T.unsafe(nil), tags: T.unsafe(nil), &block); end
 
-  # source://good_job//lib/good_job/log_subscriber.rb#265
+  # source://good_job//lib/good_job/log_subscriber.rb#267
   def warn(progname = T.unsafe(nil), tags: T.unsafe(nil), &block); end
 
   private
@@ -3244,7 +3607,7 @@ class GoodJob::LogSubscriber < ::ActiveSupport::LogSubscriber
   # @return [void]
   # @yield [void]
   #
-  # source://good_job//lib/good_job/log_subscriber.rb#236
+  # source://good_job//lib/good_job/log_subscriber.rb#238
   def tag_logger(*tags, &block); end
 
   class << self
@@ -3279,57 +3642,33 @@ class GoodJob::LogSubscriber < ::ActiveSupport::LogSubscriber
     #
     # @return [void]
     #
-    # source://good_job//lib/good_job/log_subscriber.rb#224
+    # source://good_job//lib/good_job/log_subscriber.rb#226
     def reset_logger; end
   end
 end
 
-# Metrics for the scheduler.
-#
-# source://good_job//lib/good_job/metrics.rb#5
-class GoodJob::Metrics
-  # @return [Metrics] a new instance of Metrics
-  #
-  # source://good_job//lib/good_job/metrics.rb#6
-  def initialize; end
+class GoodJob::MetricsController < ::GoodJob::ApplicationController
+  def job_status; end
+  def primary_nav; end
 
-  # Increments number of empty queried executions.
-  #
-  # @return [Integer]
-  #
-  # source://good_job//lib/good_job/metrics.rb#15
-  def increment_empty_executions; end
+  private
 
-  # Increments number of failed executions.
-  #
-  # @return [Integer]
-  #
-  # source://good_job//lib/good_job/metrics.rb#21
-  def increment_errored_executions; end
+  # source://actionview/7.0.8/lib/action_view/layouts.rb#328
+  def _layout(lookup_context, formats); end
 
-  # Increments number of succeeded executions.
-  #
-  # @return [Integer]
-  #
-  # source://good_job//lib/good_job/metrics.rb#27
-  def increment_succeeded_executions; end
+  def number_to_human(count); end
+  def number_with_delimiter(count); end
 
-  # Increments number of unlocked executions.
-  #
-  # @return [Integer]
-  #
-  # source://good_job//lib/good_job/metrics.rb#33
-  def increment_unexecutable_executions; end
+  class << self
+    # source://actionpack/7.0.8/lib/action_controller/metal/params_wrapper.rb#185
+    def _wrapper_options; end
 
-  # Reset counters.
-  #
-  # @return [void]
-  #
-  # source://good_job//lib/good_job/metrics.rb#50
-  def reset; end
+    # source://actionpack/7.0.8/lib/action_controller/metal/helpers.rb#63
+    def helpers_path; end
 
-  # source://good_job//lib/good_job/metrics.rb#37
-  def to_h; end
+    # source://actionpack/7.0.8/lib/action_controller/metal.rb#210
+    def middleware_stack; end
+  end
 end
 
 # Delegates the interface of a single {Scheduler} to multiple Schedulers.
@@ -3339,7 +3678,7 @@ class GoodJob::MultiScheduler
   # @param schedulers [Array<Scheduler>]
   # @return [MultiScheduler] a new instance of MultiScheduler
   #
-  # source://good_job//lib/good_job/multi_scheduler.rb#10
+  # source://good_job//lib/good_job/multi_scheduler.rb#33
   def initialize(schedulers); end
 
   # Delegates to {Scheduler#create_thread}.
@@ -3347,7 +3686,7 @@ class GoodJob::MultiScheduler
   # @param state [Hash]
   # @return [Boolean, nil]
   #
-  # source://good_job//lib/good_job/multi_scheduler.rb#43
+  # source://good_job//lib/good_job/multi_scheduler.rb#66
   def create_thread(state = T.unsafe(nil)); end
 
   # Delegates to {Scheduler#restart}.
@@ -3355,19 +3694,19 @@ class GoodJob::MultiScheduler
   # @param timeout [Numeric, nil]
   # @return [void]
   #
-  # source://good_job//lib/good_job/multi_scheduler.rb#36
+  # source://good_job//lib/good_job/multi_scheduler.rb#59
   def restart(timeout: T.unsafe(nil)); end
 
   # Delegates to {Scheduler#running?}.
   #
   # @return [Boolean, nil]
   #
-  # source://good_job//lib/good_job/multi_scheduler.rb#16
+  # source://good_job//lib/good_job/multi_scheduler.rb#39
   def running?; end
 
   # @return [Array<Scheduler>] List of the scheduler delegates
   #
-  # source://good_job//lib/good_job/multi_scheduler.rb#7
+  # source://good_job//lib/good_job/multi_scheduler.rb#30
   def schedulers; end
 
   # Delegates to {Scheduler#shutdown}.
@@ -3375,16 +3714,35 @@ class GoodJob::MultiScheduler
   # @param timeout [Numeric, nil]
   # @return [void]
   #
-  # source://good_job//lib/good_job/multi_scheduler.rb#29
+  # source://good_job//lib/good_job/multi_scheduler.rb#52
   def shutdown(timeout: T.unsafe(nil)); end
 
   # Delegates to {Scheduler#shutdown?}.
   #
   # @return [Boolean, nil]
   #
-  # source://good_job//lib/good_job/multi_scheduler.rb#22
+  # source://good_job//lib/good_job/multi_scheduler.rb#45
   def shutdown?; end
+
+  # source://good_job//lib/good_job/multi_scheduler.rb#88
+  def stats; end
+
+  class << self
+    # Creates MultiScheduler from a GoodJob::Configuration instance.
+    #
+    # @param configuration [GoodJob::Configuration]
+    # @param warm_cache_on_initialize [Boolean]
+    # @return [GoodJob::MultiScheduler]
+    #
+    # source://good_job//lib/good_job/multi_scheduler.rb#10
+    def from_configuration(configuration, capsule: T.unsafe(nil), warm_cache_on_initialize: T.unsafe(nil)); end
+  end
 end
+
+# Default, null, blank value placeholder.
+#
+# source://good_job//lib/good_job.rb#54
+module GoodJob::NONE; end
 
 # Notifiers hook into Postgres LISTEN/NOTIFY functionality to emit and listen for notifications across processes.
 #
@@ -3401,11 +3759,10 @@ class GoodJob::Notifier
 
   # @param recipients [Array<#call, Array(Object, Symbol)>]
   # @param enable_listening [true, false]
-  # @param executor [Concurrent::ExecutorService]
   # @return [Notifier] a new instance of Notifier
   #
   # source://good_job//lib/good_job/notifier.rb#66
-  def initialize(*recipients, enable_listening: T.unsafe(nil), executor: T.unsafe(nil)); end
+  def initialize(*recipients, enable_listening: T.unsafe(nil), capsule: T.unsafe(nil), executor: T.unsafe(nil)); end
 
   # source://activesupport/7.0.8/lib/active_support/callbacks.rb#68
   def __callbacks; end
@@ -3436,7 +3793,7 @@ class GoodJob::Notifier
   # @param timeout [Numeric, nil] Seconds to wait for condition to be true, -1 is forever
   # @return [true, false, nil]
   #
-  # source://good_job//lib/good_job/notifier.rb#92
+  # source://good_job//lib/good_job/notifier.rb#93
   def connected?(timeout: T.unsafe(nil)); end
 
   # source://activesupport/7.0.8/lib/active_support/core_ext/module/attribute_accessors_per_thread.rb#56
@@ -3449,7 +3806,7 @@ class GoodJob::Notifier
   #
   # @return [void]
   #
-  # source://good_job//lib/good_job/notifier.rb#154
+  # source://good_job//lib/good_job/notifier.rb#155
   def listen_observer(_time, _result, thread_error); end
 
   # Tests whether the notifier is listening for new messages.
@@ -3457,14 +3814,14 @@ class GoodJob::Notifier
   # @param timeout [Numeric, nil] Seconds to wait for condition to be true, -1 is forever
   # @return [true, false, nil]
   #
-  # source://good_job//lib/good_job/notifier.rb#103
+  # source://good_job//lib/good_job/notifier.rb#104
   def listening?(timeout: T.unsafe(nil)); end
 
   # List of recipients that will receive notifications.
   #
   # @return [Array<#call, Array(Object, Symbol)>]
   #
-  # source://good_job//lib/good_job/notifier.rb#61
+  # source://good_job//lib/good_job/notifier.rb#62
   def recipients; end
 
   # Restart the notifier.
@@ -3473,12 +3830,12 @@ class GoodJob::Notifier
   # @param timeout [nil, Numeric] Seconds to wait; shares same values as {#shutdown}.
   # @return [void]
   #
-  # source://good_job//lib/good_job/notifier.rb#144
+  # source://good_job//lib/good_job/notifier.rb#145
   def restart(timeout: T.unsafe(nil)); end
 
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/notifier.rb#85
+  # source://good_job//lib/good_job/notifier.rb#86
   def running?; end
 
   # Shut down the notifier.
@@ -3491,32 +3848,32 @@ class GoodJob::Notifier
   #   * A positive number will wait that many seconds before stopping any remaining active threads.
   # @return [void]
   #
-  # source://good_job//lib/good_job/notifier.rb#123
+  # source://good_job//lib/good_job/notifier.rb#124
   def shutdown(timeout: T.unsafe(nil)); end
 
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/notifier.rb#111
+  # source://good_job//lib/good_job/notifier.rb#112
   def shutdown?; end
+
+  # source://good_job//lib/good_job/notifier.rb#187
+  def synchronize(*_arg0, **_arg1, &_arg2); end
 
   private
 
-  # source://good_job//lib/good_job/notifier.rb#196
+  # source://good_job//lib/good_job/notifier.rb#199
   def create_listen_task(delay: T.unsafe(nil)); end
 
-  # source://good_job//lib/good_job/notifier.rb#283
+  # source://good_job//lib/good_job/notifier.rb#286
   def reset_connection_errors; end
 
-  # source://good_job//lib/good_job/notifier.rb#186
+  # source://good_job//lib/good_job/notifier.rb#189
   def start; end
 
-  # source://good_job//lib/good_job/notifier.rb#288
-  def synchronize(&block); end
-
-  # source://good_job//lib/good_job/notifier.rb#263
+  # source://good_job//lib/good_job/notifier.rb#266
   def wait_for_notify; end
 
-  # source://good_job//lib/good_job/notifier.rb#249
+  # source://good_job//lib/good_job/notifier.rb#252
   def with_connection; end
 
   class << self
@@ -3565,31 +3922,31 @@ class GoodJob::Notifier
     #
     # @return [Array<GoodJob::Notifier>, nil]
     #
-    # source://good_job//lib/good_job/notifier.rb#42
+    # source://good_job//lib/good_job/notifier.rb#43
     def instances; end
 
     # Send a message via Postgres NOTIFY
     #
     # @param message [#to_json]
     #
-    # source://good_job//lib/good_job/notifier.rb#52
+    # source://good_job//lib/good_job/notifier.rb#53
     def notify(message); end
   end
 end
 
 # Default Postgres channel for LISTEN/NOTIFY
 #
-# source://good_job//lib/good_job/notifier.rb#22
+# source://good_job//lib/good_job/notifier.rb#23
 GoodJob::Notifier::CHANNEL = T.let(T.unsafe(nil), String)
 
 # Connection errors that will wait {RECONNECT_INTERVAL} before reconnecting
 #
-# source://good_job//lib/good_job/notifier.rb#31
+# source://good_job//lib/good_job/notifier.rb#32
 GoodJob::Notifier::CONNECTION_ERRORS = T.let(T.unsafe(nil), Array)
 
 # Number of consecutive connection errors before reporting an error
 #
-# source://good_job//lib/good_job/notifier.rb#28
+# source://good_job//lib/good_job/notifier.rb#29
 GoodJob::Notifier::CONNECTION_ERRORS_REPORTING_THRESHOLD = T.let(T.unsafe(nil), Integer)
 
 # Extends the Notifier to register the process in the database.
@@ -3614,13 +3971,52 @@ end
 
 # Seconds to wait if database cannot be connected to
 #
-# source://good_job//lib/good_job/notifier.rb#26
+# source://good_job//lib/good_job/notifier.rb#27
 GoodJob::Notifier::RECONNECT_INTERVAL = T.let(T.unsafe(nil), Integer)
 
 # Seconds to block while LISTENing for a message
 #
-# source://good_job//lib/good_job/notifier.rb#24
+# source://good_job//lib/good_job/notifier.rb#25
 GoodJob::Notifier::WAIT_INTERVAL = T.let(T.unsafe(nil), Integer)
+
+# Extends an ActiveRecord odel to override the connection and use
+# an explicit connection that has been removed from the pool.
+#
+# source://good_job//lib/good_job/overridable_connection.rb#6
+module GoodJob::OverridableConnection
+  extend ::ActiveSupport::Concern
+
+  mixes_in_class_methods ::GoodJob::OverridableConnection::ClassMethods
+end
+
+# source://good_job//lib/good_job/overridable_connection.rb#0
+module GoodJob::OverridableConnection::ClassMethods
+  # source://good_job//lib/good_job/overridable_connection.rb#16
+  def connection; end
+
+  # source://good_job//lib/good_job/overridable_connection.rb#23
+  def override_connection(conn); end
+end
+
+class GoodJob::PerformancesController < ::GoodJob::ApplicationController
+  def show; end
+
+  private
+
+  # source://actionview/7.0.8/lib/action_view/layouts.rb#328
+  def _layout(lookup_context, formats); end
+
+  class << self
+    # source://actionpack/7.0.8/lib/action_controller/metal/params_wrapper.rb#185
+    def _wrapper_options; end
+
+    # source://actionpack/7.0.8/lib/action_controller/metal/helpers.rb#63
+    def helpers_path; end
+
+    # source://actionpack/7.0.8/lib/action_controller/metal.rb#210
+    def middleware_stack; end
+  end
+end
 
 # Pollers regularly wake up execution threads to check for new work.
 #
@@ -3726,76 +4122,159 @@ GoodJob::Poller::DEFAULT_TIMER_OPTIONS = T.let(T.unsafe(nil), Hash)
 class GoodJob::ProbeServer
   # @return [ProbeServer] a new instance of ProbeServer
   #
-  # source://good_job//lib/good_job/probe_server.rb#11
-  def initialize(port:); end
+  # source://good_job//lib/good_job/probe_server.rb#18
+  def initialize(port:, handler: T.unsafe(nil), app: T.unsafe(nil)); end
 
-  # source://good_job//lib/good_job/probe_server.rb#31
-  def call(env); end
+  # source://good_job//lib/good_job/probe_server.rb#38
+  def build_handler(port:, handler:, app:); end
 
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/probe_server.rb#22
+  # source://good_job//lib/good_job/probe_server.rb#29
   def running?; end
 
-  # source://good_job//lib/good_job/probe_server.rb#15
+  # source://good_job//lib/good_job/probe_server.rb#23
   def start; end
 
-  # source://good_job//lib/good_job/probe_server.rb#26
+  # source://good_job//lib/good_job/probe_server.rb#33
   def stop; end
 
   class << self
+    # source://good_job//lib/good_job/probe_server.rb#11
+    def default_app; end
+
     # source://good_job//lib/good_job/probe_server.rb#5
     def task_observer(time, output, thread_error); end
   end
+end
+
+# source://good_job//lib/good_job/probe_server/healthcheck_middleware.rb#5
+class GoodJob::ProbeServer::HealthcheckMiddleware
+  # @return [HealthcheckMiddleware] a new instance of HealthcheckMiddleware
+  #
+  # source://good_job//lib/good_job/probe_server/healthcheck_middleware.rb#6
+  def initialize(app); end
+
+  # source://good_job//lib/good_job/probe_server/healthcheck_middleware.rb#10
+  def call(env); end
+end
+
+# source://good_job//lib/good_job/probe_server/not_found_app.rb#5
+module GoodJob::ProbeServer::NotFoundApp
+  class << self
+    # source://good_job//lib/good_job/probe_server/not_found_app.rb#6
+    def call(_env); end
+  end
+end
+
+# source://good_job//lib/good_job/probe_server/simple_handler.rb#5
+class GoodJob::ProbeServer::SimpleHandler
+  # @return [SimpleHandler] a new instance of SimpleHandler
+  #
+  # source://good_job//lib/good_job/probe_server/simple_handler.rb#8
+  def initialize(app, options = T.unsafe(nil)); end
+
+  # source://good_job//lib/good_job/probe_server/simple_handler.rb#25
+  def build_future; end
+
+  # @return [Boolean]
+  #
+  # source://good_job//lib/good_job/probe_server/simple_handler.rb#21
+  def running?; end
+
+  # source://good_job//lib/good_job/probe_server/simple_handler.rb#16
+  def stop; end
+
+  private
+
+  # source://good_job//lib/good_job/probe_server/simple_handler.rb#48
+  def handle_connections; end
+
+  # source://good_job//lib/good_job/probe_server/simple_handler.rb#69
+  def parse_request(request); end
+
+  # source://good_job//lib/good_job/probe_server/simple_handler.rb#75
+  def respond(client, status, headers, body); end
+
+  # source://good_job//lib/good_job/probe_server/simple_handler.rb#31
+  def run; end
+
+  # source://good_job//lib/good_job/probe_server/simple_handler.rb#41
+  def start_server; end
+end
+
+# in seconds
+#
+# source://good_job//lib/good_job/probe_server/simple_handler.rb#6
+GoodJob::ProbeServer::SimpleHandler::SOCKET_READ_TIMEOUT = T.let(T.unsafe(nil), Integer)
+
+# source://good_job//lib/good_job/probe_server/webrick_handler.rb#5
+class GoodJob::ProbeServer::WebrickHandler
+  # @return [WebrickHandler] a new instance of WebrickHandler
+  #
+  # source://good_job//lib/good_job/probe_server/webrick_handler.rb#6
+  def initialize(app, options = T.unsafe(nil)); end
+
+  # source://good_job//lib/good_job/probe_server/webrick_handler.rb#31
+  def build_future; end
+
+  # @return [Boolean]
+  #
+  # source://good_job//lib/good_job/probe_server/webrick_handler.rb#27
+  def running?; end
+
+  # source://good_job//lib/good_job/probe_server/webrick_handler.rb#23
+  def stop; end
 end
 
 class GoodJob::Process < ::GoodJob::BaseRecord
   include ::GoodJob::Process::GeneratedAttributeMethods
   include ::GoodJob::Process::GeneratedAssociationMethods
   include ::GoodJob::AdvisoryLockable
-  include ::GoodJob::AssignableConnection
+  include ::GoodJob::OverridableConnection
   extend ::GoodJob::AdvisoryLockable::ClassMethods
-  extend ::GoodJob::AssignableConnection::ClassMethods
+  extend ::GoodJob::OverridableConnection::ClassMethods
 
   # source://activesupport/7.0.8/lib/active_support/core_ext/module/attribute_accessors_per_thread.rb#56
-  def _connection; end
+  def _overridden_connection; end
 
   # source://activesupport/7.0.8/lib/active_support/core_ext/module/attribute_accessors_per_thread.rb#100
-  def _connection=(obj); end
+  def _overridden_connection=(obj); end
 
-  def _current_id; end
-  def _current_id=(val); end
-  def _pid; end
-  def _pid=(val); end
   def advisory_lockable_function; end
   def advisory_lockable_function=(_arg0); end
   def advisory_lockable_function?; end
+
+  # source://activerecord/7.0.8/lib/active_record/autosave_association.rb#160
+  def autosave_associated_records_for_locked_jobs(*args); end
+
   def basename; end
   def create_with_advisory_lock; end
   def create_with_advisory_lock=(_arg0); end
-  def deregister; end
   def expired?; end
-  def mutex; end
+  def lock_type; end
+  def lock_type=(value); end
   def refresh; end
   def refresh_if_stale(cleanup: T.unsafe(nil)); end
   def schedulers; end
   def stale?; end
   def state; end
 
+  # source://activerecord/7.0.8/lib/active_record/autosave_association.rb#160
+  def validate_associated_records_for_locked_jobs(*args); end
+
   class << self
     # source://activesupport/7.0.8/lib/active_support/callbacks.rb#68
     def __callbacks; end
 
     # source://activesupport/7.0.8/lib/active_support/core_ext/module/attribute_accessors_per_thread.rb#48
-    def _connection; end
+    def _overridden_connection; end
 
     # source://activesupport/7.0.8/lib/active_support/core_ext/module/attribute_accessors_per_thread.rb#92
-    def _connection=(obj); end
+    def _overridden_connection=(obj); end
 
-    def _current_id; end
-    def _current_id=(val); end
-    def _pid; end
-    def _pid=(val); end
+    # source://activerecord/7.0.8/lib/active_record/reflection.rb#11
+    def _reflections; end
 
     # source://activemodel/7.0.8/lib/active_model/validations.rb#52
     def _validators; end
@@ -3820,11 +4299,13 @@ class GoodJob::Process < ::GoodJob::BaseRecord
     def advisory_unlocked(*args, **_arg1); end
 
     def cleanup; end
-    def current_id; end
-    def current_state; end
+    def create_record(id:, with_advisory_lock: T.unsafe(nil)); end
 
     # source://activerecord/7.0.8/lib/active_record/enum.rb#116
     def defined_enums; end
+
+    # source://activerecord/7.0.8/lib/active_record/model_schema.rb#157
+    def implicit_order_column; end
 
     # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
     def inactive(*args, **_arg1); end
@@ -3835,20 +4316,35 @@ class GoodJob::Process < ::GoodJob::BaseRecord
     # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
     def joins_advisory_locks(*args, **_arg1); end
 
-    def mutex; end
-    def ns_current_id; end
-    def ns_current_state; end
+    def lock_type_migrated?; end
 
     # source://activerecord/7.0.8/lib/active_record/scoping/named.rb#174
     def owns_advisory_locked(*args, **_arg1); end
 
-    def register; end
+    def process_state; end
   end
 end
 
 GoodJob::Process::EXPIRED_INTERVAL = T.let(T.unsafe(nil), ActiveSupport::Duration)
-module GoodJob::Process::GeneratedAssociationMethods; end
+
+module GoodJob::Process::GeneratedAssociationMethods
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/collection_association.rb#62
+  def locked_job_ids; end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/collection_association.rb#72
+  def locked_job_ids=(ids); end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/association.rb#103
+  def locked_jobs; end
+
+  # source://activerecord/7.0.8/lib/active_record/associations/builder/association.rb#111
+  def locked_jobs=(value); end
+end
+
 module GoodJob::Process::GeneratedAttributeMethods; end
+GoodJob::Process::LOCK_TYPES = T.let(T.unsafe(nil), Array)
+GoodJob::Process::LOCK_TYPE_ADVISORY = T.let(T.unsafe(nil), String)
+GoodJob::Process::LOCK_TYPE_ENUMS = T.let(T.unsafe(nil), Hash)
 GoodJob::Process::STALE_INTERVAL = T.let(T.unsafe(nil), ActiveSupport::Duration)
 
 class GoodJob::ProcessesController < ::GoodJob::ApplicationController
@@ -3892,7 +4388,7 @@ end
 # If a performer does not have work, the thread will go to sleep.
 # The scheduler maintains an instance of +Concurrent::TimerTask+, which wakes sleeping threads and causes them to check whether the performer has new work.
 #
-# source://good_job//lib/good_job/scheduler.rb#20
+# source://good_job//lib/good_job/scheduler.rb#19
 class GoodJob::Scheduler
   # @param performer [GoodJob::JobPerformer]
   # @param max_threads [Numeric, nil] number of seconds between polls for jobs
@@ -3903,33 +4399,32 @@ class GoodJob::Scheduler
   # @raise [ArgumentError]
   # @return [Scheduler] a new instance of Scheduler
   #
-  # source://good_job//lib/good_job/scheduler.rb#76
+  # source://good_job//lib/good_job/scheduler.rb#48
   def initialize(performer, max_threads: T.unsafe(nil), max_cache: T.unsafe(nil), warm_cache_on_initialize: T.unsafe(nil), cleanup_interval_seconds: T.unsafe(nil), cleanup_interval_jobs: T.unsafe(nil)); end
 
   # Preload existing runnable and future-scheduled jobs
   #
   # @return [void]
   #
-  # source://good_job//lib/good_job/scheduler.rb#273
+  # source://good_job//lib/good_job/scheduler.rb#238
   def cleanup; end
 
   # Wakes a thread to allow the performer to execute a task.
   #
   # @param state [Hash, nil] Contextual information for the performer. See {JobPerformer#next?}.
   # @return [Boolean, nil] Whether work was started.
-  #
   #   * +nil+ if the scheduler is unable to take new work, for example if the thread pool is shut down or at capacity.
   #   * +true+ if the performer started executing work.
   #   * +false+ if the performer decides not to attempt to execute a task based on the +state+ that is passed to it.
   #
-  # source://good_job//lib/good_job/scheduler.rb#159
+  # source://good_job//lib/good_job/scheduler.rb#131
   def create_thread(state = T.unsafe(nil)); end
 
   # Human readable name of the scheduler that includes configuration values.
   #
   # @return [String]
   #
-  # source://good_job//lib/good_job/scheduler.rb#68
+  # source://good_job//lib/good_job/scheduler.rb#40
   def name; end
 
   # Restart the Scheduler.
@@ -3939,14 +4434,14 @@ class GoodJob::Scheduler
   # @raise [ArgumentError]
   # @return [void]
   #
-  # source://good_job//lib/good_job/scheduler.rb#141
+  # source://good_job//lib/good_job/scheduler.rb#114
   def restart(timeout: T.unsafe(nil)); end
 
   # Tests whether the scheduler is running.
   #
   # @return [Boolean, nil]
   #
-  # source://good_job//lib/good_job/scheduler.rb#101
+  # source://good_job//lib/good_job/scheduler.rb#72
   def running?(*_arg0, **_arg1, &_arg2); end
 
   # Shut down the scheduler.
@@ -3960,93 +4455,85 @@ class GoodJob::Scheduler
   #   * A positive number will wait that many seconds before stopping any remaining active tasks.
   # @return [void]
   #
-  # source://good_job//lib/good_job/scheduler.rb#116
+  # source://good_job//lib/good_job/scheduler.rb#89
   def shutdown(timeout: T.unsafe(nil)); end
 
-  # Tests whether the scheduler is shutdown.
+  # Tests whether the scheduler is shutdown and no tasks are running.
   #
   # @return [Boolean, nil]
   #
-  # source://good_job//lib/good_job/scheduler.rb#105
-  def shutdown?(*_arg0, **_arg1, &_arg2); end
+  # source://good_job//lib/good_job/scheduler.rb#76
+  def shutdown?; end
 
   # Information about the Scheduler
   #
   # @return [Hash]
   #
-  # source://good_job//lib/good_job/scheduler.rb#233
+  # source://good_job//lib/good_job/scheduler.rb#197
   def stats; end
 
   # Invoked on completion of ThreadPoolExecutor task
   #
   # @return [void]
   #
-  # source://good_job//lib/good_job/scheduler.rb#204
+  # source://good_job//lib/good_job/scheduler.rb#178
   def task_observer(time, output, thread_error); end
 
   # Preload existing runnable and future-scheduled jobs
   #
   # @return [void]
   #
-  # source://good_job//lib/good_job/scheduler.rb#249
+  # source://good_job//lib/good_job/scheduler.rb#214
   def warm_cache; end
 
   private
 
-  # source://good_job//lib/good_job/scheduler.rb#328
+  # source://good_job//lib/good_job/scheduler.rb#298
   def cache_count; end
 
   # @return [void]
   #
-  # source://good_job//lib/good_job/scheduler.rb#295
+  # source://good_job//lib/good_job/scheduler.rb#260
   def create_executor; end
 
   # @param delay [Integer]
+  # @param fanout [Boolean] Whether to eagerly create a 2nd execution thread if a job is found.
   # @return [void]
   #
-  # source://good_job//lib/good_job/scheduler.rb#304
-  def create_task(delay = T.unsafe(nil)); end
+  # source://good_job//lib/good_job/scheduler.rb#270
+  def create_task(delay = T.unsafe(nil), fanout: T.unsafe(nil)); end
 
   # Returns the value of attribute executor.
   #
-  # source://good_job//lib/good_job/scheduler.rb#292
+  # source://good_job//lib/good_job/scheduler.rb#257
   def executor; end
 
   # @param name [String]
   # @param payload [Hash]
   # @return [void]
   #
-  # source://good_job//lib/good_job/scheduler.rb#318
+  # source://good_job//lib/good_job/scheduler.rb#288
   def instrument(name, payload = T.unsafe(nil), &block); end
 
   # Returns the value of attribute performer.
   #
-  # source://good_job//lib/good_job/scheduler.rb#292
+  # source://good_job//lib/good_job/scheduler.rb#257
   def performer; end
 
-  # source://good_job//lib/good_job/scheduler.rb#332
+  # source://good_job//lib/good_job/scheduler.rb#302
   def remaining_cache_count; end
 
   # Returns the value of attribute timer_set.
   #
-  # source://good_job//lib/good_job/scheduler.rb#292
+  # source://good_job//lib/good_job/scheduler.rb#257
   def timer_set; end
 
   class << self
-    # Creates GoodJob::Scheduler(s) and Performers from a GoodJob::Configuration instance.
-    #
-    # @param configuration [GoodJob::Configuration]
-    # @param warm_cache_on_initialize [Boolean]
-    # @return [GoodJob::Scheduler, GoodJob::MultiScheduler]
-    #
-    # source://good_job//lib/good_job/scheduler.rb#43
-    def from_configuration(configuration, warm_cache_on_initialize: T.unsafe(nil)); end
-
     # List of all instantiated Schedulers in the current process.
     #
     # @return [Array<GoodJob::Scheduler>, nil]
     #
-    # source://good_job//lib/good_job/scheduler.rb#37
+    # source://good_job//lib/good_job/scheduler.rb#36
     def instances; end
   end
 end
@@ -4054,21 +4541,21 @@ end
 # Defaults for instance of Concurrent::ThreadPoolExecutor
 # The thread pool executor is where work is performed.
 #
-# source://good_job//lib/good_job/scheduler.rb#23
+# source://good_job//lib/good_job/scheduler.rb#22
 GoodJob::Scheduler::DEFAULT_EXECUTOR_OPTIONS = T.let(T.unsafe(nil), Hash)
 
 # Custom sub-class of +Concurrent::ThreadPoolExecutor+ to add additional worker status.
 #
 # @private
 #
-# source://good_job//lib/good_job/scheduler.rb#338
+# source://good_job//lib/good_job/scheduler.rb#308
 class GoodJob::Scheduler::ThreadPoolExecutor < ::Concurrent::ThreadPoolExecutor
   # Number of inactive threads available to execute tasks.
   # https://github.com/ruby-concurrency/concurrent-ruby/issues/684#issuecomment-427594437
   #
   # @return [Integer]
   #
-  # source://good_job//lib/good_job/scheduler.rb#342
+  # source://good_job//lib/good_job/scheduler.rb#312
   def ready_worker_count; end
 end
 
@@ -4076,20 +4563,20 @@ end
 #
 # @private
 #
-# source://good_job//lib/good_job/scheduler.rb#357
+# source://good_job//lib/good_job/scheduler.rb#327
 class GoodJob::Scheduler::TimerSet < ::Concurrent::TimerSet
   # Number of scheduled jobs in the queue
   #
   # @return [Integer]
   #
-  # source://good_job//lib/good_job/scheduler.rb#360
+  # source://good_job//lib/good_job/scheduler.rb#330
   def length; end
 
   # Clear the queue
   #
   # @return [void]
   #
-  # source://good_job//lib/good_job/scheduler.rb#366
+  # source://good_job//lib/good_job/scheduler.rb#336
   def reset; end
 end
 
@@ -4207,35 +4694,46 @@ class GoodJob::Setting < ::GoodJob::BaseRecord
 
     def cron_key_disable(key); end
     def cron_key_enable(key); end
-    def cron_key_enabled?(key); end
+    def cron_key_enabled?(key, default: T.unsafe(nil)); end
 
     # source://activerecord/7.0.8/lib/active_record/enum.rb#116
     def defined_enums; end
+
+    # source://activerecord/7.0.8/lib/active_record/model_schema.rb#157
+    def implicit_order_column; end
   end
 end
 
 GoodJob::Setting::CRON_KEYS_DISABLED = T.let(T.unsafe(nil), String)
+GoodJob::Setting::CRON_KEYS_ENABLED = T.let(T.unsafe(nil), String)
 module GoodJob::Setting::GeneratedAssociationMethods; end
 module GoodJob::Setting::GeneratedAttributeMethods; end
 
-# source://good_job//lib/good_job/shared_executor.rb#4
+# source://good_job//lib/good_job/shared_executor.rb#6
 class GoodJob::SharedExecutor
+  include ::Logger::Severity
+  include ::Concurrent::Concern::Logging
+  include ::Concurrent::ExecutorService
+
   # @return [SharedExecutor] a new instance of SharedExecutor
   #
-  # source://good_job//lib/good_job/shared_executor.rb#15
+  # source://good_job//lib/good_job/shared_executor.rb#20
   def initialize; end
 
   # Returns the value of attribute executor.
   #
-  # source://good_job//lib/good_job/shared_executor.rb#13
+  # source://good_job//lib/good_job/shared_executor.rb#18
   def executor; end
 
-  # source://good_job//lib/good_job/shared_executor.rb#51
+  # source://good_job//lib/good_job/shared_executor.rb#26
+  def post(*args, &task); end
+
+  # source://good_job//lib/good_job/shared_executor.rb#70
   def restart(timeout: T.unsafe(nil)); end
 
   # @return [Boolean]
   #
-  # source://good_job//lib/good_job/shared_executor.rb#20
+  # source://good_job//lib/good_job/shared_executor.rb#38
   def running?; end
 
   # Shut down the SharedExecutor.
@@ -4248,17 +4746,19 @@ class GoodJob::SharedExecutor
   #   * A positive number will wait that many seconds before stopping any remaining active threads.
   # @return [void]
   #
-  # source://good_job//lib/good_job/shared_executor.rb#40
+  # source://good_job//lib/good_job/shared_executor.rb#56
   def shutdown(timeout: T.unsafe(nil)); end
 
-  # @return [Boolean]
+  # Tests whether the scheduler is shutdown and no tasks are running.
   #
-  # source://good_job//lib/good_job/shared_executor.rb#24
+  # @return [Boolean, nil]
+  #
+  # source://good_job//lib/good_job/shared_executor.rb#44
   def shutdown?; end
 
   private
 
-  # source://good_job//lib/good_job/shared_executor.rb#58
+  # source://good_job//lib/good_job/shared_executor.rb#77
   def create_executor; end
 
   class << self
@@ -4266,12 +4766,12 @@ class GoodJob::SharedExecutor
     #
     # @return [Array<GoodJob::SharedExecutor>, nil]
     #
-    # source://good_job//lib/good_job/shared_executor.rb#11
+    # source://good_job//lib/good_job/shared_executor.rb#16
     def instances; end
   end
 end
 
-# source://good_job//lib/good_job/shared_executor.rb#5
+# source://good_job//lib/good_job/shared_executor.rb#10
 GoodJob::SharedExecutor::MAX_THREADS = T.let(T.unsafe(nil), Integer)
 
 # Manages communication with systemd to notify it about the status of the
@@ -4313,6 +4813,26 @@ class GoodJob::SystemdService
     # source://good_job//lib/good_job/systemd_service.rb#13
     def task_observer(_time, _output, thread_error); end
   end
+end
+
+# Provides methods for determining the status of the
+# current job execution thread. This is useful for determining
+# whether to continue processing a job or to shut down gracefully.
+#
+# source://good_job//lib/good_job/thread_status.rb#7
+module GoodJob::ThreadStatus
+  extend ::ActiveSupport::Concern
+
+  mixes_in_class_methods ::GoodJob::ThreadStatus::ClassMethods
+end
+
+# source://good_job//lib/good_job/thread_status.rb#0
+module GoodJob::ThreadStatus::ClassMethods
+  # source://good_job//lib/good_job/thread_status.rb#13
+  def current_thread_running?; end
+
+  # source://good_job//lib/good_job/thread_status.rb#21
+  def current_thread_shutting_down?; end
 end
 
 # GoodJob gem version.
