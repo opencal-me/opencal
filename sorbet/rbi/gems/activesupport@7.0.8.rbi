@@ -15084,7 +15084,7 @@ class Enumerable::SoleItemExpectedError < ::StandardError; end
 # source://activesupport//lib/active_support/core_ext/object/json.rb#240
 class Exception
   # source://activesupport//lib/active_support/core_ext/object/json.rb#241
-  def as_json(options = T.unsafe(nil)); end
+  # def as_json(options = T.unsafe(nil)); end
 end
 
 # source://activesupport//lib/active_support/core_ext/object/blank.rb#61

@@ -1,3 +1,4 @@
+# rubocop:disable Layout/LineLength
 # frozen_string_literal: true
 
 class CreateGoodJobLabelsIndex < ActiveRecord::Migration[7.0]
@@ -6,7 +7,8 @@ class CreateGoodJobLabelsIndex < ActiveRecord::Migration[7.0]
   def change
     reversible do |dir|
       dir.up do
-        unless connection.index_name_exists?(:good_jobs, :index_good_jobs_on_labels)
+        unless connection.index_name_exists?(:good_jobs,
+                                             :index_good_jobs_on_labels)
           add_index :good_jobs, :labels, using: :gin, where: "(labels IS NOT NULL)",
             name: :index_good_jobs_on_labels, algorithm: :concurrently
         end

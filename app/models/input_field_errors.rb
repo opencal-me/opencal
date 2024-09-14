@@ -24,7 +24,6 @@ class InputFieldErrors < Array
   sig { returns(T::Hash[String, String]) }
   def to_h
     super do |error|
-      error = T.let(error, InputFieldError)
       [error.field, error.message]
     end
   end
